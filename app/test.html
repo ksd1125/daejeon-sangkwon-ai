@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상권AI 자동화 테스트</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    :root {
+      --brand: #2D4540;
+      --bg: #F5F2EC;
+      --pass: #4F7A5E;
+      --fail: #A84B40;
+      --error: #C4883A;
+      --skip: #A29E94;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--brand);
+      color: #fff;
+      padding: 16px 24px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    /* Controls */
+    #controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    #levelSelect {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: .9rem;
+      background: #fff;
+      min-width: 340px;
+    }
+    button {
+      padding: 8px 20px;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    button:disabled { opacity: .4; cursor: default; }
+    #runBtn { background: var(--brand); color: #fff; }
+    #runBtn:hover:not(:disabled) { opacity: .85; }
+    #exportBtn { background: #fff; color: var(--brand); border: 1px solid var(--brand); }
+    #exportBtn:hover:not(:disabled) { background: #e8e5df; }
+
+    /* Progress */
+    .progress-bar-outer {
+      width: 100%;
+      height: 8px;
+      background: #ddd;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: var(--brand);
+      border-radius: 4px;
+      transition: width .15s ease;
+    }
+    .progress-text {
+      font-size: .82rem;
+      color: #888;
+      text-align: right;
+    }
+
+    /* Summary */
+    .summary-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .summary-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 18px;
+      min-width: 110px;
+      flex: 1;
+    }
+    .summary-value { font-size: 1.5rem; font-weight: 700; }
+    .summary-label { font-size: .78rem; color: #888; }
+    .summary-alert { color: var(--fail); font-weight: 600; margin: 8px 0; font-size: .95rem; }
+    .summary-ok { color: var(--pass); font-weight: 600; margin: 8px 0; font-size: .95rem; }
+
+    /* Coverage */
+    .coverage-section { margin: 12px 0; }
+    .coverage-section h3 { font-size: .95rem; color: var(--brand); margin-bottom: 6px; }
+    .coverage-row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .coverage-item {
+      background: #fff;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: .85rem;
+    }
+    .coverage-value { font-weight: 700; color: var(--brand); margin-right: 4px; }
+    .coverage-label { color: #888; }
+
+    /* Category */
+    .category-section { margin-top: 16px; }
+    .category-section h3 { font-size: .95rem; color: var(--brand); margin-bottom: 8px; }
+    .category-group {
+      background: #fff;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      overflow: hidden;
+    }
+    .category-group summary {
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: .88rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .category-group summary::-webkit-details-marker { display: none; }
+    .cat-stats { font-weight: 400; font-size: .8rem; color: #888; }
+    .all-pass-note { padding: 8px 14px; color: var(--pass); font-size: .82rem; }
+
+    /* Tables */
+    .fail-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+    .fail-table th {
+      background: var(--brand);
+      color: #fff;
+      padding: 6px 8px;
+      text-align: left;
+      font-weight: 500;
+    }
+    .fail-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+      word-break: break-all;
+    }
+    .fail-table tr.status-fail td { background: #fef2f0; }
+    .fail-table tr.status-error td { background: #fff8ef; }
+    .cell-id { max-width: 180px; font-family: monospace; font-size: .75rem; color: #666; }
+    .cell-q { max-width: 200px; }
+    .cell-phase { color: var(--brand); font-weight: 600; }
+    .cell-err { color: var(--fail); }
+    .cell-status-fail { color: var(--fail); font-weight: 600; }
+    .cell-status-error { color: var(--error); font-weight: 600; }
+
+    /* Failed section */
+    .failed-section { margin-top: 20px; }
+    .failed-section h3 { font-size: .95rem; color: var(--fail); margin-bottom: 8px; }
+    .full-width { margin-top: 0; }
+
+    @media (max-width: 640px) {
+      #levelSelect { min-width: auto; flex: 1; }
+      .summary-card { min-width: 80px; padding: 10px 12px; }
+      .summary-value { font-size: 1.2rem; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <header>상권AI 자동화 테스트</header>
+  <div class="container">
+    <div id="controls">
+      <select id="levelSelect">
+        <option value="1">Level 1: Smoke (merge + questionType + 82동 해석 ≈ 500)</option>
+        <option value="2">Level 2: Data Integrity (82동 × 10업종 = 820 추가)</option>
+        <option value="3">Level 3: Full Matrix (82동 × 247업종 ≈ 20,254 추가)</option>
+      </select>
+      <button id="runBtn">테스트 실행</button>
+      <button id="exportBtn" disabled>HTML 리포트 저장</button>
+    </div>
+    <div id="progress"></div>
+    <div id="summary"></div>
+    <div id="results"></div>
+  </div>
+  <script type="module">
+    import('./js/test-runner.js?' + Date.now());
+  </script>
+</body>
+</html>

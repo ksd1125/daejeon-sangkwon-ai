@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상권AI 오류 신고 관리</title>
+  <style>
+    body{margin:0;background:#f6f4ef;color:#1a1916;font-family:Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}main{max-width:1120px;margin:0 auto;padding:28px 20px 56px}header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;border-bottom:2px solid #2d4540;padding-bottom:16px;margin-bottom:18px}h1{font-size:24px;margin:0}h2{font-size:18px;margin:22px 0 10px}p{color:#6f6b62}.toolbar{display:flex;gap:8px;flex-wrap:wrap}button,a.button{min-height:38px;border:1px solid #d6d1c5;background:#fff;border-radius:8px;padding:8px 12px;color:#2d4540;font-weight:700;cursor:pointer;text-decoration:none}.danger{color:#c53030;border-color:#efb5b5}.report,.change-form{background:#fff;border:1px solid #e1ded5;border-radius:8px;padding:16px;margin:12px 0}.report h2{font-size:17px;margin:0 0 8px}.meta{font-size:12px;color:#6f6b62}.flags{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.flag{font-size:12px;border-radius:999px;padding:4px 8px;background:#f4f0e6}.flag.error{background:#fef2f2;color:#a32020}.flag.warn{background:#fef9ef;color:#7a4a0c}.flag.info{background:#eef5f1;color:#2d4540}pre{white-space:pre-wrap;word-break:break-word;background:#f4f0e6;border:1px solid #e1ded5;border-radius:8px;padding:12px;font-size:12px;max-height:320px;overflow:auto}.empty{background:#fff;border:1px dashed #d6d1c5;border-radius:8px;padding:28px;text-align:center}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.form-grid label{display:grid;gap:5px;font-size:12px;font-weight:800;color:#3a4540}.form-grid input,.form-grid textarea,.form-grid select{width:100%;box-sizing:border-box;border:1px solid #d6d1c5;border-radius:8px;padding:9px 10px;font:500 13px/1.45 inherit;background:#fff;color:#1a1916}.form-grid textarea{min-height:76px;resize:vertical}.form-grid .wide{grid-column:1/-1}.hint{font-size:12px;color:#6f6b62;margin:6px 0 0}@media(max-width:760px){header{display:block}.form-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div><h1>상권AI 오류 신고 관리</h1><p>오류 신고와 수정 이력을 Codex, Claude, Gemini가 확인하기 쉽게 모아둡니다.</p></div>
+    <div class="toolbar"><a class="button" href="./">앱으로</a><button id="exportJson">JSON 내보내기</button><button id="exportChanges">수정 이력 내보내기</button><button id="clearAll" class="danger">오류 신고 삭제</button></div>
+  </header>
+
+  <section class="change-form">
+    <h2>수정 이력 등록</h2>
+    <div class="form-grid">
+      <label>수정자<input id="actor" placeholder="예: Codex, Claude, Gemini, 홍길동"></label>
+      <label>도구/모델<select id="tool"><option>Codex</option><option>Claude</option><option>Gemini</option><option>Human</option><option>Other</option></select></label>
+      <label>영역/컴포넌트<input id="scope" placeholder="예: 상권 AI, 관리자 페이지, 데이터 빌드, 디자인"></label>
+      <label>변경 ID<input id="changeId" placeholder="비워두면 자동 생성"></label>
+      <label class="wide">수정 방식<textarea id="method" placeholder="무엇을 어떤 방식으로 고쳤는지"></textarea></label>
+      <label class="wide">변경 파일<textarea id="files" placeholder="app/js/main.js, app/css/styles.css"></textarea></label>
+      <label class="wide">검증 결과<textarea id="verification" placeholder="node --check 통과, 브라우저에서 버튼 확인 등"></textarea></label>
+      <label class="wide">메모<textarea id="note" placeholder="남겨야 할 판단, 다음 AI가 주의할 점"></textarea></label>
+    </div>
+    <div class="toolbar" style="margin-top:12px"><button id="addChange">수정 이력 추가</button><button id="copyPrompt">다음 AI용 요약 복사</button><button id="clearChanges" class="danger">수정 이력 삭제</button></div>
+    <p class="hint">이 기록은 브라우저 저장소에 쌓이고 JSON으로 내보낼 수 있습니다. Codex/Claude/Gemini에게는 “다음 AI용 요약 복사”를 붙여 넣으면 됩니다.</p>
+  </section>
+
+  <section id="changes"></section>
+  <section id="reports"></section>
+</main>
+<script>
+const reportKey='commercial_ai_error_reports';
+const changeKey='commercial_ai_change_log';
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const splitLines=v=>String(v||'').split(/[\n,]/).map(s=>s.trim()).filter(Boolean);
+function read(key){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch{return[]}}
+function write(key,val){localStorage.setItem(key,JSON.stringify(val))}
+function saveBlob(name,data,type='application/json;charset=utf-8'){const blob=new Blob([data],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+let seedChanges=[],seedReports=[];
+async function loadSeed(){
+  try{const r=await fetch('data/change-log.json');if(r.ok){const j=await r.json();if(Array.isArray(j))seedChanges=j;}}catch(e){console.warn('change-log.json 로드 실패',e)}
+  try{const r=await fetch('data/error-reports.json');if(r.ok){const j=await r.json();if(Array.isArray(j))seedReports=j;}}catch(e){console.warn('error-reports.json 로드 실패',e)}
+}
+function allChanges(){const byId={};[...seedChanges,...read(changeKey)].forEach(c=>{if(c&&c.id)byId[c.id]=c});return Object.values(byId).sort((a,b)=>String(b.at).localeCompare(String(a.at)))}
+function allReports(){const byId={};[...seedReports,...read(reportKey)].forEach(c=>{if(c&&c.id)byId[c.id]=c});return Object.values(byId).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)))}
+function render(){
+ const localIds=new Set(read(changeKey).map(c=>c.id));const changes=allChanges();
+ document.getElementById('changes').innerHTML='<h2>수정 이력 ('+changes.length+'건)</h2>'+(changes.length?changes.map((c)=>{const isSeed=!localIds.has(c.id);return `<article class="report"><div class="meta">${esc(c.at)} · ${esc(c.actor)} · ${esc(c.tool)} · ${esc(c.scope||'전체')}${isSeed?' · <span class="flag info">기록</span>':''}</div><h2>${esc(c.id)}</h2><p>${esc(c.method)}</p><div class="toolbar"><button data-copy-change-id="${esc(c.id)}">복사</button>${isSeed?'':`<button data-delete-change-id="${esc(c.id)}" class="danger">삭제</button>`}</div><pre>${esc(JSON.stringify(c,null,2))}</pre></article>`}).join(''):'<div class="empty">수정 이력이 없습니다.</div>');
+ const reportLocalIds=new Set(read(reportKey).map(r=>r.id));const reports=allReports();const el=document.getElementById('reports');if(!reports.length){el.innerHTML='<h2>오류 신고</h2><div class="empty">저장된 오류 신고가 없습니다.</div>';return}el.innerHTML='<h2>오류 신고 ('+reports.length+'건)</h2>'+reports.map((r)=>{const isSeed=!reportLocalIds.has(r.id);const st=r.status?` · <span class="flag ${r.status==='fixed'?'info':'warn'}">${esc(r.status)}</span>`:'';return `<article class="report"><div class="meta">${esc(r.createdAt)} · ${esc(r.id)} · ${esc(r.diagnostics?.moduleVersion||'')}${st}</div><h2>${esc(r.question||'(질문 없음)')}</h2><div class="flags">${(r.flags||[]).map(f=>`<span class="flag ${esc(f.level)}">${esc(f.label)}</span>`).join('')}</div><div class="toolbar"><button data-copy-report-id="${esc(r.id)}">Codex/Claude용 복사</button>${isSeed?'<span class="flag info">기록</span>':`<button data-delete-report-id="${esc(r.id)}" class="danger">삭제</button>`}</div><pre>${esc(JSON.stringify(r,null,2))}</pre></article>`}).join('')
+}
+function makeChange(){const now=new Date().toISOString();const id=document.getElementById('changeId').value.trim()||`${document.getElementById('tool').value.toLowerCase()}-${now.slice(0,10).replaceAll('-','')}-${Date.now().toString(36)}`;return{id,at:now,actor:document.getElementById('actor').value.trim()||'Unknown',tool:document.getElementById('tool').value,scope:document.getElementById('scope').value.trim()||'미지정',method:document.getElementById('method').value.trim(),files:splitLines(document.getElementById('files').value),verification:splitLines(document.getElementById('verification').value),note:document.getElementById('note').value.trim()}}
+document.getElementById('addChange').onclick=()=>{const c=makeChange();if(!c.method){alert('수정 방식을 입력해 주세요.');return}const list=read(changeKey);list.unshift(c);write(changeKey,list.slice(0,100));document.querySelectorAll('.change-form input,.change-form textarea').forEach(el=>el.value='');render()};
+document.getElementById('copyPrompt').onclick=()=>{const changes=allChanges();const reports=allReports();const text=`프로젝트 수정 이력 요약\n\n최근 수정:\n${JSON.stringify(changes.slice(0,10),null,2)}\n\n최근 오류 신고:\n${JSON.stringify(reports.slice(0,5),null,2)}\n\n위 이력을 존중해서 기존 변경을 되돌리지 말고 필요한 부분만 수정해줘.`;navigator.clipboard?.writeText(text);alert('다음 AI에게 줄 요약을 복사했습니다.')};
+document.addEventListener('click',e=>{const reports=read(reportKey);const changes=read(changeKey);const copy=e.target.closest('[data-copy-report-id]');if(copy){const r=allReports().find(x=>x.id===copy.dataset.copyReportId);if(r){navigator.clipboard?.writeText(JSON.stringify(r,null,2));alert('보고서 JSON을 복사했습니다.')}}const del=e.target.closest('[data-delete-report-id]');if(del){const list=read(reportKey).filter(x=>x.id!==del.dataset.deleteReportId);write(reportKey,list);render()}const cc=e.target.closest('[data-copy-change-id]');if(cc){const c=allChanges().find(x=>x.id===cc.dataset.copyChangeId);if(c){navigator.clipboard?.writeText(JSON.stringify(c,null,2));alert('수정 이력을 복사했습니다.')}}const dc=e.target.closest('[data-delete-change-id]');if(dc){const list=read(changeKey).filter(c=>c.id!==dc.dataset.deleteChangeId);write(changeKey,list);render()}});
+document.getElementById('exportJson').onclick=()=>saveBlob('commercial-ai-error-reports.json',JSON.stringify(read(reportKey),null,2));
+document.getElementById('exportChanges').onclick=()=>saveBlob('commercial-ai-change-log.json',JSON.stringify(allChanges(),null,2));
+document.getElementById('clearAll').onclick=()=>{if(confirm('저장된 오류 신고를 모두 삭제할까요? 수정 이력은 유지됩니다.')){localStorage.removeItem(reportKey);render()}};
+document.getElementById('clearChanges').onclick=()=>{if(confirm('브라우저에 추가한 수정 이력을 삭제할까요? (change-log.json 시드 기록은 유지됩니다)')){localStorage.removeItem(changeKey);render()}};
+loadSeed().then(render);
+</script>
+</body>
+</html>

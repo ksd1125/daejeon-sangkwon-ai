@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대전 상권 AI</title>
+  <meta name="description" content="대전 상권 데이터 기반 AI 챗봇 — 지역과 업종을 물어보세요">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260531-qa-l">
+</head>
+<body>
+  <a class="skip-link" href="#chatPanel">본문 바로가기</a>
+<div class="layout" id="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand" id="sidebarBrand" role="button" tabindex="0" title="홈으로" style="cursor:pointer">
+          <span class="brand-mark brand-mark--sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M4 17 C7 14, 11 10, 14 8 C17 6, 20 5, 20 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+              <circle cx="20" cy="5" r="2.5" fill="#fff" opacity="0.9"/>
+              <circle cx="4" cy="17" r="1.5" fill="#fff" opacity="0.4"/>
+            </svg>
+          </span>
+          상권 <span class="brand-ai">AI</span>
+        </div>
+        <button type="button" class="sidebar-new" id="sidebarNew" aria-label="새 대화" title="새 대화">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button type="button" class="sidebar-close" id="sidebarClose" aria-label="사이드바 닫기">&times;</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="history-empty">질문하면 여기에 기록됩니다.</div>
+      </div>
+      <div class="side-card side-card--settings">
+        <p><strong>설정</strong></p>
+        <button type="button" class="btn-settings" id="btnSettings">Gemini API 키 설정</button>
+        <a class="btn-settings btn-admin-reports" href="admin-reports.html">관리자 기록 보기</a>
+      </div>
+    </aside>
+
+    <!-- Chat Panel -->
+    <main class="chat-panel" id="chatPanel">
+      <!-- Mobile Header -->
+      <div class="mobile-header" id="mobileHeader">
+        <button type="button" class="hamburger" id="hamburger" aria-label="메뉴 열기">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="brand">
+          <span class="brand-mark brand-mark--sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M4 17 C7 14, 11 10, 14 8 C17 6, 20 5, 20 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+              <circle cx="20" cy="5" r="2.5" fill="#fff" opacity="0.9"/>
+              <circle cx="4" cy="17" r="1.5" fill="#fff" opacity="0.4"/>
+            </svg>
+          </span>
+          상권 <span class="brand-ai">AI</span>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="header-new" id="headerNew" aria-label="새 대화" title="새 대화">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Messages -->
+      <div class="chat-messages" id="chatMessages">
+        <!-- Welcome — HomeView (디자인11/12) -->
+        <div class="chat-welcome" id="chatWelcome">
+          <div class="home-radial-bg"></div>
+          <div class="home-content">
+            <span class="brand-mark brand-mark--lg">
+              <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+                <circle cx="7.5" cy="24.5" r="1.6" fill="#fff" opacity="0.4"/>
+                <path d="M7.5 24.5 C 8 12, 14 8, 24.5 8" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+                <circle cx="24.5" cy="8" r="2.8" fill="#fff"/>
+              </svg>
+            </span>
+            <div class="home-titles">
+              <h1 class="home-h1"><span class="home-kr">상권</span> <span class="home-ai">ai</span></h1>
+              <p class="home-desc">행정동 단위로 매출, 업소, 유동인구를 살펴봅니다.</p>
+            </div>
+            <div class="welcome-suggestions" id="welcomeChips">
+              <button type="button" class="suggest-btn" data-q="둔산1동 카페 매출 어때?">둔산1동 카페 매출<span class="suggest-arrow">&rarr;</span></button>
+              <button type="button" class="suggest-btn" data-q="중앙동 어때?">중앙동 종합 현황<span class="suggest-arrow">&rarr;</span></button>
+              <button type="button" class="suggest-btn" data-q="유성구 편의점 최근 추세는?">유성구 편의점 추세<span class="suggest-arrow">&rarr;</span></button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area (pinned bottom) -->
+      <div class="chat-input-area" id="chatInputArea">
+        <div class="analysis-orbit" id="analysisOrbit" aria-live="polite">
+          <div class="orbit-status">
+            <span class="orbit-dot"></span>
+            <strong id="orbitTitle">질문을 기다리는 중</strong>
+          </div>
+          <div class="orbit-steps" id="orbitSteps">
+            <span class="orbit-step active">지역</span>
+            <span class="orbit-step">업종</span>
+            <span class="orbit-step">지표</span>
+            <span class="orbit-step">비교</span>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="searchInput" rows="1" aria-label="상권 질문 입력" placeholder="예: 중앙동 편의점 매출 어때?"></textarea>
+          <button type="button" class="btn-send" id="btnSubmit" aria-label="전송">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+        <p class="notice" id="notice">대전 82개 행정동·247개 업종 데이터 기반 조회 도구입니다. 일부 조합은 행정동 직접값이 없어 시군구 참고값으로 표시합니다.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <dialog class="modal" id="settingsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Gemini API 설정</h2>
+        <button type="button" class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>각 에이전트에 <strong>서로 다른 API 키</strong>를 넣으면 429 할당량 초과를 방지할 수 있습니다.</p>
+
+        <div class="api-key-group">
+          <label for="apiKeyRouter">Agent 1 — 라우터 <span class="key-hint">질문 의도 파악</span></label>
+          <input type="password" id="apiKeyRouter" class="input-field" placeholder="API 키 입력">
+        </div>
+
+        <div class="api-key-group">
+          <label for="apiKeyAnalyst">Agent 2 — 분석가 <span class="key-hint">데이터 해설 생성</span></label>
+          <input type="password" id="apiKeyAnalyst" class="input-field" placeholder="API 키 입력">
+        </div>
+
+        <div class="api-key-group">
+          <label for="apiKeyAdvisor">Agent 3 — 어드바이저 <span class="key-hint">후속 질문 + 맥락</span></label>
+          <input type="password" id="apiKeyAdvisor" class="input-field" placeholder="API 키 입력">
+        </div>
+
+        <button class="btn-link" id="btnSameKey" type="button">같은 키 일괄 입력</button>
+        <p class="key-format-warn" hidden style="color:var(--warn);font-size:12px;margin-top:8px;font-weight:500;"></p>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="btnClearKey">전체 초기화</button>
+          <button type="button" class="btn-primary" id="btnSaveKey">저장</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="lib/chart.min.js"></script>
+  <script src="env.local.js"></script>
+  <script type="module" src="js/main.js?v=20260531-qa-l"></script>
+</body>
+</html>

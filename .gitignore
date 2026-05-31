@@ -1,0 +1,23 @@
+*.zip
+node_modules/
+20260515*/
+*.csv
+.env
+.env.*
+!.env.example
+app/env.local.js
+
+# secrets & build tooling (배포·추적 제외)
+app/build/
+app/raw/
+
+# 런타임 미사용 원본 집계 (per-district stores/ 는 유지)
+app/data/micro/public-store-api-daejeon.json
+app/data/micro/public-store-api-daejeon-smoke.json
+app/data/micro/stores-daejeon.synthetic.json
+
+# 백업 파일
+*.bak
+*.bak-*
+**/*.bak-codex-*
+index.html.bak*

@@ -1,0 +1,2621 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "202602",
+  "generatedAt": "2026-05-30T02:36:54.958Z",
+  "description": "ASCII/numeric codes for app integration; Korean text is kept only in labelKo/aliasKo display fields.",
+  "storageKeys": {
+    "errorReports": "commercial_ai_error_reports",
+    "changeLog": "commercial_ai_change_log"
+  },
+  "sgg": [
+    {
+      "code": "3011",
+      "labelKo": "동구"
+    },
+    {
+      "code": "3014",
+      "labelKo": "중구"
+    },
+    {
+      "code": "3017",
+      "labelKo": "서구"
+    },
+    {
+      "code": "3020",
+      "labelKo": "유성구"
+    },
+    {
+      "code": "3023",
+      "labelKo": "대덕구"
+    }
+  ],
+  "districts": [
+    {
+      "code": "30110515",
+      "labelKo": "중앙동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110530",
+      "labelKo": "효동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110545",
+      "labelKo": "신인동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110551",
+      "labelKo": "판암1동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110552",
+      "labelKo": "판암2동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110560",
+      "labelKo": "용운동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110585",
+      "labelKo": "대동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110590",
+      "labelKo": "자양동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110620",
+      "labelKo": "가양1동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110630",
+      "labelKo": "가양2동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110640",
+      "labelKo": "용전동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110665",
+      "labelKo": "성남동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110670",
+      "labelKo": "홍도동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110695",
+      "labelKo": "삼성동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110725",
+      "labelKo": "대청동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30110740",
+      "labelKo": "산내동",
+      "sggCode": "3011",
+      "sggLabelKo": "동구"
+    },
+    {
+      "code": "30140535",
+      "labelKo": "은행선화동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140550",
+      "labelKo": "목동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140560",
+      "labelKo": "중촌동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140575",
+      "labelKo": "대흥동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140605",
+      "labelKo": "문창동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140620",
+      "labelKo": "석교동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140630",
+      "labelKo": "대사동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140640",
+      "labelKo": "부사동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140655",
+      "labelKo": "용두동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140670",
+      "labelKo": "오류동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140680",
+      "labelKo": "태평1동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140690",
+      "labelKo": "태평2동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140700",
+      "labelKo": "유천1동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140710",
+      "labelKo": "유천2동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140720",
+      "labelKo": "문화1동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140730",
+      "labelKo": "문화2동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30140740",
+      "labelKo": "산성동",
+      "sggCode": "3014",
+      "sggLabelKo": "중구"
+    },
+    {
+      "code": "30170510",
+      "labelKo": "복수동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170520",
+      "labelKo": "도마1동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170530",
+      "labelKo": "도마2동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170535",
+      "labelKo": "정림동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170540",
+      "labelKo": "변동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170550",
+      "labelKo": "용문동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170555",
+      "labelKo": "탄방동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170560",
+      "labelKo": "괴정동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170570",
+      "labelKo": "가장동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170575",
+      "labelKo": "내동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170581",
+      "labelKo": "갈마1동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170582",
+      "labelKo": "갈마2동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170586",
+      "labelKo": "월평1동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170587",
+      "labelKo": "월평2동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170588",
+      "labelKo": "월평3동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170590",
+      "labelKo": "가수원동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170593",
+      "labelKo": "도안동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170596",
+      "labelKo": "관저1동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170597",
+      "labelKo": "관저2동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170600",
+      "labelKo": "기성동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170630",
+      "labelKo": "둔산1동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170640",
+      "labelKo": "둔산2동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170650",
+      "labelKo": "만년동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30170660",
+      "labelKo": "둔산3동",
+      "sggCode": "3017",
+      "sggLabelKo": "서구"
+    },
+    {
+      "code": "30200520",
+      "labelKo": "진잠동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200526",
+      "labelKo": "학하동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200527",
+      "labelKo": "상대동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200530",
+      "labelKo": "온천1동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200540",
+      "labelKo": "온천2동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200546",
+      "labelKo": "노은1동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200547",
+      "labelKo": "노은2동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200548",
+      "labelKo": "노은3동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200550",
+      "labelKo": "신성동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200570",
+      "labelKo": "전민동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200580",
+      "labelKo": "구즉동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200600",
+      "labelKo": "관평동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30200610",
+      "labelKo": "원신흥동",
+      "sggCode": "3020",
+      "sggLabelKo": "유성구"
+    },
+    {
+      "code": "30230510",
+      "labelKo": "오정동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230520",
+      "labelKo": "대화동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230525",
+      "labelKo": "회덕동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230533",
+      "labelKo": "비래동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230543",
+      "labelKo": "송촌동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230546",
+      "labelKo": "중리동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230550",
+      "labelKo": "신탄진동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230560",
+      "labelKo": "석봉동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230570",
+      "labelKo": "덕암동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230580",
+      "labelKo": "목상동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230600",
+      "labelKo": "법1동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    },
+    {
+      "code": "30230610",
+      "labelKo": "법2동",
+      "sggCode": "3023",
+      "sggLabelKo": "대덕구"
+    }
+  ],
+  "categories": [
+    {
+      "code": "cat_001",
+      "labelKo": "가구 소매"
+    },
+    {
+      "code": "cat_002",
+      "labelKo": "섬유·의복·신발 소매"
+    },
+    {
+      "code": "cat_003",
+      "labelKo": "연료 소매"
+    },
+    {
+      "code": "cat_004",
+      "labelKo": "가전·통신 소매"
+    },
+    {
+      "code": "cat_005",
+      "labelKo": "가전제품 수리"
+    },
+    {
+      "code": "cat_006",
+      "labelKo": "기타 가정용품 수리"
+    },
+    {
+      "code": "cat_007",
+      "labelKo": "식료품 소매"
+    },
+    {
+      "code": "cat_008",
+      "labelKo": "기술 서비스"
+    },
+    {
+      "code": "cat_009",
+      "labelKo": "철물·건설자재 소매"
+    },
+    {
+      "code": "cat_010",
+      "labelKo": "산업용품 대여"
+    },
+    {
+      "code": "cat_011",
+      "labelKo": "청소·방제"
+    },
+    {
+      "code": "cat_012",
+      "labelKo": "기타 개인"
+    },
+    {
+      "code": "cat_013",
+      "labelKo": "서양식"
+    },
+    {
+      "code": "cat_014",
+      "labelKo": "본사·경영 컨설팅"
+    },
+    {
+      "code": "cat_015",
+      "labelKo": "고용 알선"
+    },
+    {
+      "code": "cat_016",
+      "labelKo": "스포츠 서비스"
+    },
+    {
+      "code": "cat_017",
+      "labelKo": "한식"
+    },
+    {
+      "code": "cat_018",
+      "labelKo": "법무관련"
+    },
+    {
+      "code": "cat_019",
+      "labelKo": "회계·세무"
+    },
+    {
+      "code": "cat_020",
+      "labelKo": "광고"
+    },
+    {
+      "code": "cat_021",
+      "labelKo": "교육 지원"
+    },
+    {
+      "code": "cat_022",
+      "labelKo": "구내식당·뷔페"
+    },
+    {
+      "code": "cat_023",
+      "labelKo": "기타 간이"
+    },
+    {
+      "code": "cat_024",
+      "labelKo": "기타 교육"
+    },
+    {
+      "code": "cat_025",
+      "labelKo": "기타 상품 소매"
+    },
+    {
+      "code": "cat_026",
+      "labelKo": "기타 숙박"
+    },
+    {
+      "code": "cat_027",
+      "labelKo": "종합 소매"
+    },
+    {
+      "code": "cat_028",
+      "labelKo": "장식품 소매"
+    },
+    {
+      "code": "cat_029",
+      "labelKo": "가정용품 대여"
+    },
+    {
+      "code": "cat_030",
+      "labelKo": "동남아시아"
+    },
+    {
+      "code": "cat_031",
+      "labelKo": "사무 지원"
+    },
+    {
+      "code": "cat_032",
+      "labelKo": "여행사·보조"
+    },
+    {
+      "code": "cat_033",
+      "labelKo": "유원지·오락"
+    },
+    {
+      "code": "cat_034",
+      "labelKo": "운송장비 대여"
+    },
+    {
+      "code": "cat_035",
+      "labelKo": "의원"
+    },
+    {
+      "code": "cat_036",
+      "labelKo": "일식"
+    },
+    {
+      "code": "cat_037",
+      "labelKo": "식물 소매"
+    },
+    {
+      "code": "cat_038",
+      "labelKo": "이용·미용"
+    },
+    {
+      "code": "cat_039",
+      "labelKo": "담배 소매"
+    },
+    {
+      "code": "cat_040",
+      "labelKo": "도서관·사적지"
+    },
+    {
+      "code": "cat_041",
+      "labelKo": "수의"
+    },
+    {
+      "code": "cat_042",
+      "labelKo": "중식"
+    },
+    {
+      "code": "cat_043",
+      "labelKo": "욕탕·신체관리"
+    },
+    {
+      "code": "cat_044",
+      "labelKo": "인쇄·제품제작"
+    },
+    {
+      "code": "cat_045",
+      "labelKo": "모터사이클 소매"
+    },
+    {
+      "code": "cat_046",
+      "labelKo": "모터사이클 수리"
+    },
+    {
+      "code": "cat_047",
+      "labelKo": "주점"
+    },
+    {
+      "code": "cat_048",
+      "labelKo": "오락용품 소매"
+    },
+    {
+      "code": "cat_049",
+      "labelKo": "기타 전문 과학"
+    },
+    {
+      "code": "cat_050",
+      "labelKo": "부동산 서비스"
+    },
+    {
+      "code": "cat_051",
+      "labelKo": "기타 외국"
+    },
+    {
+      "code": "cat_052",
+      "labelKo": "안경·정밀기기 소매"
+    },
+    {
+      "code": "cat_053",
+      "labelKo": "시설관리"
+    },
+    {
+      "code": "cat_054",
+      "labelKo": "사진 촬영"
+    },
+    {
+      "code": "cat_055",
+      "labelKo": "음료 소매"
+    },
+    {
+      "code": "cat_056",
+      "labelKo": "세탁"
+    },
+    {
+      "code": "cat_057",
+      "labelKo": "전문 디자인"
+    },
+    {
+      "code": "cat_058",
+      "labelKo": "시계·귀금속 소매"
+    },
+    {
+      "code": "cat_059",
+      "labelKo": "시장 조사"
+    },
+    {
+      "code": "cat_060",
+      "labelKo": "기타 생활용품 소매"
+    },
+    {
+      "code": "cat_061",
+      "labelKo": "애완동물·용품 소매"
+    },
+    {
+      "code": "cat_062",
+      "labelKo": "의약·화장품 소매"
+    },
+    {
+      "code": "cat_063",
+      "labelKo": "일반 숙박"
+    },
+    {
+      "code": "cat_064",
+      "labelKo": "병원"
+    },
+    {
+      "code": "cat_065",
+      "labelKo": "기타 보건"
+    },
+    {
+      "code": "cat_066",
+      "labelKo": "일반 교육"
+    },
+    {
+      "code": "cat_067",
+      "labelKo": "자동차 부품 소매"
+    },
+    {
+      "code": "cat_068",
+      "labelKo": "자동차 수리·세차"
+    },
+    {
+      "code": "cat_069",
+      "labelKo": "장례식장"
+    },
+    {
+      "code": "cat_070",
+      "labelKo": "기타 사업 서비스"
+    },
+    {
+      "code": "cat_071",
+      "labelKo": "조경·유지"
+    },
+    {
+      "code": "cat_072",
+      "labelKo": "중고 상품 소매"
+    },
+    {
+      "code": "cat_073",
+      "labelKo": "비알코올"
+    },
+    {
+      "code": "cat_074",
+      "labelKo": "컴퓨터 수리"
+    },
+    {
+      "code": "cat_075",
+      "labelKo": "통신장비 수리"
+    }
+  ],
+  "industries": [
+    {
+      "code": "ind_0001",
+      "labelKo": "가구 소매업",
+      "categoryCode": "cat_001",
+      "categoryLabelKo": "가구 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0002",
+      "labelKo": "가발 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0003",
+      "labelKo": "가방 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0004",
+      "labelKo": "가스 충전소",
+      "categoryCode": "cat_003",
+      "categoryLabelKo": "연료 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0005",
+      "labelKo": "가전제품 소매업",
+      "categoryCode": "cat_004",
+      "categoryLabelKo": "가전·통신 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0006",
+      "labelKo": "가전제품 수리업",
+      "categoryCode": "cat_005",
+      "categoryLabelKo": "가전제품 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0007",
+      "labelKo": "가정용 연료 소매업",
+      "categoryCode": "cat_003",
+      "categoryLabelKo": "연료 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0008",
+      "labelKo": "가죽/가방/신발 수선업",
+      "categoryCode": "cat_006",
+      "categoryLabelKo": "기타 가정용품 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0009",
+      "labelKo": "가축 사료 소매업",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0010",
+      "labelKo": "건강보조식품 소매업",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0011",
+      "labelKo": "건물 및 토목 엔지니어링 서비스업",
+      "categoryCode": "cat_008",
+      "categoryLabelKo": "기술 서비스",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0012",
+      "labelKo": "건설/건축자재 소매업",
+      "categoryCode": "cat_009",
+      "categoryLabelKo": "철물·건설자재 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0013",
+      "labelKo": "건설기계/장비 대여업",
+      "categoryCode": "cat_010",
+      "categoryLabelKo": "산업용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0014",
+      "labelKo": "건어물/젓갈 소매업",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0015",
+      "labelKo": "건축 설계 및 관련 서비스업",
+      "categoryCode": "cat_008",
+      "categoryLabelKo": "기술 서비스",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0016",
+      "labelKo": "건축물 일반 청소업",
+      "categoryCode": "cat_011",
+      "categoryLabelKo": "청소·방제",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0017",
+      "labelKo": "결혼 상담 서비스업",
+      "categoryCode": "cat_012",
+      "categoryLabelKo": "기타 개인",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0018",
+      "labelKo": "경양식",
+      "categoryCode": "cat_013",
+      "categoryLabelKo": "서양식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0019",
+      "labelKo": "경영 컨설팅업",
+      "categoryCode": "cat_014",
+      "categoryLabelKo": "본사·경영 컨설팅",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0020",
+      "labelKo": "고용 알선업",
+      "categoryCode": "cat_015",
+      "categoryLabelKo": "고용 알선",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0021",
+      "labelKo": "곡물/곡분 소매업",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0022",
+      "labelKo": "골프 연습장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0023",
+      "labelKo": "곱창 전골/구이",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0024",
+      "labelKo": "공인노무사",
+      "categoryCode": "cat_018",
+      "categoryLabelKo": "법무관련",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0025",
+      "labelKo": "공인회계사",
+      "categoryCode": "cat_019",
+      "categoryLabelKo": "회계·세무",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0026",
+      "labelKo": "광고 대행업",
+      "categoryCode": "cat_020",
+      "categoryLabelKo": "광고",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0027",
+      "labelKo": "광고 매체 판매업",
+      "categoryCode": "cat_020",
+      "categoryLabelKo": "광고",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0028",
+      "labelKo": "광고물 설계/제작업",
+      "categoryCode": "cat_020",
+      "categoryLabelKo": "광고",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0029",
+      "labelKo": "교육컨설팅업",
+      "categoryCode": "cat_021",
+      "categoryLabelKo": "교육 지원",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0030",
+      "labelKo": "구내식당",
+      "categoryCode": "cat_022",
+      "categoryLabelKo": "구내식당·뷔페",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0031",
+      "labelKo": "국/탕/찌개류",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0032",
+      "labelKo": "국수/칼국수",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0033",
+      "labelKo": "그 외 기타 간이 음식점",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0034",
+      "labelKo": "그 외 기타 개인/가정용품 수리업",
+      "categoryCode": "cat_006",
+      "categoryLabelKo": "기타 가정용품 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0035",
+      "labelKo": "그 외 기타 교육기관",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0036",
+      "labelKo": "그 외 기타 상품 전문 소매업",
+      "categoryCode": "cat_025",
+      "categoryLabelKo": "기타 상품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0037",
+      "labelKo": "그 외 기타 숙박업",
+      "categoryCode": "cat_026",
+      "categoryLabelKo": "기타 숙박",
+      "largeCategoryLabelKo": "숙박"
+    },
+    {
+      "code": "ind_0038",
+      "labelKo": "그 외 기타 종합 소매업",
+      "categoryCode": "cat_027",
+      "categoryLabelKo": "종합 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0039",
+      "labelKo": "기념품점",
+      "categoryCode": "cat_028",
+      "categoryLabelKo": "장식품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0040",
+      "labelKo": "기숙사/고시원",
+      "categoryCode": "cat_026",
+      "categoryLabelKo": "기타 숙박",
+      "largeCategoryLabelKo": "숙박"
+    },
+    {
+      "code": "ind_0041",
+      "labelKo": "기타 개인/가정용품 대여업",
+      "categoryCode": "cat_029",
+      "categoryLabelKo": "가정용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0042",
+      "labelKo": "기타 건설/건축자재 소매업",
+      "categoryCode": "cat_009",
+      "categoryLabelKo": "철물·건설자재 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0043",
+      "labelKo": "기타 광고 관련 서비스업",
+      "categoryCode": "cat_020",
+      "categoryLabelKo": "광고",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0044",
+      "labelKo": "기타 교육지원 서비스업",
+      "categoryCode": "cat_021",
+      "categoryLabelKo": "교육 지원",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0045",
+      "labelKo": "기타 기술/직업 훈련학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0046",
+      "labelKo": "기타 동남아식 전문",
+      "categoryCode": "cat_030",
+      "categoryLabelKo": "동남아시아",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0047",
+      "labelKo": "기타 법무관련 서비스업",
+      "categoryCode": "cat_018",
+      "categoryLabelKo": "법무관련",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0048",
+      "labelKo": "기타 사무 지원 서비스업",
+      "categoryCode": "cat_031",
+      "categoryLabelKo": "사무 지원",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0049",
+      "labelKo": "기타 산업용 기계/장비 대여업",
+      "categoryCode": "cat_010",
+      "categoryLabelKo": "산업용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0050",
+      "labelKo": "기타 서양식 음식점",
+      "categoryCode": "cat_013",
+      "categoryLabelKo": "서양식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0051",
+      "labelKo": "기타 스포츠시설 운영업",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0052",
+      "labelKo": "기타 엔지니어링 서비스업",
+      "categoryCode": "cat_008",
+      "categoryLabelKo": "기술 서비스",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0053",
+      "labelKo": "기타 여행 보조/예약 서비스업",
+      "categoryCode": "cat_032",
+      "categoryLabelKo": "여행사·보조",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0054",
+      "labelKo": "기타 예술/스포츠 교육기관",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0055",
+      "labelKo": "기타 오락관련 서비스업",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0056",
+      "labelKo": "기타 오락장",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0057",
+      "labelKo": "기타 운송장비 대여업",
+      "categoryCode": "cat_034",
+      "categoryLabelKo": "운송장비 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0058",
+      "labelKo": "기타 의류 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0059",
+      "labelKo": "기타 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0060",
+      "labelKo": "기타 일식 음식점",
+      "categoryCode": "cat_036",
+      "categoryLabelKo": "일식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0061",
+      "labelKo": "기타 한식 음식점",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0062",
+      "labelKo": "기타 회계 관련 서비스업",
+      "categoryCode": "cat_019",
+      "categoryLabelKo": "회계·세무",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0063",
+      "labelKo": "김밥/만두/분식",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0064",
+      "labelKo": "꽃집",
+      "categoryCode": "cat_037",
+      "categoryLabelKo": "식물 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0065",
+      "labelKo": "낚시터 운영업",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0066",
+      "labelKo": "남성 의류 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0067",
+      "labelKo": "내과/소아과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0068",
+      "labelKo": "냉면/밀면",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0069",
+      "labelKo": "네일숍",
+      "categoryCode": "cat_038",
+      "categoryLabelKo": "이용·미용",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0070",
+      "labelKo": "노래방",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0071",
+      "labelKo": "닭/오리고기 구이/찜",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0072",
+      "labelKo": "담배/전자담배 소매업",
+      "categoryCode": "cat_039",
+      "categoryLabelKo": "담배 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0073",
+      "labelKo": "당구장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0074",
+      "labelKo": "도시 계획 및 조경 설계 서비스업",
+      "categoryCode": "cat_008",
+      "categoryLabelKo": "기술 서비스",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0075",
+      "labelKo": "독서실/스터디 카페",
+      "categoryCode": "cat_040",
+      "categoryLabelKo": "도서관·사적지",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0076",
+      "labelKo": "동물병원",
+      "categoryCode": "cat_041",
+      "categoryLabelKo": "수의",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0077",
+      "labelKo": "돼지고기 구이/찜",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0078",
+      "labelKo": "떡/한과",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0079",
+      "labelKo": "레크리에이션 교육기관",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0080",
+      "labelKo": "마라탕/훠궈",
+      "categoryCode": "cat_042",
+      "categoryLabelKo": "중식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0081",
+      "labelKo": "마사지/안마",
+      "categoryCode": "cat_043",
+      "categoryLabelKo": "욕탕·신체관리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0082",
+      "labelKo": "만화방",
+      "categoryCode": "cat_029",
+      "categoryLabelKo": "가정용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0083",
+      "labelKo": "명함/간판/광고물 제작",
+      "categoryCode": "cat_044",
+      "categoryLabelKo": "인쇄·제품제작",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0084",
+      "labelKo": "모터사이클 및 부품 소매업",
+      "categoryCode": "cat_045",
+      "categoryLabelKo": "모터사이클 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0085",
+      "labelKo": "모터사이클 수리업",
+      "categoryCode": "cat_046",
+      "categoryLabelKo": "모터사이클 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0086",
+      "labelKo": "목욕탕/사우나",
+      "categoryCode": "cat_043",
+      "categoryLabelKo": "욕탕·신체관리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0087",
+      "labelKo": "무도 유흥 주점",
+      "categoryCode": "cat_047",
+      "categoryLabelKo": "주점",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0088",
+      "labelKo": "문구/회화용품 소매업",
+      "categoryCode": "cat_048",
+      "categoryLabelKo": "오락용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0089",
+      "labelKo": "미술학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0090",
+      "labelKo": "미용실",
+      "categoryCode": "cat_038",
+      "categoryLabelKo": "이용·미용",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0091",
+      "labelKo": "바둑/장기/체스 경기 운영업",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0092",
+      "labelKo": "반찬/식료품 소매업",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0093",
+      "labelKo": "방사선 진단/병리 검사 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0094",
+      "labelKo": "백반/한정식",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0095",
+      "labelKo": "버거",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0096",
+      "labelKo": "번역/통역 서비스업",
+      "categoryCode": "cat_049",
+      "categoryLabelKo": "기타 전문 과학",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0097",
+      "labelKo": "법무사",
+      "categoryCode": "cat_018",
+      "categoryLabelKo": "법무관련",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0098",
+      "labelKo": "베트남식 전문",
+      "categoryCode": "cat_030",
+      "categoryLabelKo": "동남아시아",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0099",
+      "labelKo": "벽지/장판/마루 소매업",
+      "categoryCode": "cat_009",
+      "categoryLabelKo": "철물·건설자재 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0100",
+      "labelKo": "변리사",
+      "categoryCode": "cat_018",
+      "categoryLabelKo": "법무관련",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0101",
+      "labelKo": "변호사",
+      "categoryCode": "cat_018",
+      "categoryLabelKo": "법무관련",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0102",
+      "labelKo": "복 요리 전문",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0103",
+      "labelKo": "복권 발행/판매업",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0104",
+      "labelKo": "복사업",
+      "categoryCode": "cat_031",
+      "categoryLabelKo": "사무 지원",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0105",
+      "labelKo": "볼링장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0106",
+      "labelKo": "부동산 중개/대리업",
+      "categoryCode": "cat_050",
+      "categoryLabelKo": "부동산 서비스",
+      "largeCategoryLabelKo": "부동산"
+    },
+    {
+      "code": "ind_0107",
+      "labelKo": "분류 안된 외국식 음식점",
+      "categoryCode": "cat_051",
+      "categoryLabelKo": "기타 외국",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0108",
+      "labelKo": "뷔페",
+      "categoryCode": "cat_022",
+      "categoryLabelKo": "구내식당·뷔페",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0109",
+      "labelKo": "비디오방",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0110",
+      "labelKo": "빵/도넛",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0111",
+      "labelKo": "사무기기 소매업",
+      "categoryCode": "cat_052",
+      "categoryLabelKo": "안경·정밀기기 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0112",
+      "labelKo": "사업/무형 재산권 중개업",
+      "categoryCode": "cat_049",
+      "categoryLabelKo": "기타 전문 과학",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0113",
+      "labelKo": "사업시설 유지·관리 서비스업",
+      "categoryCode": "cat_053",
+      "categoryLabelKo": "시설관리",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0114",
+      "labelKo": "사진기/기타 광학기기 소매업",
+      "categoryCode": "cat_052",
+      "categoryLabelKo": "안경·정밀기기 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0115",
+      "labelKo": "사진촬영업",
+      "categoryCode": "cat_054",
+      "categoryLabelKo": "사진 촬영",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0116",
+      "labelKo": "사회교육시설",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0117",
+      "labelKo": "산부인과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0118",
+      "labelKo": "산업설비, 운송장비 및 공공장소 청소업",
+      "categoryCode": "cat_011",
+      "categoryLabelKo": "청소·방제",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0119",
+      "labelKo": "상용 인력 공급 및 인사관리 서비스업",
+      "categoryCode": "cat_015",
+      "categoryLabelKo": "고용 알선",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0120",
+      "labelKo": "생맥주 전문",
+      "categoryCode": "cat_047",
+      "categoryLabelKo": "주점",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0121",
+      "labelKo": "생수/음료 소매업",
+      "categoryCode": "cat_055",
+      "categoryLabelKo": "음료 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0122",
+      "labelKo": "서점",
+      "categoryCode": "cat_048",
+      "categoryLabelKo": "오락용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0123",
+      "labelKo": "성형외과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0124",
+      "labelKo": "세무사",
+      "categoryCode": "cat_019",
+      "categoryLabelKo": "회계·세무",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0125",
+      "labelKo": "세탁소",
+      "categoryCode": "cat_056",
+      "categoryLabelKo": "세탁",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0126",
+      "labelKo": "셀프 빨래방",
+      "categoryCode": "cat_056",
+      "categoryLabelKo": "세탁",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0127",
+      "labelKo": "소고기 구이/찜",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0128",
+      "labelKo": "소독, 구충 및 방제 서비스업",
+      "categoryCode": "cat_011",
+      "categoryLabelKo": "청소·방제",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0129",
+      "labelKo": "수산물 소매업",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0130",
+      "labelKo": "수상/해양 레저업",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0131",
+      "labelKo": "수영장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0132",
+      "labelKo": "슈퍼마켓",
+      "categoryCode": "cat_027",
+      "categoryLabelKo": "종합 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0133",
+      "labelKo": "스쿼시/라켓볼장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0134",
+      "labelKo": "스포츠/레크리에이션 용품 대여업",
+      "categoryCode": "cat_029",
+      "categoryLabelKo": "가정용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0135",
+      "labelKo": "시각 디자인업",
+      "categoryCode": "cat_057",
+      "categoryLabelKo": "전문 디자인",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0136",
+      "labelKo": "시계/귀금속 소매업",
+      "categoryCode": "cat_058",
+      "categoryLabelKo": "시계·귀금속 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0137",
+      "labelKo": "시계/귀금속/악기 수리업",
+      "categoryCode": "cat_006",
+      "categoryLabelKo": "기타 가정용품 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0138",
+      "labelKo": "시장 조사 및 여론 조사업",
+      "categoryCode": "cat_059",
+      "categoryLabelKo": "시장 조사",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0139",
+      "labelKo": "신경/정신과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0140",
+      "labelKo": "신발 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0141",
+      "labelKo": "실/섬유제품 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0142",
+      "labelKo": "아이스크림 할인점",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0143",
+      "labelKo": "아이스크림/빙수",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0144",
+      "labelKo": "악기 소매업",
+      "categoryCode": "cat_060",
+      "categoryLabelKo": "기타 생활용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0145",
+      "labelKo": "안경렌즈 소매업",
+      "categoryCode": "cat_052",
+      "categoryLabelKo": "안경·정밀기기 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0146",
+      "labelKo": "안과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0147",
+      "labelKo": "애완동물/애완용품 소매업",
+      "categoryCode": "cat_061",
+      "categoryLabelKo": "애완동물·용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0148",
+      "labelKo": "액세서리/잡화 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0149",
+      "labelKo": "약국",
+      "categoryCode": "cat_062",
+      "categoryLabelKo": "의약·화장품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0150",
+      "labelKo": "얼음 소매업",
+      "categoryCode": "cat_055",
+      "categoryLabelKo": "음료 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0151",
+      "labelKo": "여관/모텔",
+      "categoryCode": "cat_063",
+      "categoryLabelKo": "일반 숙박",
+      "largeCategoryLabelKo": "숙박"
+    },
+    {
+      "code": "ind_0152",
+      "labelKo": "여성 의류 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0153",
+      "labelKo": "여행사",
+      "categoryCode": "cat_032",
+      "categoryLabelKo": "여행사·보조",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0154",
+      "labelKo": "예술품 소매업",
+      "categoryCode": "cat_028",
+      "categoryLabelKo": "장식품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0155",
+      "labelKo": "예식장업",
+      "categoryCode": "cat_012",
+      "categoryLabelKo": "기타 개인",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0156",
+      "labelKo": "옥외/전시 광고 대행업",
+      "categoryCode": "cat_020",
+      "categoryLabelKo": "광고",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0157",
+      "labelKo": "외과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0158",
+      "labelKo": "외국어학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0159",
+      "labelKo": "요가/필라테스 학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0160",
+      "labelKo": "요리 주점",
+      "categoryCode": "cat_047",
+      "categoryLabelKo": "주점",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0161",
+      "labelKo": "요양병원",
+      "categoryCode": "cat_064",
+      "categoryLabelKo": "병원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0162",
+      "labelKo": "우유 소매업",
+      "categoryCode": "cat_055",
+      "categoryLabelKo": "음료 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0163",
+      "labelKo": "운동용품 소매업",
+      "categoryCode": "cat_048",
+      "categoryLabelKo": "오락용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0164",
+      "labelKo": "운전학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0165",
+      "labelKo": "유사 의료업",
+      "categoryCode": "cat_065",
+      "categoryLabelKo": "기타 보건",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0166",
+      "labelKo": "유아용 의류 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0167",
+      "labelKo": "음반/비디오물 대여업",
+      "categoryCode": "cat_029",
+      "categoryLabelKo": "가정용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0168",
+      "labelKo": "음반/비디오물 소매업",
+      "categoryCode": "cat_048",
+      "categoryLabelKo": "오락용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0169",
+      "labelKo": "음악학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0170",
+      "labelKo": "의료기기 소매업",
+      "categoryCode": "cat_062",
+      "categoryLabelKo": "의약·화장품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0171",
+      "labelKo": "의류 대여업",
+      "categoryCode": "cat_029",
+      "categoryLabelKo": "가정용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0172",
+      "labelKo": "의류/이불 수선업",
+      "categoryCode": "cat_006",
+      "categoryLabelKo": "기타 가정용품 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0173",
+      "labelKo": "이비인후과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0174",
+      "labelKo": "인테리어 디자인업",
+      "categoryCode": "cat_057",
+      "categoryLabelKo": "전문 디자인",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0175",
+      "labelKo": "일반 유흥 주점",
+      "categoryCode": "cat_047",
+      "categoryLabelKo": "주점",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0176",
+      "labelKo": "일반병원",
+      "categoryCode": "cat_064",
+      "categoryLabelKo": "병원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0177",
+      "labelKo": "일식 면 요리",
+      "categoryCode": "cat_036",
+      "categoryLabelKo": "일식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0178",
+      "labelKo": "일식 카레/돈가스/덮밥",
+      "categoryCode": "cat_036",
+      "categoryLabelKo": "일식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0179",
+      "labelKo": "일식 회/초밥",
+      "categoryCode": "cat_036",
+      "categoryLabelKo": "일식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0180",
+      "labelKo": "임시/일용 인력 공급업",
+      "categoryCode": "cat_015",
+      "categoryLabelKo": "고용 알선",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0181",
+      "labelKo": "입시·교과학원",
+      "categoryCode": "cat_066",
+      "categoryLabelKo": "일반 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0182",
+      "labelKo": "자동차 대여업",
+      "categoryCode": "cat_034",
+      "categoryLabelKo": "운송장비 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0183",
+      "labelKo": "자동차 부품 소매업",
+      "categoryCode": "cat_067",
+      "categoryLabelKo": "자동차 부품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0184",
+      "labelKo": "자동차 세차장",
+      "categoryCode": "cat_068",
+      "categoryLabelKo": "자동차 수리·세차",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0185",
+      "labelKo": "자동차 정비소",
+      "categoryCode": "cat_068",
+      "categoryLabelKo": "자동차 수리·세차",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0186",
+      "labelKo": "자전거 소매업",
+      "categoryCode": "cat_048",
+      "categoryLabelKo": "오락용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0187",
+      "labelKo": "장난감 소매업",
+      "categoryCode": "cat_048",
+      "categoryLabelKo": "오락용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0188",
+      "labelKo": "장례식장",
+      "categoryCode": "cat_069",
+      "categoryLabelKo": "장례식장",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0189",
+      "labelKo": "전/부침개",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0190",
+      "labelKo": "전기용품/조명장치 소매업",
+      "categoryCode": "cat_060",
+      "categoryLabelKo": "기타 생활용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0191",
+      "labelKo": "전문자격/고시학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0192",
+      "labelKo": "전시/컨벤션/행사 대행 서비스업",
+      "categoryCode": "cat_070",
+      "categoryLabelKo": "기타 사업 서비스",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0193",
+      "labelKo": "전자 게임장",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0194",
+      "labelKo": "정육점",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0195",
+      "labelKo": "제품 디자인업",
+      "categoryCode": "cat_057",
+      "categoryLabelKo": "전문 디자인",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0196",
+      "labelKo": "조경 유지·관리 서비스업",
+      "categoryCode": "cat_071",
+      "categoryLabelKo": "조경·유지",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0197",
+      "labelKo": "족발/보쌈",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0198",
+      "labelKo": "종합 스포츠시설",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0199",
+      "labelKo": "종합병원",
+      "categoryCode": "cat_064",
+      "categoryLabelKo": "병원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0200",
+      "labelKo": "주류 소매업",
+      "categoryCode": "cat_055",
+      "categoryLabelKo": "음료 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0201",
+      "labelKo": "주방/가정용품 소매업",
+      "categoryCode": "cat_060",
+      "categoryLabelKo": "기타 생활용품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0202",
+      "labelKo": "주유소",
+      "categoryCode": "cat_003",
+      "categoryLabelKo": "연료 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0203",
+      "labelKo": "중고 상품 소매업",
+      "categoryCode": "cat_072",
+      "categoryLabelKo": "중고 상품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0204",
+      "labelKo": "중국집",
+      "categoryCode": "cat_042",
+      "categoryLabelKo": "중식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0205",
+      "labelKo": "직원 훈련기관",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0206",
+      "labelKo": "채소/과일 소매업",
+      "categoryCode": "cat_007",
+      "categoryLabelKo": "식료품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0207",
+      "labelKo": "철물/공구 소매업",
+      "categoryCode": "cat_009",
+      "categoryLabelKo": "철물·건설자재 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0208",
+      "labelKo": "청소년 수련시설",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0209",
+      "labelKo": "체형/비만 관리",
+      "categoryCode": "cat_043",
+      "categoryLabelKo": "욕탕·신체관리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0210",
+      "labelKo": "치과병원",
+      "categoryCode": "cat_064",
+      "categoryLabelKo": "병원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0211",
+      "labelKo": "치과의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0212",
+      "labelKo": "치킨",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0213",
+      "labelKo": "침구류/커튼 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0214",
+      "labelKo": "카페",
+      "categoryCode": "cat_073",
+      "categoryLabelKo": "비알코올",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0215",
+      "labelKo": "캠핑/글램핑",
+      "categoryCode": "cat_063",
+      "categoryLabelKo": "일반 숙박",
+      "largeCategoryLabelKo": "숙박"
+    },
+    {
+      "code": "ind_0216",
+      "labelKo": "컴퓨터 학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0217",
+      "labelKo": "컴퓨터/노트북/프린터 수리업",
+      "categoryCode": "cat_074",
+      "categoryLabelKo": "컴퓨터 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0218",
+      "labelKo": "컴퓨터/사무기기 대여업",
+      "categoryCode": "cat_010",
+      "categoryLabelKo": "산업용품 대여",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0219",
+      "labelKo": "컴퓨터/소프트웨어 소매업",
+      "categoryCode": "cat_004",
+      "categoryLabelKo": "가전·통신 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0220",
+      "labelKo": "타이어 소매업",
+      "categoryCode": "cat_067",
+      "categoryLabelKo": "자동차 부품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0221",
+      "labelKo": "탁구장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0222",
+      "labelKo": "태권도/무술학원",
+      "categoryCode": "cat_024",
+      "categoryLabelKo": "기타 교육",
+      "largeCategoryLabelKo": "교육"
+    },
+    {
+      "code": "ind_0223",
+      "labelKo": "테니스장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0224",
+      "labelKo": "토스트/샌드위치/샐러드",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0225",
+      "labelKo": "파스타/스테이크",
+      "categoryCode": "cat_013",
+      "categoryLabelKo": "서양식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0226",
+      "labelKo": "패밀리레스토랑",
+      "categoryCode": "cat_013",
+      "categoryLabelKo": "서양식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0227",
+      "labelKo": "패션/섬유/기타 전문 디자인업",
+      "categoryCode": "cat_057",
+      "categoryLabelKo": "전문 디자인",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0228",
+      "labelKo": "펜션",
+      "categoryCode": "cat_063",
+      "categoryLabelKo": "일반 숙박",
+      "largeCategoryLabelKo": "숙박"
+    },
+    {
+      "code": "ind_0229",
+      "labelKo": "편의점",
+      "categoryCode": "cat_027",
+      "categoryLabelKo": "종합 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0230",
+      "labelKo": "포장/충전업",
+      "categoryCode": "cat_070",
+      "categoryLabelKo": "기타 사업 서비스",
+      "largeCategoryLabelKo": "시설관리·임대"
+    },
+    {
+      "code": "ind_0231",
+      "labelKo": "피부 관리실",
+      "categoryCode": "cat_038",
+      "categoryLabelKo": "이용·미용",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0232",
+      "labelKo": "피부/비뇨기과 의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0233",
+      "labelKo": "피자",
+      "categoryCode": "cat_023",
+      "categoryLabelKo": "기타 간이",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0234",
+      "labelKo": "한방병원",
+      "categoryCode": "cat_064",
+      "categoryLabelKo": "병원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0235",
+      "labelKo": "한복 소매업",
+      "categoryCode": "cat_002",
+      "categoryLabelKo": "섬유·의복·신발 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0236",
+      "labelKo": "한의원",
+      "categoryCode": "cat_035",
+      "categoryLabelKo": "의원",
+      "largeCategoryLabelKo": "보건의료"
+    },
+    {
+      "code": "ind_0237",
+      "labelKo": "해산물 구이/찜",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0238",
+      "labelKo": "핸드폰 소매업",
+      "categoryCode": "cat_004",
+      "categoryLabelKo": "가전·통신 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0239",
+      "labelKo": "핸드폰/통신장비 수리업",
+      "categoryCode": "cat_075",
+      "categoryLabelKo": "통신장비 수리",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0240",
+      "labelKo": "행정사",
+      "categoryCode": "cat_018",
+      "categoryLabelKo": "법무관련",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0241",
+      "labelKo": "헬스장",
+      "categoryCode": "cat_016",
+      "categoryLabelKo": "스포츠 서비스",
+      "largeCategoryLabelKo": "예술·스포츠"
+    },
+    {
+      "code": "ind_0242",
+      "labelKo": "호텔/리조트",
+      "categoryCode": "cat_063",
+      "categoryLabelKo": "일반 숙박",
+      "largeCategoryLabelKo": "숙박"
+    },
+    {
+      "code": "ind_0243",
+      "labelKo": "화장터/묘지/납골당",
+      "categoryCode": "cat_069",
+      "categoryLabelKo": "장례식장",
+      "largeCategoryLabelKo": "수리·개인"
+    },
+    {
+      "code": "ind_0244",
+      "labelKo": "화장품 소매업",
+      "categoryCode": "cat_062",
+      "categoryLabelKo": "의약·화장품 소매",
+      "largeCategoryLabelKo": "소매"
+    },
+    {
+      "code": "ind_0245",
+      "labelKo": "환경 관련 엔지니어링 서비스업",
+      "categoryCode": "cat_008",
+      "categoryLabelKo": "기술 서비스",
+      "largeCategoryLabelKo": "과학·기술"
+    },
+    {
+      "code": "ind_0246",
+      "labelKo": "횟집",
+      "categoryCode": "cat_017",
+      "categoryLabelKo": "한식",
+      "largeCategoryLabelKo": "음식"
+    },
+    {
+      "code": "ind_0247",
+      "labelKo": "PC방",
+      "categoryCode": "cat_033",
+      "categoryLabelKo": "유원지·오락",
+      "largeCategoryLabelKo": "예술·스포츠"
+    }
+  ],
+  "industryAliases": [
+    {
+      "aliasKo": "치킨집",
+      "industryCode": "ind_0212"
+    },
+    {
+      "aliasKo": "커피숍",
+      "industryCode": "ind_0214"
+    },
+    {
+      "aliasKo": "삼겹살",
+      "industryCode": "ind_0077"
+    },
+    {
+      "aliasKo": "과일가게",
+      "industryCode": "ind_0206"
+    },
+    {
+      "aliasKo": "피시방",
+      "industryCode": "ind_0247"
+    },
+    {
+      "aliasKo": "미장원",
+      "industryCode": "ind_0090"
+    },
+    {
+      "aliasKo": "해장국",
+      "industryCode": "ind_0031"
+    },
+    {
+      "aliasKo": "빵집",
+      "industryCode": "ind_0018"
+    },
+    {
+      "aliasKo": "떡볶이",
+      "industryCode": "ind_0063"
+    },
+    {
+      "aliasKo": "횟집",
+      "industryCode": "ind_0246"
+    },
+    {
+      "aliasKo": "초밥",
+      "industryCode": "ind_0179"
+    },
+    {
+      "aliasKo": "중국집",
+      "industryCode": "ind_0204"
+    },
+    {
+      "aliasKo": "마라탕",
+      "industryCode": "ind_0080"
+    },
+    {
+      "aliasKo": "족발",
+      "industryCode": "ind_0197"
+    },
+    {
+      "aliasKo": "보쌈",
+      "industryCode": "ind_0197"
+    }
+  ]
+}

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="오류 탐지 세션">
+<meta name="date" content="2026-05-30">
+<meta name="keywords" content="상권AI, 오류감사, 레드팀, QA, 조사버그, 집계오류, 업종매칭">
+<meta name="session" content="71">
+<title>상권AI 챗봇 — 무작위 오류 감사 보고서 (22건)</title>
+<style>
+  :root{--brand:#2D4540;--bg:#F5F2EC;--hi:#fef2f2;--hiC:#a32020;--md:#fff9ef;--mdC:#7a4a0c;--lo:#eef5f1;--loC:#2d4540;--line:#e1ded5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#1a1916;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6}
+  main{max-width:980px;margin:0 auto;padding:32px 22px 64px}
+  header.doc{border-bottom:3px solid var(--brand);padding-bottom:18px;margin-bottom:22px}
+  h1{font-size:26px;margin:0 0 6px}
+  .sub{color:#6f6b62;font-size:14px}
+  h2{font-size:19px;margin:34px 0 12px;padding-left:10px;border-left:4px solid var(--brand)}
+  .toc{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:18px 0}
+  .toc h3{margin:0 0 8px;font-size:14px;color:#6f6b62}
+  .toc ol{margin:0;padding-left:20px;columns:2;font-size:13.5px}
+  .toc a{color:var(--brand);text-decoration:none}
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+  .scard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
+  .scard b{display:block;font-size:28px;color:var(--brand)}
+  .scard span{font-size:12.5px;color:#6f6b62}
+  table{width:100%;border-collapse:collapse;margin:8px 0 4px;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#efeae0}
+  .finding{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
+  .finding h4{margin:0 0 8px;font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .sev{font-size:11px;font-weight:800;border-radius:999px;padding:3px 9px}
+  .sev.high{background:var(--hi);color:var(--hiC)}
+  .sev.mid{background:var(--md);color:var(--mdC)}
+  .sev.low{background:var(--lo);color:var(--loC)}
+  .num{color:#9a958a;font-weight:800;margin-right:2px}
+  .finding dl{display:grid;grid-template-columns:88px 1fr;gap:4px 12px;margin:8px 0 0;font-size:13.5px}
+  .finding dt{font-weight:800;color:#3a4540}
+  code,.mono{font-family:'Cascadia Code',Consolas,monospace;font-size:12.5px;background:#f4f0e6;border-radius:5px;padding:1px 5px}
+  .ex{background:#f4f0e6;border-left:3px solid #b8b1a2;padding:8px 12px;border-radius:0 6px 6px 0;margin:6px 0;font-size:13px}
+  .ex b{color:var(--hiC)}
+  .cat{margin-top:30px}
+  .note{background:#eef5f1;border:1px solid #cfe0d6;border-radius:8px;padding:12px 16px;font-size:13px;margin:10px 0}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:#6f6b62}
+  @media print{body{background:#fff}.finding,.scard,.toc{break-inside:avoid}main{max-width:none}}
+  @media(max-width:680px){.toc ol{columns:1}.summary-grid{grid-template-columns:1fr}.finding dl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<header class="doc">
+  <h1>상권AI 챗봇 — 무작위 오류 감사 보고서</h1>
+  <div class="sub">세션 71 · 2026-05-30 · 로컬 파이프라인(Gemini 미사용) 대상 · 약 420회 무작위 쿼리 + 40여 엣지 케이스 · 22개 이슈</div>
+</header>
+
+<div class="summary-grid">
+  <div class="scard"><b>50</b><span>검증된 이슈</span></div>
+  <div class="scard"><b>7</b><span>High</span></div>
+  <div class="scard"><b>~25,000</b><span>레코드/도구 호출 검증</span></div>
+</div>
+
+<div class="note" style="background:#eef5f1;border-color:#cfe0d6">
+<b>✅ 개선 완료 (2026-05-30, redteam-d)</b> — 50건 중 <b>코드로 해결 가능한 41건 수정·검증 완료</b>. <code>node --check</code> 9개 파일 + ToolDispatcher production 경로 80회 회귀 스윕(크래시·누출·조사오류 0) + 실제 UI 라이브 확인.
+<ul style="margin:8px 0 0;padding-left:18px">
+<li><b>R3 조사</b> #1·2·3·44 — <code>josa.js</code> 유틸 신설, narrative·summary·칩 11+ 사이트 적용 (카페는/치킨이/유동인구가 정확)</li>
+<li><b>R4 집계분모</b> #4·45·30 — <code>totalIndustries</code>를 실제 영업 업종(로컬 upso&gt;0)으로. 대청동 247→45, 평균 46→1,891만원</li>
+<li><b>R1 인사이트</b> #27·31·32·33 — 모순된 "업체당 매출" 디텍터 제거, 시도 비교 sgg_sub 가드, 주중/주말 일평균 정규화</li>
+<li><b>R2 신뢰도</b> #9·41 — <code>dataNotice</code> 카드 상단 렌더(sgg_sub 경고 노출), direct는 미표시</li>
+<li><b>R5 매칭</b> #5 — 정형외과→성형외과 오매칭 차단(접두 정렬 규칙), 정상 매칭 유지 검증</li>
+<li><b>R6/Quick</b> #6·15·17·18·28·29·34·35·36·46 — merge 0개 모순, 자동선택 고지, 동일동/동일업종 차단, delta=0 보합, "-%", "전국"→"대전시", 라벨 정정</li>
+<li><b>회귀수정</b> #48 — 배지색 hsl 허용(세션70 자가유발)</li>
+</ul>
+<b>📊 최종 처리 현황 (redteam-f, 정확 집계)</b>
+<table style="margin:8px 0">
+<tr><th>상태</th><th>건수</th><th>항목</th></tr>
+<tr><td><b>✅ 완전 수정·검증</b></td><td><b>40</b></td><td>#1-6, 9-24, 27-36, 38, 40, 43-48 (조사·247분모·정형외과·업체당매출·미인식안내·사전16종·밀도라우팅·유사상권dedup·빈추세·brand고지·맥락덮어쓰기·지표라벨·소표본 등)</td></tr>
+<tr><td>⚠️ 부분/완화</td><td>5</td><td>#7 merge평균(dataNotice로 완화), #25·39 유사 규모(기준 라벨로 명확화), #41·42 (참고)표기(경고배너로 대체)</td></tr>
+<tr><td>🔬 원자료 조사 → <b>버그 아님(데이터 정상)</b></td><td>4</td><td>#8 upso=100, #26·49 peak균일, #50 이상치 — 아래 판별</td></tr>
+<tr><td>✅ 설계적정(종결)</td><td>1</td><td>#37 disambiguation — 아래 판단</td></tr>
+</table>
+<b>#37 판단</b>: 차단형 disambiguation 미도입 결정. 법정동=생활권이라 auto-merge가 올바른 기본값이고, 핵심 불만(조용한 병합)은 이미 해소됨 — merge 요약이 "여러 행정동을 묶어 본 결과…둔산1+둔산2동에 걸쳐"로 고지하고, <code>DongDetailCard</code>가 구성 행정동 개별 지표를 나란히 표시. 특정 동은 "관저1동 카페"로 직접 질의 가능. (비차단 드릴다운 칩은 향후 선택 개선으로만 기록)
+<b>원자료 직접 조사 결과 (districts/*.json 82개 + 12,206 레코드)</b>:
+<ul style="margin:6px 0 0;padding-left:18px">
+<li><b>#8</b> upsoDong=100은 전체 12,206건 중 100배수가 단 1건(0.0%) → 캡 아닌 우연의 실제값. ✅ 버그 아님</li>
+<li><b>#26·49</b> peakTime이 popByTime 최댓값과 82/82 완전 일치(계산 정확). 14-18시 피크는 오후 상업 유동인구의 실제 보편 패턴. ✅ 버그 아님</li>
+<li><b>#50</b> 목동 기타의류 amt=11,761(amtLow 6,448~High 12,646, upso=7, direct) → 일관된 고가 클러스터, 앱이 이미 "8.8배" 인사이트로 노출. ✅ 버그 아님</li>
+</ul>
+검증: <code>node --check</code> 전 파일 + ToolDispatcher <b>140회×7도구 회귀(0)</b> + UI 다중턴 + <b>원자료 직접 조사</b>. 추가 발견·수정: "업소 수은" 조사버그.
+</div>
+
+<div class="note">
+<b>방법</b>: 82개 행정동 × 247개 업종을 무작위 조합한 표준 쿼리 220회 + 모든 라우팅 타입 200회 스윕, 그리고 엣지/악성/오타 입력 약 40종을 <code>TestRunner</code>(프로덕션 모듈 직접 호출)와 실제 UI(production 파이프라인) 양쪽으로 통과시켜 결과를 깊이 스캔했습니다.
+<br><b>중요</b>: 자동 탐지기의 1차 후보 다수가 <u>검증 후 false positive로 기각</u>되었습니다(예: 스트리밍 429 정상, JSON 파싱 견고, density 0나눗셈·insight NaN%는 기존 가드로 방어, garbage/업종만 입력은 적절히 clarify, follow-up 체인 100회 무결, amt=0/null 2만건 0건). 아래는 <b>코드 소스 라인 또는 실제 UI DOM으로 재현 확인된 것만</b> 수록합니다.
+</div>
+
+<div class="toc">
+<h3>목차 — 카테고리별</h3>
+<ol>
+<li><a href="#a">A. 한국어 조사(은/는·과/와) — #1~#3</a></li>
+<li><a href="#b">B. 집계·데이터 정확성 — #4~#8</a></li>
+<li><a href="#c">C. 업종 매칭 — #9~#12</a></li>
+<li><a href="#d">D. 의도 라우팅 — #13~#15</a></li>
+<li><a href="#e">E. 신뢰도 표기·안내 — #16~#19</a></li>
+<li><a href="#f">F. 포맷·표현(UX) — #20~#22</a></li>
+<li><a href="#g">G. 차트·유사상권·인구 (2차) — #23~#26</a></li>
+<li><a href="#h">H. 인사이트 엔진 정확성 (3차) — #27~#33</a></li>
+<li><a href="#i">I. 비교·랭킹·매칭 (3차) — #34~#40</a></li>
+<li><a href="#j">J. 신뢰도·조사·집계 심화 (3차) — #41~#47</a></li>
+<li><a href="#k">K. 회귀·데이터품질 (3차) — #48~#50</a></li>
+</ol>
+<p style="font-size:12.5px;color:#6f6b62;margin:8px 0 0">3차 감사는 <b>ToolDispatcher(production 실행 경로) 직접 구동</b> + insight-engine 정적 리뷰. 모든 도구 타입을 하네스 한계 없이 검증.</p>
+</div>
+
+<h2>심각도 요약</h2>
+<table>
+<tr><th>심각도</th><th>이슈</th></tr>
+<tr><td><span class="sev high">High</span></td><td>#4·#45 overview 247 오집계, #5 정형외과→성형외과 오매칭, #6 merge 0개 모순, #9 sgg_sub 참고값 경고 미표시, #13·#40 미인식 업종 무고지 폴백, <b>#27 "업체당 매출" 인사이트 ×upso 오산(카드 모순)</b>, <b>#48 배지색 회귀(수정완료)</b></td></tr>
+<tr><td><span class="sev mid">Mid</span></td><td>#1~3 조사, #7 의료과목 미매칭, #10 brand 무고지, #11 정형외과외 매칭갭, #14 밀도 라우팅, #15 비교대상 자동치환, #16 sgg_sub 표기, #18 전국 오표기, #19 맥락오염</td></tr>
+<tr><td><span class="sev low">Low</span></td><td>#8 upso=100 캡 의심, #12 음식/레저 용어갭, #17 "-%" 포맷, #20 지표 라벨, #21 억단위, #22 소표본 비교</td></tr>
+</table>
+
+<!-- A -->
+<section class="cat" id="a">
+<h2>A. 한국어 조사 (은/는 · 과/와)</h2>
+
+<div class="finding">
+<h4><span class="num">#1</span> narrative 조사 "은/는" 하드코딩 <span class="sev mid">Mid</span></h4>
+<p>로컬 해설 생성기가 업종명 뒤에 조사 <code>은</code>을 하드코딩해, 모음으로 끝나는 업종에서 "카페<b>은</b>"처럼 비문이 됩니다.</p>
+<div class="ex">실제 UI: "둔산 카페<b>은</b> 여러 행정동을 묶어 본 결과입니다." / "동구 카페<b>은</b> 최근 기준 …"</div>
+<dl>
+<dt>위치</dt><dd><code>main.js</code> buildLocalNarrative — 854(density), 868(sggIndustry), 887(merge), 915(upso)</dd>
+<dt>수정안</dt><dd>받침 유무 판정 헬퍼 <code>josa(word,'은/는')</code> 도입 후 전 사이트 적용</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#2</span> "과/와" 조사 양방향 오류 <span class="sev mid">Mid</span></h4>
+<p>유사상권 문구는 한쪽은 <code>과</code>(854·931·614), 다른 쪽은 <code>와</code>(629)로 하드코딩되어, 모음 업종은 "카페<b>과</b>", 자음 업종은 "치킨<b>와</b>"로 둘 다 깨집니다.</p>
+<dl>
+<dt>위치</dt><dd><code>main.js</code>:931 · <code>response-builder.js</code>:614(<code>과</code>),629(<code>와</code>)</dd>
+<dt>수정안</dt><dd>동일 <code>josa(word,'과/와')</code> 적용</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#3</span> 생성된 follow-up 칩 텍스트의 조사 오류 <span class="sev mid">Mid</span></h4>
+<p>꼬리물기 칩 템플릿이 <code>${industry}는</code>으로 고정되어, 자음 업종 칩이 "치킨<b>는</b> 어때?"로 출력됩니다(클릭 가능한 UI 요소라 노출 빈도 높음).</p>
+<dl>
+<dt>위치</dt><dd><code>response-builder.js</code>:1133 compare 칩 템플릿</dd>
+<dt>수정안</dt><dd>칩 생성 시 조사 헬퍼 적용</dd>
+</dl>
+</div>
+</section>
+
+<!-- B -->
+<section class="cat" id="b">
+<h2>B. 집계·데이터 정확성</h2>
+
+<div class="finding">
+<h4><span class="num">#4</span> Overview "247개 업종이 영업 중" — 모든 동에서 동일 <span class="sev high">High</span></h4>
+<p>행정동 전체 현황의 "업종 수"가 <b>해당 동 실제 영업 업종 수가 아니라 전체 카탈로그(247)</b>로 표시됩니다. 대청동(전체 130업소)도, 산내동(749), 중앙동(1,984)도 모두 "247개 업종". 130개 업소가 247개 업종을 다 영업할 수 없으므로 명백한 오집계입니다. 요약 문장과 통계 카드 셀("업종 수: 247개") 양쪽에 노출.</p>
+<dl>
+<dt>증거</dt><dd>대청동·대흥동·기성동 등 6개 동 일괄 검증 → 전부 247</dd>
+<dt>위치</dt><dd><code>response-builder.js</code>:661 <code>overview.totalIndustries||0</code> → 670 출력. 근본은 <code>query-engine.js</code> buildOverview의 totalIndustries 산출(카탈로그 길이로 추정)</dd>
+<dt>수정안</dt><dd>해당 동에서 매출/업소 데이터가 존재하는 업종만 카운트</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#5</span> 정형외과 → "성형외과 의원" 오매칭 <span class="sev high">High</span></h4>
+<p>업종 부분매칭이 "정형외과"에서 "정"을 떼고 "형외과"를 "<b>성형외과 의원</b>"에 매칭(ratio 0.5)합니다. 정형외과(整形外科)와 성형외과(成形外科)는 전혀 다른 진료과로, 사용자가 받는 데이터가 완전히 다른 업종이 됩니다. <b>의미적으로 위험</b>.</p>
+<div class="ex">parse("중앙동 정형외과 매출") → industry=<b>성형외과 의원</b>, raw="형외과", type=partial</div>
+<dl>
+<dt>위치</dt><dd><code>intent-parser.js</code> 부분매칭(ratio≥0.35 허용) — 의료 "○○과" 계열 substring 충돌</dd>
+<dt>수정안</dt><dd>"○○과" 의료 토큰은 부분매칭 제외(정확/별칭만), 또는 접두 1글자 차이 페널티 강화</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#6</span> 데이터 결손 동 합산 → "총 업소 0개" + 모순된 평균 <span class="sev high">High</span></h4>
+<p>법정동 합산(merge) 시 구성 행정동이 모두 sgg_sub(개별 업소 데이터 없음)이면 합산 업소가 <b>0개</b>로 나오는데, 동시에 "평균 업소당 월매출 1,019만원"을 표시합니다. <b>업소 0개인데 업소당 평균 매출이 존재</b>하는 논리적 모순.</p>
+<div class="ex">"법동 한식 매출" → "…업소 규모는 <b>0개</b>로 집계했습니다. 평균 업소당 월매출 1,019만원" (총 업소 수(합) 0개)</div>
+<dl>
+<dt>위치</dt><dd>merge 합산(null upso 합 → 0) + <code>response-builder.js</code>:980 merge 요약</dd>
+<dt>수정안</dt><dd>구성 동이 전부 결손이면 "개별 업소 데이터 없음"으로 표기하고 0 대신 "-"</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#7</span> merge 합산 평균이 결손 데이터 위에서 산출 <span class="sev mid">Mid</span></h4>
+<p>#6과 연동: 합산 평균 매출이 sgg 대체값 기반인데도 일반 직접값처럼 제시됩니다(참고값 표기 없음 → C #16과 결합 시 신뢰도 오인 가중).</p>
+<dl><dt>수정안</dt><dd>merge 결과에 dataStatus 전파 + 참고값 배지 노출</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#8</span> 중앙동 카페 업소 수 정확히 100 — 캡 의심 <span class="sev low">Low</span></h4>
+<p>고밀도 조합 스캔에서 "중앙동 카페 = 100개"가 정확히 떨어집니다. 라운드 넘버라 상한 캡 또는 집계 아티팩트 가능성. (편의점=8 등 다른 값은 정상이라 단정 불가 — <b>원자료 확인 필요</b>.)</p>
+<dl><dt>조치</dt><dd>원본 CSV에서 중앙동 카페 업소 수 직접 확인</dd></dl>
+</div>
+</section>
+
+<!-- C -->
+<section class="cat" id="c">
+<h2>C. 업종 매칭</h2>
+
+<div class="finding">
+<h4><span class="num">#9</span> 의료 전문과목 대량 미매칭 <span class="sev high">High</span></h4>
+<p>신경외과·흉부외과·구강외과·재활의학과·가정의학과·영상의학과·마취통증의학과·<b>피부과·안과</b>가 모두 <code>null</code>(매칭 실패). 데이터에 "피부/비뇨기과 의원" 등 의원 카테고리가 존재함에도 "피부과"가 매칭되지 않습니다. 의료 질의의 상당수가 무응답/오응답.</p>
+<dl>
+<dt>증거</dt><dd>9개 진료과 probe 전부 type=none</dd>
+<dt>수정안</dt><dd>의료 "○○과 → ○○과 의원" 별칭 사전 보강</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#10</span> brand/별칭 치환이 사용자에게 미고지 <span class="sev mid">Mid</span></h4>
+<p>"스타벅스"→카페, "다이소"→그 외 기타 종합 소매업, "올리브영"→화장품 소매업처럼 brand 매칭이 적용되지만 <b>해석 안내 노트가 없고 배지도 "카페"로 표기</b>됩니다("로봇카페"같은 partial은 안내가 뜨는 것과 불일치). 사용자가 스타벅스 단독 데이터로 오인할 수 있음.</p>
+<div class="ex">"중앙동 스타벅스 매출" → 배지 "카페", note에 해석 안내 없음, "중앙동 카페 600만원"</div>
+<dl><dt>수정안</dt><dd>brand/alias 매칭에도 partial과 동일한 "○○는 △△로 해석" 안내 적용</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#11</span> 정형외과 외 매칭 갭(일반 용어) <span class="sev mid">Mid</span></h4>
+<p>곱창·스크린골프·포장마차·이자카야·와인바·요양원·코노 등 일상적 업종 표현이 <code>null</code>. 빈도 높은 키워드라 무응답 경험 누적.</p>
+<dl><dt>수정안</dt><dd>고빈도 별칭 사전 확장</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#12</span> 미인식 업종이 조용히 폴백 <span class="sev high">High</span></h4>
+<p>인식 안 되는 업종("우주선")을 넣으면 <b>아무 안내 없이 해당 동의 전체 overview로 폴백</b>합니다. 사용자는 그 overview가 "우주선" 결과라고 오인할 수 있음(#11 갭들과 결합 시 빈발).</p>
+<div class="ex">"중앙동 우주선 매출" → "중앙동 전체 상권 현황입니다. 247개 업종…" (우주선 미인식 안내 없음)</div>
+<dl><dt>수정안</dt><dd>업종 토큰은 있으나 매칭 실패 시 "‘우주선’ 업종을 찾지 못했어요" 안내 후 overview 제안</dd></dl>
+</div>
+</section>
+
+<!-- D -->
+<section class="cat" id="d">
+<h2>D. 의도 라우팅</h2>
+
+<div class="finding">
+<h4><span class="num">#13</span> 미인식 업종 무고지 폴백 (대표 사례) <span class="sev high">High</span></h4>
+<p>#12와 동일 근본의 라우팅 측면: 업종 슬롯이 채워지지 않으면 overview로 흘러가는 분기에 "업종 인식 실패" 신호가 없습니다. (C/D 교차 — 사용자 영향 큼.)</p>
+<dl><dt>위치</dt><dd>로컬 IntentParser → goal=overview 폴백 경로</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#14</span> "밀도/밀도 분석" 키워드가 density로 라우팅되지 않음 <span class="sev mid">Mid</span></h4>
+<p>"중앙동 카페 밀도 분석"은 density가 아니라 <b>sales</b>로 처리됩니다("업소당 월평균 매출 600만원"). 반면 "업소당 유동인구 밀도"처럼 풀어 쓰면 density가 정상 작동(업소당 유동인구 1,222명/업소). 즉 핵심 키워드 "밀도" 단독이 트리거되지 않음.</p>
+<dl>
+<dt>위치</dt><dd><code>intent-parser.js</code> density 감지 패턴</dd>
+<dt>수정안</dt><dd>"밀도" 단독 키워드를 density 트리거에 추가</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#15</span> 비교 대상 미지정/오류 시 조용히 자동 치환 <span class="sev mid">Mid</span></h4>
+<p>존재하지 않는 비교 대상을 줘도 <b>안내 없이</b> 같은 권역의 다른 동을 자동 선택해 비교합니다. 사용자는 자기가 지정한 대상과 비교된 줄 오인.</p>
+<div class="ex">"중앙동 없는동 카페 비교"(초기화 후) → "카페 매출은 <b>효동</b>이 더 높습니다" ("없는동" 미인식 고지 없음)</div>
+<dl>
+<dt>위치</dt><dd>orchestrator <code>_enrichVagueCompareIntent</code>/<code>_pickDefaultCompareDistrict</code> — rationale는 기록하나 UI 미노출</dd>
+<dt>수정안</dt><dd>"비교 대상을 못 찾아 ○○동을 자동 선택했어요" 안내 노출</dd>
+</dl>
+</div>
+</section>
+
+<!-- E -->
+<section class="cat" id="e">
+<h2>E. 신뢰도 표기·안내</h2>
+
+<div class="finding">
+<h4><span class="num">#16</span> sgg_sub "참고값" 경고문이 렌더링되지 않음 <span class="sev high">High</span></h4>
+<p>response-builder가 만든 <code>dataNotice</code>("행정동 개별 데이터가 부족해 시군구 평균을 참고값으로 사용합니다")가 <b>프로덕션 파이프라인에서 어디에도 표시되지 않습니다</b>. 오케스트레이터는 <code>note</code>만 렌더하고 <code>dataNotice</code>는 읽지 않으며, 로컬 narrative에도 해당 문구가 없습니다. 유일한 흔적은 통계 셀 라벨의 작은 "(참고)" 접미사뿐. 무작위 쿼리의 약 14%가 sgg_sub인데, 사용자는 그것을 행정동 직접값으로 오인하기 쉽습니다. <b>이 프로젝트의 핵심 신뢰도 이슈와 직결</b>.</p>
+<dl>
+<dt>증거</dt><dd>grep: <code>dataNotice</code>는 write만 존재, chat-ui/ui-controller/orchestrator에 reader 없음. "법1동 한식"(sgg_sub) 실제 UI에서 경고문 미표시</dd>
+<dt>위치</dt><dd>생성 <code>response-builder.js</code>:30 / 미렌더 <code>response-orchestrator.js</code> Stage 6, <code>chat-ui.js</code> setNote</dd>
+<dt>수정안</dt><dd>Stage 6에서 <code>response.dataNotice</code>를 note 영역(또는 전용 배지)으로 렌더</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#17</span> "전월 대비 -%" 포맷 깨짐 <span class="sev low">Low</span></h4>
+<p>값이 없을 때 셀이 "-" + 단위 "%"로 합쳐져 "<b>전월 대비 -%</b>"로 표시됩니다(법1동 한식 카드).</p>
+<dl><dt>수정안</dt><dd>값이 "-"이면 단위 미부착</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#18</span> 비교 필터 "전국·전년" 오표기 <span class="sev mid">Mid</span></h4>
+<p>매출/업소 응답의 필터 칩이 "비교: <b>전국</b>·전년"으로 고정. 데이터는 대전(시도)이고 비교 기준값도 대전시 평균이라 "전국"은 사실과 다릅니다.</p>
+<dl>
+<dt>위치</dt><dd><code>response-builder.js</code>:1353 하드코딩 <code>'전국·전년'</code></dd>
+<dt>수정안</dt><dd>"대전시·전년"으로 정정</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#19</span> 대화 맥락이 명시적/개방형 질의를 덮어씀 <span class="sev mid">Mid</span></h4>
+<p>직전 업종이 후속 개방형 질문에 강제 carry됩니다. "동구 어때"(구 전체 개관 의도)가 직전 "카페" 맥락 때문에 "동구 카페" sggIndustry로 처리되는 식. 의도와 다른 좁은 답을 줄 수 있음.</p>
+<div class="ex">"중앙동 카페 밀도" 직후 "동구 어때" → "동구 카페<b>은</b> … 853만원" (카페로 한정 + 조사오류 동반)</div>
+<dl><dt>수정안</dt><dd>명시적 지역만 있고 업종이 비어있는 개방형 "어때"는 carry 대신 overview/clarify 우선</dd></dl>
+</div>
+</section>
+
+<!-- F -->
+<section class="cat" id="f">
+<h2>F. 포맷·표현 (UX)</h2>
+
+<div class="finding">
+<h4><span class="num">#20</span> 지표 라벨 과대표기 <span class="sev low">Low</span></h4>
+<p>"중앙동 카페 <b>매출</b>"만 물어도 필터 지표가 "매출·업소"로 표기. 카드가 업소도 보여주긴 하나 사용자 질의 범위와 불일치.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#21</span> 큰 금액을 만원 단위로만 표기 <span class="sev low">Low</span></h4>
+<p>"중리동 합계 매출 149,468만원"처럼 14.9억 규모를 만원으로만 표기해 가독성 저하. 억/조 보조 표기 권장.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#22</span> 소표본 업종 간 비교에 주의 표기 없음 <span class="sev low">Low</span></h4>
+<p>업종 비교에서 한쪽이 1개 업소여도 업소당 지표를 동등 비교합니다("카페 100개 vs 기타 한식 음식점 1개"). 표본 1개 비교임을 알리지 않아 오해 소지.</p>
+<dl><dt>수정안</dt><dd>업소 수 N이 작으면(예: ≤2) 비교 신뢰도 캡션 추가</dd></dl>
+</div>
+</section>
+
+<!-- G -->
+<section class="cat" id="g">
+<h2>G. 차트·유사상권·인구 (2차 추가 감사)</h2>
+<div class="note">사용자 요청으로 1차에서 미탐색이던 <b>차트 데이터 무결성·유사상권 알고리즘·인구</b> 영역을 추가 감사. (insights "0배"·인구 결손·compareDistricts 빈카드는 검증 결과 false positive/하네스 한계로 기각 — 하단 표 참조.)</div>
+
+<div class="finding">
+<h4><span class="num">#23</span> 희소 업종 "추세" 빈 차트 + 모순 문구 <span class="sev high">High</span></h4>
+<p>데이터가 희소한 업종에 추세를 요청하면 <b>행정동 라인과 시군구 평균 라인이 12개월 전부 null</b>(대전 평균선만 존재)이라 사실상 빈 그래프가 그려집니다. 그런데도 카드 제목은 "최근 12개월 ○○ 매출 추세", 요약은 "<b>최근 추이를 확인합니다</b>", 통계는 전부 "-". 사용자는 추세를 요청했는데 볼 추세가 없습니다.</p>
+<div class="ex">"법2동 한복 소매업 추세" → 법2동·대덕구 평균 nonNull=0, 대전 평균만 12개. stats "업소당 월평균 매출 -만원 / 업소 수 -개 / 전월 대비 -%"</div>
+<dl>
+<dt>빈도</dt><dd>무작위 추세 쿼리 중 sgg 평균선까지 결손 ~8%; 행정동 라인 결손은 더 빈번(희소 업종 전반)</dd>
+<dt>수정안</dt><dd>대상 라인이 전부 null이면 trendCard 대신 "추세를 그릴 개별 데이터가 없습니다" 안내로 대체</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#24</span> 유사 상권 목록에 기준 동이 중복 출현 <span class="sev mid">Mid</span></h4>
+<p>유사상권 차트는 기준 동을 첫 막대(비교 기준)로 넣는데, 일부 경우 기준 동이 <b>유사 목록에 한 번 더 중복</b>됩니다(자기 자신과 유사).</p>
+<div class="ex">"둔산1동 카페 비슷한 상권" → 막대 [둔산1동, 둔산2동, <b>둔산1동</b>, 월평2동, 구즉동, 신성동] — 둔산1동 2회. 빈도 5/53(~9%)</div>
+<dl><dt>수정안</dt><dd>유사 후보 산출 시 기준 동 code를 제외(중복 dedupe)</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#25</span> "유사 상권"이 규모가 크게 다른 동을 포함 <span class="sev mid">Mid</span></h4>
+<p>"유사 상권 매출 비교" 차트에서 기준 동과 <b>2배 이상 차이</b>나는 동이 다수 포함(53건 중 33건, 62%). 유사도가 복합 피처 기반이더라도 "매출 비교" 라벨과 함께 보면 "유사"가 무색합니다.</p>
+<div class="ex">"산성동 복사업"(240만원)의 유사 상권 → 둔산1동 1,107 · 탄방동 1,024 · 전민동 984만원 (4배+)</div>
+<dl><dt>수정안</dt><dd>유사도 기준에 해당 지표 근접도 반영, 또는 차트 라벨을 "참고 비교군"으로 변경</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#26</span> 피크 시간대가 거의 모든 동에서 동일 <span class="sev low">Low</span></h4>
+<p>인구 응답의 "피크 시간대"가 25개 동 중 24개에서 "<b>14-18시</b>"로 동일(1개만 18-23시). 실제 오후 피크일 수도 있으나, 거의 상수에 가까워 정보성이 없고 계산 퇴화 가능성. <b>원자료/집계 확인 필요</b>.</p>
+<dl><dt>조치</dt><dd>시간대 버킷 산출 로직 점검(항상 동일 버킷을 고르는지)</dd></dl>
+</div>
+</section>
+
+<!-- H -->
+<section class="cat" id="h">
+<h2>H. 인사이트 엔진 정확성 (3차)</h2>
+<div class="note">핵심: 이 데이터의 <code>amt</code>는 <b>"업소당 월평균 매출"(per-store)</b>인데, insight-engine 일부 디텍터가 이를 <b>총매출로 오인</b>해 계산합니다.</div>
+
+<div class="finding">
+<h4><span class="num">#27</span> "업체당 매출" 인사이트가 카드와 정면 모순 <span class="sev high">High</span></h4>
+<p><code>_detectRevenuePerBusiness</code>가 <code>amt/upso</code>를 "업체당 매출"로 표시하는데, <code>amt</code>는 이미 업소당 값이라 결과가 <b>실제의 1/upso</b>로 틀립니다. 같은 카드의 "업소당 월평균 매출"과 직접 모순(60건 중 27건=77% 불일치).</p>
+<div class="ex">중앙동 카페: 카드 "업소당 월평균 매출 600만원" ↔ 인사이트 "<b>업체당 매출 6만원</b> (총 매출 600만원 ÷ 100개 업소)". 노은1동 주유소 37,124 ↔ 7,425</div>
+<dl><dt>위치</dt><dd><code>insight-engine.js</code>:141~162</dd><dt>수정</dt><dd>amt는 per-store이므로 나누지 말 것; "총 매출" 라벨 제거 또는 amt×upso로 총매출 재정의</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#28</span> overview "합계 매출"이 실제 총매출이 아님 <span class="sev mid">Mid</span></h4>
+<p>"합계 매출"이 업소당 평균의 단순 합 수준(중앙동 234,990만원)으로, 실제 시장 총매출(Σ amt×upso ≈ 438만 만원)의 약 5%. 라벨이 오해를 부릅니다.</p>
+<dl><dt>수정</dt><dd>라벨을 "업종 평균 합" 등으로 정정하거나 Σ(amt×upso)로 재계산</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#29</span> overview "상위 업종"이 업소당 매출 순 → 병원·주유소 도배 <span class="sev mid">Mid</span></h4>
+<p>상위 업종 막대가 per-store amt 기준이라 고가·저빈도 업종(종합병원 414,194 · 일반병원 · 주유소)이 상단을 점유. 동네 상권의 실제 주력 업종을 대표하지 못합니다.</p>
+<div class="ex">둔산1동 "상위 업종": 종합병원·일반병원·패밀리레스토랑·주유소…</div>
+<dl><dt>수정</dt><dd>총매출(amt×upso) 또는 업소 수 기준 정렬, 라벨 명확화</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#30</span> "업종 평균 업소당 월매출"이 247 분모로 디플레이션 <span class="sev mid">Mid</span></h4>
+<p>#4와 연동: 분모가 영업 안 하는 업종까지 247개라, 소형 동의 평균이 비현실적으로 낮게 나옵니다(대청동 46만원 vs 중앙동 951만원).</p>
+<dl><dt>수정</dt><dd>데이터 존재 업종만 분모로</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#31</span> 시도 비교 인사이트가 sgg_sub에서도 발화 <span class="sev mid">Mid</span></h4>
+<p><code>_detectRevenueVsSido</code>에 sgg_sub 가드가 없어(다른 디텍터엔 있음), 시군구 대체값을 행정동 성과처럼 "대전 평균의 2.5배 매출"로 표시.</p>
+<div class="ex">대사동 신발 소매업(amt=amtSgg=2,323) → "대전 평균의 2.5배 매출"</div>
+<dl><dt>위치</dt><dd><code>insight-engine.js</code>:198 — <code>if(r.dataStatus==='sgg_sub')return null;</code> 누락</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#32</span> 업체당매출 디텍터도 sgg_sub 가드 누락 <span class="sev low">Low</span></h4>
+<p><code>_detectRevenuePerBusiness</code>(#27)도 sgg_sub 가드 없이 대체값 위에서 계산.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#33</span> 주중/주말 비율이 일수 미정규화 <span class="sev low">Low</span></h4>
+<p>"주중/주말 방문 비율 3.3:1"이 주중 5일 합%(72.7%)과 주말 2일 합%(27.3%)를 그대로 나눈 값. 일평균으로는 ≈1.06:1로 거의 균등 — 주중 집중을 과대 표현.</p>
+<dl><dt>위치</dt><dd><code>insight-engine.js</code>:164~177</dd></dl>
+</div>
+</section>
+
+<!-- I -->
+<section class="cat" id="i">
+<h2>I. 비교·랭킹·매칭 (3차)</h2>
+
+<div class="finding">
+<h4><span class="num">#34</span> 동일 두 동 비교가 무의미한 우열 출력 <span class="sev mid">Mid</span></h4>
+<p>district1=district2(같은 동)로 비교해도 에러 없이 다른 동으로 치환하거나 "A가 더 높습니다"를 출력.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#35</span> 비교 상대가 데이터 없을 때 동일값+거짓 우위 <span class="sev mid">Mid</span></h4>
+<p>같은 구의 두 동을 비교할 때 한쪽에 해당 업종 데이터가 없으면 둘 다 시군구 대체값이 되어 <b>동일 수치</b>인데도 "○○이 더 높습니다"로 우열을 단정.</p>
+<div class="ex">중앙동 vs 대청동 종합병원 → "60,842 / 60,842만원" 인데 "중앙동이 더 높습니다", 업소수 "2 / -개"</div>
+</div>
+
+<div class="finding">
+<h4><span class="num">#36</span> compareIndustries 동일 업종 미dedupe <span class="sev low">Low</span></h4>
+<p>같은 업종 2개를 비교 요청하면 "카페, 카페 중 … 카페" 비문 출력.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#37</span> 모호 법정동을 항상 자동 merge (선택지 미제공) <span class="sev mid">Mid</span></h4>
+<p>가양동·법동·노은·둔산·관저동 등 복수 행정동 매핑이 disambiguation 없이 항상 merge. 사용자에게 "어느 동?" 선택 기회를 주지 않으며, merge가 부적절한 경우(#6 0개)도 그대로 진행.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#38</span> 유사 상권 목록에 기준 동 중복 <span class="sev mid">Mid</span></h4>
+<p>(G #24 재확인) 기준 동이 비교 막대 + 유사 목록에 한 번 더(둔산1동 ×2). 빈도 5/53.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#39</span> "유사 상권"이 규모 2배+ 다른 동 다수 포함 <span class="sev mid">Mid</span></h4>
+<p>(G #25 재확인) 53건 중 33건(62%)에서 기준과 2배+ 차이. 산성동 복사업(240) vs 유사 1,000+.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#40</span> 미인식 업종 무고지 폴백 (재확인·정량) <span class="sev high">High</span></h4>
+<p>(C/D #12·#13) "우주선" 등 미인식 업종이 안내 없이 overview로. 의료 전문과(신경외과·피부과·안과 등)·일상 용어(곱창·스크린골프·포장마차) 다수 미매칭이라 발생 빈도 높음. 정형외과→성형외과(#5) 오매칭과 결합 시 신뢰 훼손.</p>
+</div>
+</section>
+
+<!-- J -->
+<section class="cat" id="j">
+<h2>J. 신뢰도·조사·집계 심화 (3차)</h2>
+
+<div class="finding">
+<h4><span class="num">#41</span> "(참고)" 마커가 업소/유동인구 셀엔 누락 <span class="sev mid">Mid</span></h4>
+<p>sgg_sub 매출 셀엔 "(참고)"가 붙지만, <b>업소 수·유동인구 질의에선 imputed여도 신뢰도 표시가 전무</b>. "부사동 타이어 업소 수"는 대체값인데 아무 표시 없음. (#16과 합쳐 sgg_sub 안내가 일관되지 않음)</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#42</span> dataNotice가 실제 값과 불일치 <span class="sev low">Low</span></h4>
+<p>"시군구 평균을 참고값으로 사용합니다"라고 안내하면서 매출 셀은 "-"(rec_amt=null). 약속한 대체값이 실제로는 없음.</p>
+<div class="ex">구즉동 시계/귀금속/악기 수리업 추세 → 매출 "-만원" + "시군구 평균 사용" 안내</div>
+</div>
+
+<div class="finding">
+<h4><span class="num">#43</span> merge 유동인구 단순합 (인접동 중복계산) <span class="sev low">Low</span></h4>
+<p>(C #34 재확인) 둔산1·2·3동 pop을 그대로 합산(339,476). 인접 행정동을 오가는 동일 유동인구를 중복 집계할 수 있어 과대.</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#44</span> 조사 오류가 이/가까지 확장 <span class="sev mid">Mid</span></h4>
+<p>(A #1~3 확장) 비교·랭킹 요약에서 은/는뿐 아니라 이/가도 오류: "카페 <b>업소 수은</b> 중앙동이…", "<b>유동인구이</b> 가장 높은", compare population "<b>유동인구은</b>". summary.text 스캔에서 80건 검출.</p>
+<dl><dt>위치</dt><dd>compare/rank 요약 빌더 + <code>response-builder.js</code> 614/629/899/980/1133, <code>main.js</code> 854/868/887/915/931</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#45</span> overview "업종 수 247"이 비영업 업종 포함 <span class="sev high">High</span></h4>
+<p>(B #4 소스 확정) <code>totalIndustries: records.length</code> — 데이터 파일이 247개 업종 행을 모두 포함하므로 영업 여부 무관하게 247. 대청동(130업소)도 "247개 업종 영업 중".</p>
+<dl><dt>위치</dt><dd><code>query-engine.js</code>:236</dd><dt>수정</dt><dd><code>records.filter(r=>r.upso>0||r.amt>0).length</code></dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#46</span> delta=0이 ▼ 하락 화살표로 표시 <span class="sev low">Low</span></h4>
+<p>변동이 정확히 0%여도 <code>delta&gt;0?▲:▼</code> 로직이 ▼(하락)을 그림. "0.0%"에 하락 화살표.</p>
+<div class="ex">중촌동 제품 디자인업 업소 수: delta=0 → ▼ 0.0%</div>
+<dl><dt>위치</dt><dd><code>ui-controller.js</code> stat-delta 렌더 (delta===0 분기 없음)</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#47</span> 큰 금액을 만원 단독 표기 <span class="sev low">Low</span></h4>
+<p>(F #21 재확인) 종합병원 "60,842만원"(=6억), 합계 "234,990만원"(=23억) 등 억 단위 보조 표기 없음 → 자릿수 가독성 저하.</p>
+</div>
+</section>
+
+<!-- K -->
+<section class="cat" id="k">
+<h2>K. 회귀·데이터 품질 (3차)</h2>
+
+<div class="finding">
+<h4><span class="num">#48</span> 🔧 배지 색상 회귀 (세션70 자가 유발) — 수정 완료 <span class="sev high">High</span></h4>
+<p>세션70의 XSS 방어로 추가한 <code>badge.color</code> 검증이 <code>^#RRGGBB$</code>만 허용했는데, response-builder는 <b>모든 배지색을 <code>hsl(h,45%,40%)</code></b>로 생성(<code>response-builder.js</code>:1368). 결과적으로 <b>전 카테고리 배지가 기본 초록(#2D4540)으로 폴백</b>되어 색 구분 상실. 더해 기존 <code>${color}1A</code> 틴트도 hsl엔 무효였음.</p>
+<dl><dt>조치</dt><dd><b>수정 완료</b> — <code>chat-ui.js</code> setMeta가 hex/hsl 모두 허용 + hsl은 hsla 틴트로 변환(주입 안전 유지)</dd></dl>
+</div>
+
+<div class="finding">
+<h4><span class="num">#49</span> 피크 시간대가 거의 균일 (데이터 품질) <span class="sev low">Low</span></h4>
+<p>(G #26 정량) 82개 동 중 78개가 "14-18시". 원자료 <code>peakTime</code> 필드 자체가 균일 — 코드 버그 아닌 데이터/전처리 확인 필요(정보성 낮음).</p>
+</div>
+
+<div class="finding">
+<h4><span class="num">#50</span> 행정동값이 시도평균을 크게 초과하는 이상치 <span class="sev low">Low</span></h4>
+<p>direct 레코드 중 행정동 업소당매출이 대전 평균의 5배+인 사례(목동 기타 의류 소매업 dong=11,761 vs sido=1,328 ≈8.8배). 실제 대형점 또는 데이터 오류 가능 — 원자료 확인 권장.</p>
+</div>
+</section>
+
+<h2>검증으로 기각된 것 (false positive — 손대지 말 것)</h2>
+<table>
+<tr><th>후보</th><th>기각 근거</th></tr>
+<tr><td>스트리밍 429 쿨다운 미설정</td><td>HTTP 429 throw→orchestrator catch가 정상 처리</td></tr>
+<tr><td>JSON 파싱 취약</td><td><code>_safeJson</code>+화이트리스트로 견고</td></tr>
+<tr><td>density 0 나눗셈 / insight "NaN%"</td><td><code>canUpso</code>·<code>amtSgg&lt;=0</code> 가드로 방어</td></tr>
+<tr><td>garbage/업종만 입력 깨짐</td><td>실제로는 적절히 clarify("지역이나 업종이 부족합니다")</td></tr>
+<tr><td>compareIndustry 데이터 없음</td><td>하네스 한계였고 production은 정상 작동</td></tr>
+<tr><td>follow-up 체인/중복동명</td><td>체인 100회 무결, 중복 행정동명 0</td></tr>
+<tr><td>amt=0/null 누출</td><td>약 2만 레코드 스캔 0건</td></tr>
+<tr><td>insights "0배" 인사이트</td><td>탐지 정규식 오류(4.0배의 ".0" 매칭) — 실제 정상</td></tr>
+<tr><td>인구 데이터 결손(peak undefined)</td><td>희소 동 포함 모두 유효(피크 요일/시간/평일비율 정상)</td></tr>
+<tr><td>compareDistricts 빈 카드</td><td>TestRunner 하네스가 compare 미구현 — production은 정상 렌더</td></tr>
+<tr><td>차트 NaN/[object Object]</td><td>trend/compare 배열 스캔 0건(전부-null은 #23로 별도)</td></tr>
+<tr><td>(3차) production 도구 경로 누출/크래시</td><td>compare/rank/sgg/compareIndustries ~180회 0건</td></tr>
+<tr><td>(3차) imputed upso에 delta 표시</td><td>1차 의심 → upso imputed 시 delta 미표시 확인(0/110)</td></tr>
+<tr><td>(3차) rank 정렬 위반 / followUp 칩 파스백</td><td>0/25, 0/151 — 견고</td></tr>
+<tr><td>(3차) sggIndustry 단순평균</td><td>"행정동 평균" 라벨과 정합(단, merge는 가중 — 방법론 불일치 관찰)</td></tr>
+<tr><td>(3차) 추세 내부 null hole / 중복 칩 / merge map 코드</td><td>0/167, 0/40, 정상</td></tr>
+<tr><td>(3차) density via dispatcher=sales</td><td>orchestrator가 questionType=density로 override — 하네스 아티팩트</td></tr>
+</table>
+
+<footer>
+생성: 상권AI 오류 감사 세션 71 · 2026-05-30 · 검증 방식: TestRunner(프로덕션 모듈 직접 호출) + 실제 UI DOM 확인 · 모든 항목은 소스 라인 또는 재현으로 확인됨.
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,130 @@
+[
+  {
+    "id": "qa-20260531-F2-context-carry",
+    "createdAt": "2026-05-31T08:10:00.000Z",
+    "question": "중앙동 카페 매출 → 그럼 둔산1동은?",
+    "source": "자율 QA 루프(다중턴 시뮬레이션)",
+    "severity": "high",
+    "category": "맥락(대화) 회귀",
+    "flags": [
+      { "level": "error", "label": "회귀(regression)" },
+      { "level": "warn", "label": "맥락 carry 실패" },
+      { "level": "info", "label": "다중턴" }
+    ],
+    "diagnostics": { "moduleVersion": "20260530-redteam-f", "detector": "multi-turn", "expected": "둔산1동 카페", "actual": "둔산1동 overview" },
+    "rootCause": "#19 가드(response-orchestrator _fillFromConversation)가 goal=overview면 무조건 직전 업종 carry를 차단 → '그럼 X동은?' 같은 키워드 없는 후속 질문도 overview로 처리되어 직전 업종(카페)을 잇지 못함.",
+    "answerText": "직전 '카페' 맥락에서 '그럼 둔산1동은?'에 대해 둔산1동 카페가 아니라 둔산1동 전체 현황을 반환했음.",
+    "status": "fixed",
+    "resolution": "가드를 '명시적 overview 키워드(어때/현황/전체)가 있는 개방형 질의'에서만 carry 차단하도록 정교화. '그럼 둔산1동은?'은 키워드 없으므로 carry 진행.",
+    "fixId": "claude-20260531-qa-loop"
+  },
+  {
+    "id": "qa-20260531-F1-unmatched-notice",
+    "createdAt": "2026-05-31T08:05:00.000Z",
+    "question": "중앙동 우주선 매출",
+    "source": "자율 QA 루프(엣지 퍼징)",
+    "severity": "low",
+    "category": "미인식 업종 안내 노출",
+    "flags": [
+      { "level": "warn", "label": "안내 노출 위치" },
+      { "level": "info", "label": "엣지 입력" }
+    ],
+    "diagnostics": { "moduleVersion": "20260530-redteam-f", "detector": "edge-fuzz", "note": "안내가 핵심요약 카드엔 있으나 narrative 라인엔 없음" },
+    "rootCause": "#40 미인식 안내를 response.summary.text(synthesis 카드)에 prefix했는데, narrative는 buildLocalNarrative(overview)가 별도 생성하여 안내를 포함하지 않음.",
+    "answerText": "narrative가 '중앙동 전체 상권 현황…'만 표시(우주선 미인식 언급 없음). 카드 핵심요약에는 안내 존재.",
+    "status": "fixed",
+    "resolution": "안내를 summary.text가 아니라 response.note로 이동 — brand/alias 해석 고지('스타벅스는 카페로 분석')와 같은 위치라 일관적이고 항상 노출되며 중복 없음.",
+    "fixId": "claude-20260531-qa-loop"
+  },
+  {
+    "id": "qa-20260531-F4-yakguk-mismatch",
+    "createdAt": "2026-05-31T09:10:00.000Z",
+    "question": "유성구 약국 1위 동네",
+    "source": "자율 QA 루프 R2(유성구 rank 꼬리물기)",
+    "severity": "high",
+    "category": "업종 오매칭",
+    "flags": [
+      { "level": "error", "label": "오매칭(약국→일반병원)" },
+      { "level": "warn", "label": "별칭 사전 오류" }
+    ],
+    "diagnostics": { "moduleVersion": "20260531-qa-g", "expected": "약국", "actual": "일반병원", "parserOk": true },
+    "rootCause": "파서는 '약국'을 정확히 인식(type=exact)하나, ToolDispatcher._resolveIndustry가 별칭 사전(getIndustryAliases)을 적용 — 사전에 '약국→일반병원'이 있어 약국 질의가 일반병원으로 둔갑. (사전 오류는 data-loader가 industryAliasOverrides.items 평탄화 시 의료 용어를 일반병원으로 매핑한 데서 비롯, 약국:약국 파일값과 불일치)",
+    "answerText": "유성구 약국 1위 질의에 일반병원(온천1동) 결과 반환.",
+    "status": "fixed",
+    "resolution": "_resolveIndustry에 가드 추가: 입력이 이미 정확한 업종명(getIndustryList 포함)이면 별칭을 적용하지 않고 그대로 반환. 약국·카페 등 모든 실재 업종을 잘못된 override로부터 보호. 검증: 약국→약국, rank '유성구 약국 1위 노은2동'. (데이터 사전의 의원→일반병원 등 비정확 별칭 정합성은 후속 데이터 과제)",
+    "fixId": "claude-20260531-qa-loop-r2"
+  },
+  {
+    "id": "qa-20260531-F3-peak-mislabel",
+    "createdAt": "2026-05-31T09:05:00.000Z",
+    "question": "신인동 편의점 매출 → 그럼 유동인구는?",
+    "source": "자율 QA 루프 R1(동구 꼬리물기)",
+    "severity": "mid",
+    "category": "라벨 오류(요일↔시간대)",
+    "flags": [
+      { "level": "warn", "label": "피크 요일을 시간대로 표기" },
+      { "level": "info", "label": "다중턴 pop" }
+    ],
+    "diagnostics": { "moduleVersion": "20260531-qa-g", "expected": "토요일 14-18시", "actual": "피크 시간대는 토요일" },
+    "rootCause": "buildLocalNarrative(pop)의 value('피크')가 '피크 요일' 셀(토요일)을 먼저 집어 '피크 시간대는 토요일입니다'로 출력 — 요일을 시간대로 오라벨.",
+    "answerText": "유동인구 응답이 '피크 시간대는 토요일입니다'(토요일은 요일).",
+    "status": "fixed",
+    "resolution": "value('피크 요일')와 value('피크 시간대')를 분리 추출해 '주로 토요일 14-18시에 붐빕니다'로 표기. 검증 통과.",
+    "fixId": "claude-20260531-qa-loop-r2"
+  },
+  {
+    "id": "qa-20260531-F5-josa-rawtoken",
+    "createdAt": "2026-05-31T09:40:00.000Z",
+    "question": "둔산1동 치과 매출 → 한의원은? / 약국은?",
+    "source": "자율 QA 루프 R5(의료 꼬리물기)",
+    "severity": "mid",
+    "category": "해석 안내 오노출(조사 포함 raw)",
+    "flags": [
+      { "level": "warn", "label": "조사 포함 raw 토큰" },
+      { "level": "info", "label": "어색한 해석 안내" }
+    ],
+    "diagnostics": { "moduleVersion": "20260531-qa-h", "example": "'한의원은'은 업종 사전에 별도 분류가 없어 '한의원'로 해석" },
+    "rootCause": "후속 질문 '한의원은?'/'약국은?'에서 파서 exactEarly가 조사 '은'을 포함한 raw 토큰('한의원은')을 partial-token으로 반환 → _buildDataNote가 정확 업종인데도 '별도 분류가 없어 해석' 안내를 어색하게('한의원은'은) 노출.",
+    "answerText": "정확 업종(한의원/약국)인데 불필요한 부분매칭 해석 안내가 뜸.",
+    "status": "fixed",
+    "resolution": "_buildDataNote에서 raw가 '업종명+조사'(은/는/이/가/을/를/과/와/도/만/의/에서/로 등)면 같은 업종으로 보고 해석 안내를 생략. 검증: '한의원은?'/'약국은?'에서 안내 미노출, 치과→치과의원 같은 진짜 별칭 안내는 유지.",
+    "fixId": "claude-20260531-qa-loop-r2"
+  },
+  {
+    "id": "qa-20260531-F6-brand-in-district",
+    "createdAt": "2026-05-31T11:00:00.000Z",
+    "question": "송촌동 편의점 매출 → 비래동은? → 오정동은?",
+    "source": "자동 테스트 프레임워크(regionSwitchChain) — test.html",
+    "severity": "high",
+    "category": "업종 오추출(브랜드가 동 이름에 매칭)",
+    "flags": [
+      { "level": "error", "label": "브랜드-동이름 충돌" },
+      { "level": "warn", "label": "carry 덮어씀" },
+      { "level": "info", "label": "regionSwitchChain" }
+    ],
+    "diagnostics": { "moduleVersion": "20260531-qa-i", "detector": "test-suites/regionSwitchChain", "example": "'오정동은?' → industry='일식 카레/돈가스/덮밥'(brand '정동')" },
+    "rootCause": "intent-parser 브랜드 매칭이 compact 전체에서 substring을 찾아, 브랜드 '정동'(→일식 카레/돈가스/덮밥)이 행정동 '오정동' 안의 '정동'에 매칭됨. 명시 업종 없는 후속('오정동은?')에서 이 스푸리어스 업종이 carry된 편의점을 덮어씀.",
+    "answerText": "지역전환 후속 '오정동은?'이 편의점이 아니라 '일식 카레/돈가스/덮밥'으로 처리됨.",
+    "status": "fixed",
+    "resolution": "_extractIndustry가 인식된 행정동 이름을 검색 텍스트(searchCompact)에서 제거한 뒤 브랜드/부분-LCS 매칭하도록 수정. 검증: '오정동은?'→industry=null(스푸리어스 제거), '오정동 카페'→카페·'스타벅스'→카페(brand 정상) 유지, regionSwitchChain 4/4 통과.",
+    "fixId": "claude-20260531-qa-framework"
+  },
+  {
+    "id": "qa-20260531-F7-legaldong-compare",
+    "createdAt": "2026-05-31T13:00:00.000Z",
+    "question": "둔산동 카페 매출 → 반석동과 비교해줘",
+    "source": "사용자 제보 → 자동화 테스트(legalDongCompare) 추가",
+    "severity": "high",
+    "category": "법정동 비교 미지원",
+    "flags": [
+      { "level": "error", "label": "법정동 간 비교 실패" },
+      { "level": "warn", "label": "다중턴 compare carry" }
+    ],
+    "diagnostics": { "moduleVersion": "20260531-qa-j", "expected": "둔산동(merge) vs 반석동(merge) 비교", "actual": "지역이나 업종이 부족합니다(clarify)" },
+    "rootCause": "복수 행정동 묶음인 법정동(둔산동=둔산1·2·3동, 반석동=노은2·3동) 간 비교가 안 됨. (1) merge 후 ConversationState.activeDistrict가 '둔산1동'(대표 1개동)으로 저장돼 법정동 맥락 '둔산동' 유실. (2) '반석동과 비교'에서 반석동이 법정동이라 intent.district=null → _fillFromConversation compare carry가 filled.district만 보아 compareDistricts를 못 만들고 clarify로 빠짐.",
+    "answerText": "둔산동 물어본 뒤 '반석동과 비교해줘'가 '지역이나 업종이 부족합니다'로 응답.",
+    "status": "fixed",
+    "resolution": "(1) ConversationState가 merge 소스명(둔산동)을 activeDistrict.name 및 activeMergeSource에 저장. (2) compare carry가 ctxRegion=activeMergeSource, curRegion=filled.district||filled.sourceLocation 사용 → 법정동도 인식. _compare/_buildCompareSide는 이미 양쪽 merge 처리하므로 둔산동(3동)·반석동(2동) 합산 비교됨. 자동화 테스트 legalDongCompare 신설(직접/다중턴/법정동vs행정동). 검증: UI에서 둔산동 1,814 vs 반석동 869만원 정상 비교, 테스트 3/3 통과, regionSwitchChain·regression 회귀 0.",
+    "fixId": "claude-20260531-qa-legaldong"
+  }
+]

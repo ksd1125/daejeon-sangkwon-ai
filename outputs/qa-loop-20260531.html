@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="date" content="2026-05-31">
+<meta name="keywords" content="자율QA, 체계적표집, 무작위퍼징, 다중턴, 회귀탐지, 탐지-기록-검토-수정">
+<title>상권AI — 자율 QA 루프 시뮬레이션 (체계+무작위)</title>
+<style>
+  :root{--brand:#2D4540;--bg:#F5F2EC;--line:#e1ded5;--hi:#fef2f2;--hiC:#a32020;--md:#fff9ef;--mdC:#7a4a0c;--lo:#eef5f1;--loC:#2d4540;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#1a1916;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.65}
+  main{max-width:960px;margin:0 auto;padding:32px 22px 64px}
+  header.doc{border-bottom:3px solid var(--brand);padding-bottom:16px;margin-bottom:20px}
+  h1{font-size:25px;margin:0 0 6px}
+  .sub{color:#6f6b62;font-size:14px}
+  h2{font-size:19px;margin:30px 0 12px;padding-left:10px;border-left:4px solid var(--brand)}
+  h3{font-size:15px;margin:18px 0 6px}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+  .step{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700}
+  .arrow{color:#b8b1a2;font-weight:800}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:#efeae0}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+  .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
+  .card b{display:block;font-size:26px;color:var(--brand)}
+  .card span{font-size:12px;color:#6f6b62}
+  .finding{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+  .finding h4{margin:0 0 8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .sev{font-size:11px;font-weight:800;border-radius:999px;padding:3px 9px}
+  .sev.high{background:var(--hi);color:var(--hiC)}.sev.low{background:var(--lo);color:var(--loC)}
+  .finding dl{display:grid;grid-template-columns:92px 1fr;gap:4px 12px;margin:8px 0 0;font-size:13.5px}
+  .finding dt{font-weight:800;color:#3a4540}
+  code{font-family:Consolas,monospace;font-size:12.5px;background:#f4f0e6;border-radius:5px;padding:1px 5px}
+  .ex{background:#f4f0e6;border-left:3px solid #b8b1a2;padding:8px 12px;border-radius:0 6px 6px 0;margin:6px 0;font-size:13px}
+  .note{background:#eef5f1;border:1px solid #cfe0d6;border-radius:8px;padding:12px 16px;font-size:13.5px;margin:12px 0}
+  .key{background:#fff9ef;border:1px solid #f0e4c8;border-left:4px solid #c89a3c;border-radius:8px;padding:12px 16px;font-size:13.5px;margin:12px 0}
+  footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:#6f6b62}
+  @media(max-width:680px){.grid{grid-template-columns:repeat(2,1fr)}.finding dl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<header class="doc">
+  <h1>자율 QA 루프 시뮬레이션 — 체계적 계획 + 무작위성 검토</h1>
+  <div class="sub">2026-05-31 · 캐시 20260531-qa-g · "단순 검토(레거시)"가 아닌 커버리지 기반 탐지 → 기록 → 관리자 자동 검토 → 수정 → 이력화</div>
+</header>
+
+<div class="flow">
+  <span class="step">① 탐지(체계+무작위)</span><span class="arrow">→</span>
+  <span class="step">② 기록(error-reports.json)</span><span class="arrow">→</span>
+  <span class="step">③ 관리자 자동 검토(triage)</span><span class="arrow">→</span>
+  <span class="step">④ 수정+검증</span><span class="arrow">→</span>
+  <span class="step">⑤ 이력화(change-log.json)</span>
+</div>
+
+<div class="grid">
+  <div class="card"><b>330</b><span>계층표집 production 쿼리</span></div>
+  <div class="card"><b>12×5</b><span>질문유형 × 구 strata</span></div>
+  <div class="card"><b>2</b><span>탐지·수정된 결함</span></div>
+  <div class="card"><b>0</b><span>잔여 누출/크래시</span></div>
+</div>
+
+<h2>① 탐지 — 체계적 계획 + 무작위성</h2>
+<p>레거시식 "한두 케이스 눈으로 확인"이 아니라, <b>커버리지 공간을 정의하고 계층표집 + 무작위 퍼징 + 다중턴</b>으로 전수에 가깝게 두드립니다.</p>
+<h3>커버리지 설계</h3>
+<table>
+<tr><th>차원</th><th>전략</th></tr>
+<tr><td>질문유형(12)</td><td>sales·upso·pop·trend·density·overview·similar·compare·merge·rank·sggIndustry·compareIndustry — <b>전수</b></td></tr>
+<tr><td>지역(82동·5구)</td><td>구별 계층표집(각 구 무작위 동) + 법정동 별칭 + 미존재/모호</td></tr>
+<tr><td>업종(247)</td><td>무작위 + 별칭/브랜드/부분/슬랭/미존재(우주선)</td></tr>
+<tr><td>엣지/퍼징</td><td>공백·가비지·특수문자·XSS·초장문·숫자혼합·just-region·just-industry</td></tr>
+<tr><td>다중턴</td><td>맥락 carry 시퀀스("그럼 X동은?", "동구 어때", "그럼 치킨은?")</td></tr>
+</table>
+<h3>디텍터 스위트</h3>
+<p>CRASH · LEAK(NaN/Infinity/undefined/[object Object]) · RENDER_CRASH/LEAK · JOSA(은/는·이/가·과/와) · SGGSUB_NOWARN · NEG(음수 업소/유동인구) · 의미 모순 · 맥락 일관성 · XSS 실행여부</p>
+<div class="note"><b>탐지 결과</b>: 330 계층표집 production 쿼리 → <b>0 findings</b>(이전 라운드 수정이 견고히 유지). 엣지 14종 → XSS 미실행·별칭 고지 정상. <b>다중턴에서 2건 포착</b>(아래).</div>
+
+<h2>②③ 기록 + 관리자 자동 검토(triage)</h2>
+<p>findings를 <code>app/data/error-reports.json</code>에 기록 → 관리자 페이지(<code>/admin-reports.html</code>)가 자동 로드·표시. 각 건을 <b>REAL_BUG / FALSE_POSITIVE / DATA</b>로 분류하고 심각도·근본원인·해결을 배정.</p>
+
+<div class="finding">
+<h4>QA-F2 · 맥락(대화) 회귀 <span class="sev high">High</span> · REAL_BUG(regression)</h4>
+<div class="ex">"중앙동 카페 매출" → "<b>그럼 둔산1동은?</b>" → 둔산1동 <b>전체 현황</b>(카페 미계승) ❌</div>
+<dl>
+<dt>근본원인</dt><dd>직전 라운드 #19 가드(<code>response-orchestrator _fillFromConversation</code>)가 goal=overview면 <b>무조건</b> 직전 업종 carry를 차단 → "어때" 명시 overview와 "그럼~?" 후속을 구분 못 함</dd>
+<dt>탐지 경로</dt><dd>무작위 다중턴 시퀀스 — <b>내가 직전에 만든 회귀를 스스로 잡음</b></dd>
+<dt>해결</dt><dd>"명시적 overview 키워드(어때/현황/전체)가 있는 개방형 질의"에서만 carry 차단. 키워드 없는 후속은 직전 업종 계승</dd>
+</dl>
+</div>
+
+<div class="finding">
+<h4>QA-F1 · 미인식 안내 노출 위치 <span class="sev low">Low</span> · REAL_BUG</h4>
+<div class="ex">"중앙동 우주선 매출" → narrative "중앙동 전체 현황…"(우주선 미인식 언급 없음). 안내는 핵심요약 카드에만 존재</div>
+<dl>
+<dt>근본원인</dt><dd>#40 안내를 <code>summary.text</code>에 prefix했는데 narrative는 buildLocalNarrative가 별도 생성</dd>
+<dt>해결</dt><dd>안내를 <code>response.note</code>로 이동 — brand/alias 고지("스타벅스는 카페로 분석")와 동일 위치라 일관·항상 노출·중복 없음</dd>
+</dl>
+</div>
+
+<h2>④ 수정 + 검증</h2>
+<table>
+<tr><th>검증</th><th>결과</th></tr>
+<tr><td>QA-F2 회귀 해소</td><td>"그럼 둔산1동은?" → <b>둔산1동 카페 1,645만원</b>(carry 복구) ✅</td></tr>
+<tr><td>#19 회귀 없음</td><td>"동구 어때" → clarify(여전히 미carry 유지) ✅</td></tr>
+<tr><td>QA-F1 해소</td><td>"우주선" → note "<b>'우주선' 업종을 찾지 못해…</b>" ✅</td></tr>
+<tr><td>node --check</td><td>통과</td></tr>
+</table>
+
+<h2>⑤ 이력화</h2>
+<ul>
+<li><b>findings</b> → <code>app/data/error-reports.json</code> (관리자 페이지 "오류 신고" 섹션, status·근본원인·해결 포함)</li>
+<li><b>수정</b> → <code>app/data/change-log.json</code> 항목 <code>claude-20260531-qa-loop</code> (관리자 페이지 "수정 이력" 섹션)</li>
+<li>admin-reports.html이 두 시드를 자동 로드·병합(id 기준 dedupe, 최신순)하도록 확장</li>
+</ul>
+
+<div class="key"><b>핵심 교훈</b>: 이 루프의 가치는 <b>무작위 다중턴 검토가 직전 라운드에서 내가 도입한 회귀(QA-F2)를 잡아낸 것</b>입니다. 고정된 체크리스트(레거시)만 돌렸다면 "동구 어때"는 통과시키면서 "그럼 둔산1동은?" 회귀는 놓쳤을 것입니다. <b>체계적 커버리지(전 질문유형·구 strata) + 무작위성(시퀀스·퍼징)</b>의 결합이 사각지대를 메웁니다.</div>
+
+<h2>프로세스의 반복 가능성</h2>
+<p>이 루프는 재실행 가능합니다: (1) 탐지 하네스를 더 큰 N·새 strata로 재실행 → (2) 신규 findings를 error-reports.json append → (3) 관리자(사람 또는 AI)가 triage → (4) 수정 → (5) change-log append. CLAUDE.md "변동 이력 관리" 규칙이 이 사이클을 강제합니다.</p>
+
+<footer>자율 QA 루프 · 2026-05-31 · 검증: production 디스패처 + 실제 UI 다중턴 + node --check · 산출물: error-reports.json, change-log.json, admin-reports.html, 본 리포트</footer>
+</main>
+</body>
+</html>

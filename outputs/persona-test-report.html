@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="date" content="2026-05-28">
+  <meta name="keywords" content="상권AI, 사용성테스트, 페르소나, UX">
+  <title>상권AI 챗봇 — 페르소나 기반 사용성 테스트 리포트</title>
+  <style>
+    :root {
+      --brand: #2D4540;
+      --brand-light: #3d6058;
+      --bg: #F5F2EC;
+      --surface: #fff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --line: #e5e2dc;
+      --green: #16a34a;
+      --red: #dc2626;
+      --amber: #d97706;
+      --blue: #2563eb;
+      --p0: #dc2626;
+      --p1: #d97706;
+      --p2: #6b7280;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* Header */
+    .report-header {
+      text-align: center;
+      padding: 48px 0 40px;
+      border-bottom: 2px solid var(--brand);
+      margin-bottom: 40px;
+    }
+    .report-header h1 { font-size: 28px; font-weight: 800; color: var(--brand); margin-bottom: 8px; }
+    .report-header .subtitle { font-size: 15px; color: var(--muted); }
+    .report-header .meta { margin-top: 12px; font-size: 13px; color: var(--muted); }
+
+    /* TOC */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 36px;
+    }
+    .toc h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 12px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--brand); text-decoration: none; font-weight: 500; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* Sections */
+    h2 { font-size: 22px; font-weight: 700; color: var(--brand); margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+    h3 { font-size: 17px; font-weight: 700; margin: 28px 0 12px; color: var(--text); }
+    h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+
+    p { margin-bottom: 12px; }
+
+    /* Persona Card */
+    .persona-card {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .persona-avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 700; color: #fff;
+    }
+    .persona-avatar.analyst { background: var(--blue); }
+    .persona-avatar.consultant { background: var(--brand); }
+    .persona-info h3 { margin: 0 0 4px; font-size: 18px; }
+    .persona-info .role { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .persona-info .project { font-size: 14px; background: #f0f9ff; border-radius: 8px; padding: 10px 14px; border-left: 3px solid var(--blue); }
+    .persona-info .project.green { background: #f0fdf4; border-left-color: var(--green); }
+
+    /* Result Table */
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 28px;
+      font-size: 13.5px;
+    }
+    .result-table th {
+      background: var(--brand);
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .result-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    .result-table tr:nth-child(even) { background: rgba(0,0,0,0.02); }
+    .result-table tr.issue { background: #fef2f2; }
+    .result-table tr.partial-issue { background: #fffbeb; }
+
+    /* Score cells */
+    .score { display: inline-block; min-width: 22px; text-align: center; font-weight: 700; font-size: 13px; }
+    .score.s5 { color: var(--green); }
+    .score.s4 { color: #22c55e; }
+    .score.s3 { color: var(--amber); }
+    .score.s2 { color: #f97316; }
+    .score.s1 { color: var(--red); }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 4px;
+    }
+    .tag-ok { background: #dcfce7; color: #166534; }
+    .tag-fail { background: #fee2e2; color: #991b1b; }
+    .tag-warn { background: #fef3c7; color: #92400e; }
+    .tag-p0 { background: #fee2e2; color: var(--p0); font-weight: 700; }
+    .tag-p1 { background: #fef3c7; color: var(--p1); font-weight: 700; }
+    .tag-p2 { background: #f3f4f6; color: var(--p2); font-weight: 700; }
+
+    /* Cross-validation table */
+    .xval-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 28px;
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+    .xval-table th {
+      background: #f8fafc;
+      padding: 10px 14px;
+      text-align: right;
+      font-weight: 600;
+      border-bottom: 2px solid var(--line);
+      font-size: 12.5px;
+    }
+    .xval-table th:first-child { text-align: left; }
+    .xval-table td {
+      padding: 10px 14px;
+      text-align: right;
+      border-bottom: 1px solid var(--line);
+      font-weight: 500;
+    }
+    .xval-table td:first-child { text-align: left; font-weight: 600; }
+    .xval-table .match { color: var(--green); }
+    .xval-table .mismatch { color: var(--red); font-weight: 700; }
+
+    /* Issue list */
+    .issue-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .issue-severity {
+      width: 48px; height: 28px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: #fff;
+    }
+    .issue-severity.p0 { background: var(--p0); }
+    .issue-severity.p1 { background: var(--p1); }
+    .issue-severity.p2 { background: var(--p2); }
+    .issue-title { font-weight: 700; margin-bottom: 4px; }
+    .issue-desc { font-size: 13.5px; color: var(--muted); }
+    .issue-repro { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* Verdict box */
+    .verdict {
+      background: var(--surface);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .verdict-label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 8px; }
+    .verdict-value { font-size: 24px; font-weight: 800; }
+    .verdict-value.yes { color: var(--green); }
+    .verdict-value.conditional { color: var(--amber); }
+    .verdict-value.no { color: var(--red); }
+    .verdict-reason { font-size: 14px; color: var(--muted); margin-top: 8px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+    /* Radar chart area */
+    .radar-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 24px 0;
+    }
+    .radar-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .radar-box h4 { margin: 0 0 12px; text-transform: none; }
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .score-row:last-child { border-bottom: none; }
+    .score-bar {
+      width: 120px; height: 8px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .score-fill { height: 100%; border-radius: 4px; }
+    .score-fill.high { background: var(--green); }
+    .score-fill.mid { background: var(--amber); }
+    .score-fill.low { background: var(--red); }
+
+    /* Candidate tracking */
+    .candidate-flow {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    .cand-step {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 16px;
+      min-width: 160px;
+      flex: 1;
+    }
+    .cand-step .step-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    .cand-step .step-list { font-size: 14px; font-weight: 600; margin-top: 4px; }
+    .cand-step .step-list .new { color: var(--green); }
+
+    /* Print */
+    @media print {
+      body { background: #fff; font-size: 12px; }
+      .wrap { padding: 20px; max-width: 100%; }
+      .report-header { padding: 24px 0; }
+      h2 { break-before: page; margin-top: 24px; }
+      .result-table { font-size: 11px; }
+      .issue-card { break-inside: avoid; }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .radar-container { grid-template-columns: 1fr; }
+      .persona-card { grid-template-columns: 1fr; text-align: center; }
+      .candidate-flow { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <header class="report-header">
+    <h1>상권AI 챗봇 사용성 테스트 리포트</h1>
+    <div class="subtitle">페르소나 기반 탐색적 사용성 평가 — 데이터 분석가 &amp; 상권 컨설턴트</div>
+    <div class="meta">2026-05-28 · 상권AI v20260528-merge-detail · 로컬 모드(API 키 미사용)</div>
+  </header>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <h2>목차</h2>
+    <ol>
+      <li><a href="#overview">개요</a></li>
+      <li><a href="#p1">Persona 1 — 이정현 (데이터 분석가)</a></li>
+      <li><a href="#p1-xval">교차 검증</a></li>
+      <li><a href="#p2">Persona 2 — 박서연 (상권 컨설턴트)</a></li>
+      <li><a href="#p2-candidates">입지 후보 추적</a></li>
+      <li><a href="#synthesis">종합 분석</a></li>
+      <li><a href="#issues">발견 이슈 &amp; 개선 제안</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1. Overview -->
+  <h2 id="overview">1. 개요</h2>
+  <p>
+    상권AI 챗봇의 기능 개발이 완료된 시점에서, <strong>실제 업무 맥락을 가진 두 명의 가상 실무자</strong>가
+    도구를 처음 사용하며 각자의 프로젝트 목표를 달성할 수 있는지 검증했다.
+    두 페르소나 모두 도구 안에 어떤 데이터가 있는지 모르는 상태에서 시작하여,
+    대화를 통해 기능을 탐색하고 한계를 발견하는 <strong>탐색적 테스트</strong> 방식이다.
+  </p>
+  <p>
+    총 <strong>24턴</strong>의 질문-응답을 실행했으며, 각 턴에 대해 5개 차원(정확성·이해도·유용성·표현력·연결성)을
+    1~5점으로 평가했다. 테스트는 Gemini API 키 없이 <strong>로컬 모드</strong>로 진행되어,
+    파이프라인의 로컬 폴백 경로만 검증했다.
+  </p>
+
+  <!-- 2. Persona 1 -->
+  <h2 id="p1">2. Persona 1 — 이정현 (데이터 분석가)</h2>
+
+  <div class="persona-card">
+    <div class="persona-avatar analyst">정</div>
+    <div class="persona-info">
+      <h3>이정현</h3>
+      <div class="role">대전세종연구원 도시경제팀 연구원 3년차 · R/Python · 공공데이터 포털 익숙</div>
+      <div class="project">
+        <strong>프로젝트:</strong> '2026 상반기 대전 골목상권 동향 브리프' 초안 작성.
+        주요 상권 3~4곳의 현황 스냅샷 + 업종별 매출 추세가 필요.
+        이 도구에서 뽑을 수 있는 숫자가 뭔지, 신뢰할 수 있는지 빠르게 판단하려 함.
+      </div>
+    </div>
+  </div>
+
+  <h4>Phase A: 도구 탐색 — "이게 뭘 보여주는 거지?"</h4>
+  <table class="result-table">
+    <thead>
+      <tr><th>#</th><th>질문</th><th>응답 요약</th><th style="width:90px">정/이/유/표/연</th><th>메모</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A1</td>
+        <td>중앙동 어때?</td>
+        <td>overview: 247업종, 1,984업소, 평균 951만원, 유동인구 122,172명. 지도+요일차트+피크정보</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td><span class="tag tag-ok">overview 정상</span> 기준월 2026.02 확인</td>
+      </tr>
+      <tr>
+        <td>A2</td>
+        <td>카페가 몇 개야?</td>
+        <td>중앙동 카페 100개(▼2.0%), 매출 600만원(▲2.4%), 유동인구 122,172명</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+          <span class="score s4">4</span>
+          <span class="score s5">5</span>
+        </td>
+        <td><span class="tag tag-ok">carry ✓</span> 중앙동 유지, 업종 drill-down</td>
+      </tr>
+      <tr>
+        <td>A3</td>
+        <td>매출은?</td>
+        <td>중앙동 카페 매출 600만원(▲2.4%), 업소 100개(▼2.0%) — A2와 동일 수치</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+          <span class="score s4">4</span>
+          <span class="score s5">5</span>
+        </td>
+        <td><span class="tag tag-ok">일관 ✓</span> metric 전환, 수치 동일</td>
+      </tr>
+      <tr class="partial-issue">
+        <td>A4</td>
+        <td>작년 대비 어때?</td>
+        <td>A3과 동일한 매출 카드 재표시 (YoY ▲2.4% 이미 포함)</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s3">3</span>
+          <span class="score s3">3</span>
+          <span class="score s3">3</span>
+          <span class="score s3">3</span>
+        </td>
+        <td><span class="tag tag-warn">중복</span> 추세 전용 뷰 미분화</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Phase B: 교차검증 — "이 숫자 믿어도 되나?"</h4>
+  <table class="result-table">
+    <thead>
+      <tr><th>#</th><th>질문</th><th>응답 요약</th><th style="width:90px">정/이/유/표/연</th><th>메모</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A5</td>
+        <td>둔산2동 카페 매출</td>
+        <td>2,077만원(▼27.8%), 121개(▼0.0%), 203,416명</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>교차검증 기준값 ①</td>
+      </tr>
+      <tr>
+        <td>A6</td>
+        <td>둔산1동은?</td>
+        <td>1,645만원(▼25.7%), 80개(▼3.6%), 109,985명</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+        </td>
+        <td><span class="tag tag-ok">carry ✓</span> 교차검증 기준값 ②</td>
+      </tr>
+      <tr>
+        <td>A7</td>
+        <td>둔산동 카페 매출</td>
+        <td>merge(3동): 221개, 1,539만원(▼27.0%), 339,476명. 동별 상세 카드 포함</td>
+        <td>
+          <span class="score s4">4</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>합산 정확, <span class="tag tag-warn">단순평균</span></td>
+      </tr>
+      <tr>
+        <td>A8</td>
+        <td>둔산1동이랑 둔산2동 비교</td>
+        <td>비교카드: 1,645/2,077만원, 80/121개, 109,985/203,416명. 추세 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td><span class="tag tag-ok">수치 일치 ✓</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Phase C: 리포트용 데이터 수집 — "써먹을 수 있는 걸 뽑자"</h4>
+  <table class="result-table">
+    <thead>
+      <tr><th>#</th><th>질문</th><th>응답 요약</th><th style="width:90px">정/이/유/표/연</th><th>메모</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A9</td>
+        <td>유성구 카페 추세</td>
+        <td>평균 1,019만원, 상위10% 1,738만원(신성동), 하위10% 937만원(상대동). 12개월 3시리즈 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>리포트 그래프용으로 우수</td>
+      </tr>
+      <tr>
+        <td>A10</td>
+        <td>서구에서 치킨 매출 높은 동네</td>
+        <td>1위 둔산1동(2,031만원), 24개 행정동 랭킹 바 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s3">3</span>
+        </td>
+        <td>랭킹 기능 정상</td>
+      </tr>
+      <tr class="issue">
+        <td>A11</td>
+        <td>편의점은?</td>
+        <td><strong>"지역이나 업종이 부족합니다"</strong> — sgg 컨텍스트 carry 실패</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s1">1</span>
+          <span class="score s2">2</span>
+          <span class="score s4">4</span>
+          <span class="score s1">1</span>
+        </td>
+        <td><span class="tag tag-fail">P0</span> 구 단위 follow-up 불가</td>
+      </tr>
+      <tr>
+        <td>A11'</td>
+        <td>서구 편의점 매출 높은 동네 <em>(재시도)</em></td>
+        <td>1위 둔산1동(3,521만원), 24개 행정동</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s3">3</span>
+        </td>
+        <td>명시적 질문 시 정상</td>
+      </tr>
+      <tr class="partial-issue">
+        <td>A12</td>
+        <td>자양동 네일 매출</td>
+        <td>"자양동에 네일 아트 데이터가 없습니다"</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+          <span class="score s2">2</span>
+          <span class="score s3">3</span>
+          <span class="score s2">2</span>
+        </td>
+        <td><span class="tag tag-warn">P2</span> 대안 업종 제안 없음</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Cross-validation -->
+  <h3 id="p1-xval">교차 검증표</h3>
+  <p>A5(둔산2동), A6(둔산1동) 개별 조회 vs A7(둔산동 merge) vs A8(비교 카드) 숫자 대조.</p>
+
+  <table class="xval-table">
+    <thead>
+      <tr>
+        <th style="text-align:left">지표</th>
+        <th>A6 둔산1동</th>
+        <th>A5 둔산2동</th>
+        <th>A7 둔산3동</th>
+        <th>A7 merge 합산</th>
+        <th>계산 검증</th>
+        <th>A8 비교카드</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>업소 수</td>
+        <td>80</td>
+        <td>121</td>
+        <td>20</td>
+        <td>221</td>
+        <td class="match">80+121+20 = 221 ✓</td>
+        <td class="match">80 / 121 ✓</td>
+      </tr>
+      <tr>
+        <td>유동인구</td>
+        <td>109,985</td>
+        <td>203,416</td>
+        <td>26,075</td>
+        <td>339,476</td>
+        <td class="match">합산 = 339,476 ✓</td>
+        <td class="match">109,985 / 203,416 ✓</td>
+      </tr>
+      <tr>
+        <td>업소당 매출</td>
+        <td>1,645</td>
+        <td>2,077</td>
+        <td>894</td>
+        <td>1,539</td>
+        <td class="match">단순평균 1,539 ✓</td>
+        <td class="match">1,645 / 2,077 ✓</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="3"></td>
+        <td><em>가중평균</em></td>
+        <td class="mismatch">1,814 ≠ 1,539</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <strong>결론:</strong> 업소 수·유동인구 합산은 정확. 개별조회↔merge↔비교 간 수치 완전 일관.
+    단, merge 평균 매출은 <strong>단순 산술평균</strong>이라 업소 수 가중평균(1,814만원)과 18% 차이.
+    리포트 인용 시 "행정동 단순 평균"임을 명시해야 함.
+  </p>
+
+  <!-- Persona 1 verdict -->
+  <div class="verdict">
+    <div class="verdict-label">정현의 최종 판정</div>
+    <div class="verdict-value conditional">Conditional</div>
+    <div class="verdict-reason">
+      수치 일관성은 높아 기본 인용 가능. 다만 merge 평균 방식(단순 vs 가중)과
+      구 단위 follow-up 한계를 인지하고 사용해야 함.
+      "캡처 + 보조 자료"로는 충분하지만, "1차 출처"로 쓰기엔 메타데이터(기준월·산출방식) 표기 부족.
+    </div>
+  </div>
+
+  <!-- 3. Persona 2 -->
+  <h2 id="p2">3. Persona 2 — 박서연 (상권 컨설턴트)</h2>
+
+  <div class="persona-card">
+    <div class="persona-avatar consultant">서</div>
+    <div class="persona-info">
+      <h3>박서연</h3>
+      <div class="role">프리랜서 창업 컨설턴트 5년차 · 전 은행 기업금융팀 · Excel 피벗 수준</div>
+      <div class="project green">
+        <strong>프로젝트:</strong> 의뢰인(30대 부부)이 대전 서구/유성구에서 디저트 카페 창업 검토 중.
+        예산 1.5억, 유동인구 선호, 경쟁 과열 회피.
+        다음 주 미팅에서 입지 후보 3곳 + 근거 데이터 제시 필요.
+      </div>
+    </div>
+  </div>
+
+  <h4>Phase B1: 큰 그림 파악 — "서구랑 유성구 중 어디가 나아?"</h4>
+  <table class="result-table">
+    <thead>
+      <tr><th>#</th><th>질문</th><th>응답 요약</th><th style="width:90px">정/이/유/표/연</th><th>메모</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>B1</td>
+        <td>서구 카페 현황 어때?</td>
+        <td>평균 923만원, 상위10% 둔산2동(2,853만원), 하위10% 가장동(678만원). 24개동 추세 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>구 단위 진입 성공</td>
+      </tr>
+      <tr class="issue">
+        <td>B2</td>
+        <td>유성구는?</td>
+        <td><strong>"지역이나 업종이 부족합니다"</strong></td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s1">1</span>
+          <span class="score s2">2</span>
+          <span class="score s4">4</span>
+          <span class="score s1">1</span>
+        </td>
+        <td><span class="tag tag-fail">P0</span> sgg follow-up 실패</td>
+      </tr>
+      <tr>
+        <td>B2'</td>
+        <td>유성구 카페 현황 <em>(재시도)</em></td>
+        <td>평균 1,019만원, 상위10% 신성동(1,738만원), 하위10% 상대동(937만원). 13개동</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s3">3</span>
+        </td>
+        <td>명시적 질문 시 정상</td>
+      </tr>
+      <tr class="issue">
+        <td>B3</td>
+        <td>어디가 매출이 더 높아?</td>
+        <td><strong>"지역이나 업종이 부족합니다"</strong></td>
+        <td>
+          <span class="score s1">—</span>
+          <span class="score s1">1</span>
+          <span class="score s1">1</span>
+          <span class="score s1">—</span>
+          <span class="score s1">1</span>
+        </td>
+        <td><span class="tag tag-warn">P2</span> 맥락 비교 추론 불가</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Phase B2: 동 레벨 탐색 — "구체적으로 어디가 좋지?"</h4>
+  <table class="result-table">
+    <thead>
+      <tr><th>#</th><th>질문</th><th>응답 요약</th><th style="width:90px">정/이/유/표/연</th><th>메모</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>B4</td>
+        <td>서구에서 카페 매출 높은 동네 알려줘</td>
+        <td>1위 둔산2동(2,077만원), 24개동 랭킹 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>랭킹으로 후보 추리기 성공</td>
+      </tr>
+      <tr>
+        <td>B5</td>
+        <td>둔산동 카페 어때?</td>
+        <td>merge(3동): 221개, 1,539만원(▼27.0%), 339,476명. 동별 상세 카드</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>생활권 단위 파악 우수</td>
+      </tr>
+      <tr class="issue">
+        <td>B6</td>
+        <td>유동인구는 언제 많아?</td>
+        <td><strong>"지역이나 업종이 부족합니다"</strong></td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s1">1</span>
+          <span class="score s2">2</span>
+          <span class="score s5">5</span>
+          <span class="score s1">1</span>
+        </td>
+        <td><span class="tag tag-fail">P0</span> merge 후 follow-up 실패</td>
+      </tr>
+      <tr>
+        <td>B6'</td>
+        <td>둔산2동 카페 유동인구 <em>(재시도)</em></td>
+        <td>203,416명/일, 평일 75.2%, 피크 금요일 14-18시. 요일별·시간대별 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s3">3</span>
+        </td>
+        <td>오후 피크 = 디저트 카페 적합 시그널</td>
+      </tr>
+      <tr>
+        <td>B7</td>
+        <td>유성온천 쪽 카페는?</td>
+        <td>merge(온천1+2동): 302개, 989만원(▼8.0%), 515,714명. 동별 상세 카드</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>위치별칭 merge 정상</td>
+      </tr>
+      <tr class="issue">
+        <td>B8</td>
+        <td>비슷한 상권 있어?</td>
+        <td><strong>"지역이나 업종이 부족합니다"</strong></td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s1">1</span>
+          <span class="score s2">2</span>
+          <span class="score s4">4</span>
+          <span class="score s1">1</span>
+        </td>
+        <td><span class="tag tag-fail">P0</span> merge 후 follow-up 재확인</td>
+      </tr>
+      <tr>
+        <td>B8'</td>
+        <td>온천2동 카페랑 비슷한 동네 <em>(재시도)</em></td>
+        <td>유사 5곳: 둔산2동, 둔산1동, 월평2동 등. 매출 비교 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+          <span class="score s3">3</span>
+        </td>
+        <td><span class="tag tag-ok">월평2동</span> 새 후보 발견</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Phase B3: 비교·결정 — "고객한테 뭘 보여주지?"</h4>
+  <table class="result-table">
+    <thead>
+      <tr><th>#</th><th>질문</th><th>응답 요약</th><th style="width:90px">정/이/유/표/연</th><th>메모</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>B9</td>
+        <td>관저동 카페 어때?</td>
+        <td>merge(관저1+2동): 131개, 1,095만원(<strong>▲11.0%</strong>), 179,993명. 관저1동 ▲26.9%</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td><span class="tag tag-ok">성장 상권</span> 발견</td>
+      </tr>
+      <tr class="partial-issue">
+        <td>B10</td>
+        <td>둔산1동이랑 비교해줘</td>
+        <td>둔산1동 vs <strong>둔산2동</strong>으로 비교됨 (관저동이 아님)</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s2">2</span>
+          <span class="score s3">3</span>
+          <span class="score s5">5</span>
+          <span class="score s2">2</span>
+        </td>
+        <td><span class="tag tag-warn">P1</span> merge 맥락 미반영</td>
+      </tr>
+      <tr>
+        <td>B10'</td>
+        <td>관저2동이랑 둔산1동 카페 비교 <em>(재시도)</em></td>
+        <td>매출 958/1,645만원, 전년비 -4.5%/-25.7%. 추세 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+        </td>
+        <td>관저2동 안정, 둔산1동 급락 대비 명확</td>
+      </tr>
+      <tr class="partial-issue">
+        <td>B11</td>
+        <td>노은동 카페 추세</td>
+        <td>노은<strong>1동만</strong> 선택됨 (merge 미트리거). 933만원, 12개월 추세 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s3">3</span>
+          <span class="score s4">4</span>
+          <span class="score s4">4</span>
+          <span class="score s3">3</span>
+        </td>
+        <td><span class="tag tag-warn">P1</span> "노은동" merge 안 됨</td>
+      </tr>
+      <tr>
+        <td>B12</td>
+        <td>여기 편의점은 어때?</td>
+        <td>노은1동 편의점 2,928만원(▼5.8%), 17개(▼10.5%). 추세 차트</td>
+        <td>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+          <span class="score s4">4</span>
+          <span class="score s5">5</span>
+          <span class="score s5">5</span>
+        </td>
+        <td><span class="tag tag-ok">carry ✓</span> 단일동 follow-up 성공</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Candidate tracking -->
+  <h3 id="p2-candidates">입지 후보 형성 추적</h3>
+  <div class="candidate-flow">
+    <div class="cand-step">
+      <div class="step-label">Phase B1 (구 탐색)</div>
+      <div class="step-list">
+        서구 평균 923만원<br>
+        유성구 평균 1,019만원<br>
+        → <strong>유성구 약간 우위</strong>
+      </div>
+    </div>
+    <div class="cand-step">
+      <div class="step-label">Phase B2 (동 drill-down)</div>
+      <div class="step-list">
+        ① <strong>둔산2동</strong> (2,077만원, 피크 14-18시)<br>
+        ② <strong>유성온천</strong> (989만원, 유동인구 51.5만)<br>
+        ③ <span class="new"><strong>월평2동</strong></span> (similar에서 발견)
+      </div>
+    </div>
+    <div class="cand-step">
+      <div class="step-label">Phase B3 (비교·결정)</div>
+      <div class="step-list">
+        ① 둔산2동 — 매출 최고, 하락세<br>
+        ② <span class="new"><strong>관저동</strong></span> — 성장(▲11%), 가성비<br>
+        ③ 유성온천 — 유동인구 강세<br>
+        <em>노은동은 불완전 탐색(merge 미작동)</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- Persona 2 verdict -->
+  <div class="verdict">
+    <div class="verdict-label">서연의 최종 판정</div>
+    <div class="verdict-value conditional">Conditional</div>
+    <div class="verdict-reason">
+      명시적으로 질문하면 입지 분석에 필요한 데이터(매출·업소수·유동인구·추세·비교)를 충분히 제공.
+      하지만 자연스러운 대화 흐름이 자주 끊겨(24턴 중 5회 실패), 매번 지역+업종을 재입력해야 함.
+      "도구를 아는 사람"은 잘 쓸 수 있으나, 처음 접하는 컨설턴트는 초반에 답답할 수 있음.
+    </div>
+  </div>
+
+  <!-- 4. Synthesis -->
+  <h2 id="synthesis">4. 종합 분석</h2>
+
+  <h3>5차원 평균 점수</h3>
+  <div class="radar-container">
+    <div class="radar-box">
+      <h4>이정현 (데이터 분석가)</h4>
+      <div class="score-row">
+        <span>정확성</span>
+        <span><strong>4.9</strong></span>
+        <div class="score-bar"><div class="score-fill high" style="width:98%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>이해도</span>
+        <span><strong>4.5</strong></span>
+        <div class="score-bar"><div class="score-fill high" style="width:90%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>유용성</span>
+        <span><strong>4.2</strong></span>
+        <div class="score-bar"><div class="score-fill high" style="width:84%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>표현력</span>
+        <span><strong>4.5</strong></span>
+        <div class="score-bar"><div class="score-fill high" style="width:90%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>연결성</span>
+        <span><strong>3.5</strong></span>
+        <div class="score-bar"><div class="score-fill mid" style="width:70%"></div></div>
+      </div>
+    </div>
+    <div class="radar-box">
+      <h4>박서연 (상권 컨설턴트)</h4>
+      <div class="score-row">
+        <span>정확성</span>
+        <span><strong>5.0</strong></span>
+        <div class="score-bar"><div class="score-fill high" style="width:100%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>이해도</span>
+        <span><strong>3.6</strong></span>
+        <div class="score-bar"><div class="score-fill mid" style="width:72%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>유용성</span>
+        <span><strong>3.9</strong></span>
+        <div class="score-bar"><div class="score-fill mid" style="width:78%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>표현력</span>
+        <span><strong>4.8</strong></span>
+        <div class="score-bar"><div class="score-fill high" style="width:96%"></div></div>
+      </div>
+      <div class="score-row">
+        <span>연결성</span>
+        <span><strong>2.8</strong></span>
+        <div class="score-bar"><div class="score-fill low" style="width:56%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>핵심 발견</h3>
+  <table class="result-table">
+    <thead>
+      <tr><th>항목</th><th>강점</th><th>약점</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>데이터 정확성</strong></td>
+        <td>개별조회↔merge↔비교 간 수치 완전 일관. 합산/YoY 계산 정확</td>
+        <td>merge 매출이 단순평균(가중평균 아님)</td>
+      </tr>
+      <tr>
+        <td><strong>기능 범위</strong></td>
+        <td>overview·매출·업소·유동인구·추세·비교·merge·랭킹·유사상권 모두 작동</td>
+        <td>구↔구 비교, 업종 간 비교 미지원</td>
+      </tr>
+      <tr>
+        <td><strong>카드 품질</strong></td>
+        <td>스탯카드·지도·차트·동별상세 정보 밀도 우수</td>
+        <td>"작년 대비" 등 추세 전용 뷰 부재</td>
+      </tr>
+      <tr>
+        <td><strong>대화 연결</strong></td>
+        <td>단일 행정동 간 follow-up 완벽 (지역·업종·metric carry)</td>
+        <td><strong>merge/sgg 후 follow-up 전면 실패</strong> — 핵심 이슈</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 5. Issues -->
+  <h2 id="issues">5. 발견 이슈 &amp; 개선 제안</h2>
+
+  <div class="issue-card">
+    <div class="issue-severity p0">P0</div>
+    <div>
+      <div class="issue-title">merge/sgg 결과 후 follow-up 컨텍스트 전면 실패</div>
+      <div class="issue-desc">
+        법정동 merge(둔산동, 관저동, 유성온천) 또는 구(sgg) 단위 분석 후,
+        "유동인구는?", "편의점은?", "비슷한 상권 있어?" 같은 follow-up이 모두
+        "지역이나 업종이 부족합니다"로 실패. 단일 행정동 후에는 정상 작동(B12).
+      </div>
+      <div class="issue-repro">재현: A11, B2, B6, B8, B10 — 5/24턴(21%) 실패</div>
+      <div class="issue-desc" style="margin-top:8px">
+        <strong>개선 제안:</strong> conversation-state에서 merge 결과의 대표 행정동(예: 가장 큰 동)과
+        sgg를 activeDistrict/activeSgg로 저장. follow-up 시 이를 기본값으로 사용.
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-severity p1">P1</div>
+    <div>
+      <div class="issue-title">"노은동" merge 미트리거 (법정동 매핑 불완전)</div>
+      <div class="issue-desc">
+        "둔산동"은 locationAlias를 통해 둔산1+2+3동으로 merge되지만,
+        "노은동"은 노은1동만 선택됨. legalDongToAdminDong 또는 locationAliases에
+        "노은동" → [노은1동, 노은2동, 노은3동] 매핑이 누락된 것으로 추정.
+      </div>
+      <div class="issue-repro">재현: B11</div>
+      <div class="issue-desc" style="margin-top:8px">
+        <strong>개선 제안:</strong> matching-dictionaries.json의 legalDongToAdminDong에
+        "노은동" 매핑 추가. 유사 패턴(갈마동, 도마동, 유천동 등)도 일괄 점검.
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-severity p2">P2</div>
+    <div>
+      <div class="issue-title">merge 평균 매출이 단순 산술평균</div>
+      <div class="issue-desc">
+        둔산동 merge: 단순평균 1,539만원 vs 업소수 가중평균 1,814만원 (18% 차이).
+        업소 20개인 둔산3동(894만원)과 121개인 둔산2동(2,077만원)이 동일 비중.
+      </div>
+      <div class="issue-desc" style="margin-top:8px">
+        <strong>개선 제안:</strong> 업소 수 가중평균으로 변경하거나,
+        "가중/단순" 레이블을 표기하여 해석 오류 방지.
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-severity p2">P2</div>
+    <div>
+      <div class="issue-title">"작년 대비" 질문에 기존 매출 카드 중복 표시</div>
+      <div class="issue-desc">
+        A3("매출은?")과 A4("작년 대비 어때?")가 동일 카드. YoY가 이미 포함되어 있어
+        추세 전용 뷰(12개월 차트 강조, 분기별 비교 등)가 별도로 제공되지 않음.
+      </div>
+      <div class="issue-desc" style="margin-top:8px">
+        <strong>개선 제안:</strong> "작년", "추세", "변화" 키워드에 대해
+        trend 뷰(12개월 차트 풀사이즈 + 분기 하이라이트)를 우선 표시.
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-severity p2">P2</div>
+    <div>
+      <div class="issue-title">데이터 없음 시 대안 제안 부재</div>
+      <div class="issue-desc">
+        "자양동 네일 매출" → "데이터가 없습니다"로만 안내.
+        자양동에서 조회 가능한 업종이나, 네일이 있는 인근 동을 제안하지 않음.
+      </div>
+      <div class="issue-desc" style="margin-top:8px">
+        <strong>개선 제안:</strong> 데이터 없음 시 "자양동 인기 업종: 한식, 카페, 편의점" 또는
+        "네일 아트 데이터 있는 가까운 동: 중앙동, 효동" 제안.
+      </div>
+    </div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-severity p2">P2</div>
+    <div>
+      <div class="issue-title">대화 맥락 기반 비교 추론 미지원</div>
+      <div class="issue-desc">
+        서구→유성구 순차 조회 후 "어디가 매출이 더 높아?"에 응답 실패.
+        현재는 "A랑 B 비교" 패턴만 지원하며, 대화 히스토리 기반 비교 추론 불가.
+      </div>
+      <div class="issue-desc" style="margin-top:8px">
+        <strong>개선 제안:</strong> Gemini Router 에이전트가 활성화되면 대화 맥락 기반 추론이
+        가능해질 수 있음. 로컬 모드에서는 최근 2턴의 지역을 비교 후보로 제안하는 방법도 검토.
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority summary -->
+  <h3>우선순위 요약</h3>
+  <table class="result-table">
+    <thead>
+      <tr><th>심각도</th><th>이슈</th><th>영향 범위</th><th>예상 난이도</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tag-p0">P0</span></td>
+        <td>merge/sgg 후 follow-up 실패</td>
+        <td>전체 대화의 21% (5/24턴)</td>
+        <td>중 — conversation-state 확장</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-p1">P1</span></td>
+        <td>"노은동" merge 미트리거</td>
+        <td>특정 법정동 사용자</td>
+        <td>하 — 사전 매핑 추가</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-p2">P2</span></td>
+        <td>merge 평균 매출 단순평균</td>
+        <td>merge 사용 시</td>
+        <td>하 — 계산식 변경</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-p2">P2</span></td>
+        <td>추세 전용 뷰 미분화</td>
+        <td>추세 질문 시</td>
+        <td>중 — 새 카드 타입</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-p2">P2</span></td>
+        <td>데이터 없음 시 대안 미제안</td>
+        <td>엣지케이스</td>
+        <td>하 — 응답 분기 추가</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-p2">P2</span></td>
+        <td>맥락 비교 추론 미지원</td>
+        <td>자연어 비교 시</td>
+        <td>상 — 대화 추론 로직</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr style="margin: 48px 0; border: none; border-top: 2px solid var(--line);">
+  <p style="text-align:center; color:var(--muted); font-size:13px;">
+    상권AI 챗봇 사용성 테스트 리포트 · 2026-05-28 · 24턴 실행 · 로컬 모드
+  </p>
+
+</div>
+</body>
+</html>

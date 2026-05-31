@@ -1,0 +1,178 @@
+[
+  {
+    "id": "claude-20260530-s70-stability-a11y",
+    "at": "2026-05-30T02:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 안정성/접근성",
+    "method": "레드팀 검토 후 검증된 결함만 수정: (1) handleQuestion 동시 질문 in-flight 락 — 스트리밍 중 중복 질문/칩 클릭이 공유 conversationState·_lastMapSig를 경쟁하던 문제 차단. (2) chat-ui setMeta/setFilterRow/setMapCard 범례에 escapeHtml 적용 + badge.color CSS 주입 방지. (3) orchestrator _is429를 비-Error throw도 방어. (4) _resolveNarrative 데드코드(streamAborted) 제거. (5) 설정 모달 포커스 저장→첫 입력 focus, close 이벤트로 복원(ESC 포함). (6) narrative에 aria-live=polite.",
+    "files": ["app/js/main.js", "app/js/chat-ui.js", "app/js/response-orchestrator.js", "app/js/ui-controller.js"],
+    "verification": ["node --check 통과", "브라우저: 동시 질문 가드(2회 클릭→1개), 모달 포커스 복원, narrative aria-live, 429 폴백 회귀 없음"],
+    "note": "자동탐지 1차 후보 다수를 검증으로 기각(스트리밍429 정상·JSON파싱 견고·density0/insight NaN% 기존 가드). 캐시 20260530-redteam로 갱신."
+  },
+  {
+    "id": "claude-20260530-s71-audit-50",
+    "at": "2026-05-30T05:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 오류 감사(QA)",
+    "method": "무작위/엣지/악성 쿼리를 TestRunner(프로덕션 모듈 직접 호출) + ToolDispatcher(production 실행경로) + 실제 UI 양쪽으로 통과시켜 50건 발견·분류. 약 25,000 레코드/도구호출 검증. 7개 근본원인으로 클러스터링(R1 amt 의미, R2 sgg_sub 표기, R3 조사, R4 247분모, R5 업종매칭, R6 무고지치환, R7 데이터품질).",
+    "files": ["project/상권ai챗봇/outputs/error-audit-20260530.html", "project/상권ai챗봇/worklogs/session-71.md"],
+    "verification": ["220 무작위 + 200 라우팅 스윕 + 40 엣지", "다수 후보를 검증으로 false positive 기각"],
+    "note": "보고서: outputs/error-audit-20260530.html (A~K 카테고리, 50건)."
+  },
+  {
+    "id": "claude-20260530-s71-fix-rootcause",
+    "at": "2026-05-30T08:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 근본원인 수정(R1~R6)",
+    "method": "(R3) josa.js 한국어 조사 유틸 신설 → main/response-builder 전 사이트 적용(카페는/치킨이). (R4) query-engine totalIndustries를 실제 영업 업종(로컬 upso>0)으로, 평균 분모도 보정 — 대청동 247→45, 평균 46→1,891만원. (R1) insight-engine _detectRevenuePerBusiness 제거(amt는 이미 업소당이라 ÷upso는 오산·카드와 모순), _detectRevenueVsSido에 sgg_sub 가드, 주중/주말 일평균 정규화. (R2) ui-controller _buildDataNotice로 sgg_sub 경고 카드 렌더. (R5) intent-parser 부분매칭 접두정렬 규칙 → 정형외과→성형외과 오매칭 차단. (R6) delta=0 보합·전국→대전시·compareIndustries dedupe·merge 0개→집계안됨·자동선택 고지.",
+    "files": ["app/js/josa.js", "app/js/response-builder.js", "app/js/main.js", "app/js/query-engine.js", "app/js/insight-engine.js", "app/js/ui-controller.js", "app/js/intent-parser.js", "app/js/tool-dispatcher.js"],
+    "verification": ["node --check 9파일", "ToolDispatcher 80회 회귀(크래시·누출·조사 0)", "UI 라이브: 둔산 카페는, overview 동별 차등, dataNotice 배너"],
+    "note": "캐시 redteam-c→d."
+  },
+  {
+    "id": "claude-20260530-s71-regression-badge",
+    "at": "2026-05-30T08:30:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 회귀 수정",
+    "method": "세션70에 XSS 방어로 넣은 badge.color 검증이 ^#RRGGBB$만 허용 → response-builder가 생성하는 hsl(h,45%,40%) 배지색을 거부하여 전 카테고리 배지가 기본 초록으로 폴백되던 자가 유발 회귀. chat-ui setMeta가 hex/hsl 모두 허용 + hsl은 hsla 틴트로 변환(주입 차단 유지)하도록 수정.",
+    "files": ["app/js/chat-ui.js"],
+    "verification": ["hsl 색상 복원 + red;animation/url(//evil) 등 주입 차단 검증", "UI 배지 색상 정상(#D9663A 등)"],
+    "note": "자가 유발 회귀를 스스로 발견·수정. 멀쩡한 코드를 건드릴 때의 리스크 사례로 기록."
+  },
+  {
+    "id": "claude-20260531-s71-followup-dict",
+    "at": "2026-05-31T01:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 미인식 안내 + 업종 사전",
+    "method": "(#40) intent-parser _residualToken로 지역·키워드·조사 제거 후 잔여 토큰 추출 → orchestrator Stage4에서 'X 업종을 찾지 못해 전체 현황' 안내(정밀 오탐방지). 업종 별칭 16종 보강(data-loader): 안과·피부과·이비인후과·산부인과·내과·치과→해당 의원, 전용분류 없는 전문과(정형/신경외과 등)→기타 의원, 곱창/막창→곱창전골, 스크린골프→골프연습장, 포장마차/이자카야/와인바→요리주점, 요양원→요양병원, 코노→노래방, 찜질방/사우나→목욕탕. merge 유동인구 중복 캡션(#43), 억 단위 보조표기(#47). 추가 발견·수정: _trendText의 '업소 수은' 조사버그.",
+    "files": ["app/js/intent-parser.js", "app/js/data-loader.js", "app/js/response-orchestrator.js", "app/js/response-builder.js", "app/js/ui-controller.js"],
+    "verification": ["별칭 16종 실측", "120회×6도구 회귀 0", "UI: '우주선'→안내, 종합병원→억 표기+dataNotice"],
+    "note": "캐시 redteam-d→e."
+  },
+  {
+    "id": "claude-20260531-s71-recount-missing8",
+    "at": "2026-05-31T03:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 정확 재집계 + 누락분",
+    "method": "'47건 수정' 과대보고를 정정(클러스터번호↔보고서번호 혼동). 정확 대조 후 누락 8건 수정: #14 '밀도/효율' 키워드→density 라우팅, #24/38 유사상권 기준 동 dedup + '(기준)' 라벨, #23 대상 시리즈 전부 null인 추세카드 제거+안내, #10 brand/alias 치환 고지(스타벅스→'카페 분류로 분석'), #19 명시지역+개방형 '어때'는 직전 업종 미carry(맥락 덮어쓰기 가드), #20 지표 라벨 '매출·업소'→'매출', #22 소표본(업소≤2) 비교 캡션.",
+    "files": ["app/js/intent-parser.js", "app/js/response-builder.js", "app/js/response-orchestrator.js"],
+    "verification": ["node --check", "140회×7도구 회귀 0", "UI 다중턴: '동구 어때'가 직전 카페 미carry 확인"],
+    "note": "정직성 기록: 도중 과대보고가 있었고 정확 재집계로 정정. 캐시 redteam-e→f."
+  },
+  {
+    "id": "claude-20260531-s71-rawdata-verdict",
+    "at": "2026-05-31T05:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 원자료 조사",
+    "method": "데이터 품질 의심 4건을 districts/*.json 82개 + 12,206 레코드 직접 분석으로 판별. #8 upsoDong=100은 100배수가 전체 1건(0.0%)→캡 아닌 우연값. #26·49 peakTime이 popByTime 최댓값과 82/82 일치(계산 정확), 14-18시 피크는 오후 상업 유동인구 실제 보편패턴. #50 목동 기타의류 amt=11,761(Low6,448~High12,646, upso=7, direct)=일관된 고가 클러스터, 앱이 이미 8.8배 인사이트로 노출.",
+    "files": ["app/data/districts/*.json (조사 대상, 미변경)"],
+    "verification": ["4건 모두 데이터 정상, 버그 아님으로 판별"],
+    "note": "코드 수정 없음. '데이터 품질' 우려는 모두 원자료가 정상이었음."
+  },
+  {
+    "id": "claude-20260531-s71-disambig-decision",
+    "at": "2026-05-31T06:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 설계 판단(#37)",
+    "method": "#37 모호 법정동 disambiguation — 차단형 프롬프트 미도입 결정. 근거: 법정동=생활권이라 auto-merge가 올바른 기본값; 핵심 불만(조용한 병합)은 이미 해소(merge 요약 고지 + DongDetailCard 개별 행정동 표시); 특정 동은 '관저1동 카페'로 직접 질의 가능; Simplicity/Surgical 원칙상 멀쩡한 설계 미변경.",
+    "files": ["(판단·코드 미변경)"],
+    "verification": ["50/50 처리 완료: 40 수정 + 5 완화 + 4 데이터정상 + 1 설계적정"],
+    "note": "비차단 드릴다운 칩('관저1동만 보기')은 향후 선택 개선으로만 기록."
+  },
+  {
+    "id": "claude-20260531-s71-changelog-system",
+    "at": "2026-05-31T07:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 이력관리 시스템",
+    "method": "변동 이력을 버전관리 가능한 시드 파일(data/change-log.json)로 영구화. admin-reports.html이 페이지 로드 시 이 시드를 fetch하여 localStorage 기록과 병합(id 기준 dedupe, 최신순)하도록 수정. 삭제/복사 핸들러를 인덱스→id 기반으로 변경, 시드 항목은 '기록' 배지로 구분.",
+    "files": ["app/data/change-log.json", "app/admin-reports.html"],
+    "verification": ["admin 페이지 렌더 확인", "시드+localStorage 병합 동작"],
+    "note": "향후 모든 변동은 이 change-log.json에 항목 추가로 추적. 관리자 페이지 폼으로 추가하면 브라우저 localStorage에 누적, 영구 기록은 시드 파일에 반영."
+  },
+  {
+    "id": "claude-20260531-qa-loop",
+    "at": "2026-05-31T08:20:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 자율 QA 루프(탐지→기록→검토→수정)",
+    "method": "체계적+무작위 QA 루프 시뮬레이션 실행: (1)탐지 — 12개 질문유형×5구 계층표집 330쿼리(production 디스패처) + 엣지/퍼징 + 다중턴. (2)기록 — findings를 data/error-reports.json에 기록(admin 페이지 로드). (3)관리자 자동 검토 — REAL/FP/DATA 분류·심각도·근본원인 배정. (4)수정 2건: [QA-F2 High 회귀] #19 맥락 가드가 goal=overview면 무조건 carry 차단하여 '그럼 둔산1동은?' 후속이 직전 업종(카페) 미계승 → '명시적 overview 키워드(어때/현황/전체)'가 있을 때만 차단하도록 정교화. [QA-F1 Low] #40 미인식 안내가 카드엔 있으나 narrative 라인엔 없음 → response.note로 이동(brand/alias 고지와 동일 위치).",
+    "files": ["app/js/response-orchestrator.js", "app/data/error-reports.json", "app/admin-reports.html"],
+    "verification": ["330 계층표집 production 스윕 0 findings", "다중턴 UI: '그럼 둔산1동은?'→둔산1동 카페(carry 복구), '동구 어때'→clarify(미carry 유지), '우주선'→note 안내", "node --check"],
+    "note": "다중턴 무작위 검토가 직전 라운드(#19)에서 내가 만든 회귀를 잡아냄 — '단순 검토'가 아닌 체계+무작위 커버리지의 가치. admin-reports.html이 error-reports.json 시드도 로드하도록 확장. 캐시 redteam-f→qa-g."
+  },
+  {
+    "id": "claude-20260531-qa-loop-r2",
+    "at": "2026-05-31T09:20:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 자율 QA 반복(다지역 꼬리물기)",
+    "method": "다른 지역(5개 구 전역의 미사용 동 + 법정동 별칭) + 꼬리물기(다중턴) 6라운드 반복 실행. 발견·수정 3건: [QA-F4 High 오매칭] '유성구 약국 1위'가 일반병원 반환 — 파서는 약국을 정확 인식하나 ToolDispatcher._resolveIndustry가 별칭사전의 잘못된 '약국→일반병원'을 적용 → _resolveIndustry에 '입력이 이미 정확한 업종명이면 별칭 미적용' 가드 추가(약국·카페 등 실재 업종 보호). [QA-F3 Mid 라벨오류] pop narrative가 '피크 시간대는 토요일'로 요일을 시간대로 오라벨 → 피크 요일/시간대 분리 추출('주로 토요일 14-18시에 붐빕니다'). [QA-F5 Mid 안내오노출] '한의원은?/약국은?' 후속에서 조사 '은'이 raw 토큰에 포함돼 정확 업종인데 '별도 분류가 없어 해석' 안내가 어색하게 노출 → _buildDataNote가 raw='업종+조사'면 안내 생략.",
+    "files": ["app/js/tool-dispatcher.js", "app/js/main.js", "app/js/response-builder.js", "app/data/error-reports.json"],
+    "verification": ["UI 다중턴 6라운드(동/중/서/유성/대덕 + 법정동별칭 + 의료) — 조사·누출·어색안내 0", "약국→약국(rank 노은2동), 피크='토요일 14-18시', '한의원은?' 안내 미노출 검증", "node --check"],
+    "note": "다지역 반복 꼬리물기가 3건을 추가 포착. 데이터 후속과제: data-loader가 industryAliasOverrides.items 평탄화 시 의료 용어(의원 등)를 일반병원으로 매핑하는 사전 정합성 점검. 캐시 qa-g→qa-i."
+  },
+  {
+    "id": "claude-20260531-qa-loop-r3-region",
+    "at": "2026-05-31T10:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 자율 QA 반복(지역전환 꼬리물기 검증)",
+    "method": "다른 행정동/법정동으로 연속 전환하는 꼬리물기 4라운드(R7~R10) 검증: (R7) 행정동 4-hop(효동→용운동→삼성동→가양1동) 업종 carry, 법정동 전환(중앙동→관저동→노은→둔산) merge+carry. (R8) merge↔행정동 드릴(관저동→관저1동→관저2동→둔산), 칩 merge라벨 누출 0. (R9) 약국 carry + 교차구 전환(유성 온천1동→대덕 비래동) + pop 피크 정상. (R10) 가양동(법정동merge)→가양1/2동 드릴, 월평1/2/3동 형제 연속. 코드 변경 없음(전부 정상).",
+    "files": ["(검증만 — 코드 미변경)"],
+    "verification": ["R7~R10 다중턴 ~22쿼리(5개 구 전역+법정동+숫자형제동) — 조사·누출·칩merge라벨 0", "업종 carry/merge전환/드릴/교차구 전부 정상"],
+    "note": "설계 판단(미변경): 맨 지역전환('전민동은?')은 직전 지표(유동인구)를 carry하지 않고 주지표(매출)로 표시 — 탐색 연속성 vs 예측가능성 트레이드오프에서 후자 유지. '치킨은'은 자음종결+은으로 정확(탐지기 오탐). 지역전환 꼬리물기는 견고하게 동작 확인."
+  },
+  {
+    "id": "claude-20260531-qa-framework",
+    "at": "2026-05-31T11:30:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 무료 자동 QA 프레임워크 확장 + 버그수정",
+    "method": "토큰 0짜리 자동 테스트(test.html/test-runner.js/test-suites.js)를 확장: (1) 신규 유형 `regression`(과거 수정 버그 재발 단언: 약국 정확업종 보존·정형외과 오매칭·247분모·조사토큰 안내) + `regionSwitchChain`(지역전환 꼬리물기 — ConversationState+orchestrator carry 재현). (2) validator 강화: 전 케이스(2만건 fullMatrix 포함)에 josa·값누출(NaN/undefined/[object Object]) 디텍터 적용. (3) 다리: 실패를 commercial_ai_error_reports(localStorage)에 기록 → admin-reports.html이 같은 origin에서 자동 표시. (4) test-runner.init에 ToolDispatcher+ResponseOrchestrator+ConversationState+AgentAnalyst 추가(production 실행경로/맥락 재현). + 프레임워크가 즉시 잡은 신규 버그 [QA-F6 High] '오정동은?'이 브랜드 '정동'(→일식 카레/돈가스/덮밥)에 잘못 매칭 → _extractIndustry가 인식 행정동명을 검색텍스트에서 제거 후 브랜드/부분매칭하도록 수정.",
+    "files": ["app/js/test-suites.js", "app/js/test-runner.js", "app/js/intent-parser.js"],
+    "verification": ["L1 275케이스 전부 통과(회귀 4/4, 지역전환 4/4)", "다리 동작: 실패→localStorage 기록(exported>0)", "브랜드 수정: 오정동은?→null, 오정동 카페→카페, 스타벅스→카페 유지", "node --check"],
+    "note": "비용구조: 반복 탐지=test.html(JS, 토큰 0) / triage=Gemini(선택,저렴) / 수정=Claude·사람(버그 발견 시에만). followUpChain에 간헐적 '칩 0개'(overview chain) 플래키 — pre-existing, 추후 점검. 캐시 qa-i→qa-j."
+  },
+  {
+    "id": "claude-20260531-qa-validator-falsepos",
+    "at": "2026-05-31T12:30:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 테스트 validator false positive 수정",
+    "method": "사용자가 L3 전수(21,349건) 실행 시 fullMatrix에서 109 '실패'가 났으나, 전수 검증 결과 전부 내 josa validator의 false positive였음(앱 출력은 정확). 원인: scanJosa 은-오류 목록에 받침 있는 노래방(ㅇ)·네일(ㄹ)·효율(ㄹ)을 잘못 포함('노래방은'은 정답), 와-오류 목록에 모음 종결 '업소 수'(수)를 잘못 포함('업소 수와'는 정답). 수정: 명확히 모음 종결인 단어(카페·피자·호프·헤어·유동인구·밀도)만 은-오류로, 자음 종결(치킨·편의점)만 와-오류로 한정. test-suites.js와 test-runner.js 양쪽 패턴 동일 수정.",
+    "files": ["app/js/test-suites.js", "app/js/test-runner.js"],
+    "verification": ["수정 후 노래방·중개업·카페·치킨 15개 동 재검증 0/60 플래그", "앱 실제 출력 '노래방은'(받침 ㅇ→정답)·'업소 수와'(수=모음→정답) 확인 — 앱은 정상"],
+    "note": "정직 기록: 109건은 앱 버그가 아니라 내 validator 오류였음. 사용자 브라우저 localStorage에 기록된 109 false 신고는 admin '오류 신고 삭제'로 제거 후 L3 재실행 권장. 교훈: 하드코딩 단어목록 josa 탐지기는 취약 — 향후 josa() 헬퍼 기반 데이터구동 탐지로 개선 여지."
+  },
+  {
+    "id": "claude-20260531-qa-legaldong",
+    "at": "2026-05-31T13:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 법정동 비교 지원 + 자동화 테스트",
+    "method": "사용자 제보(둔산동 물어본 뒤 반석동과 비교가 안 됨)를 워크플로우대로 처리: 재현 → 자동화 테스트 추가 → 수정. [신규 테스트] test-suites.js에 legalDongCompare 유형(직접 compareDistricts 양쪽 merge / 다중턴 '법정동 카페'→'법정동과 비교' clarify 금지 / 법정동vs행정동), test-runner _executeRegionSwitchChain에 expectCompare 검증. [수정] (1) conversation-state.js: merge 후 activeDistrict.name을 대표동(둔산1동)이 아닌 법정동 소스명(둔산동)으로 저장 + activeMergeSource 보관. (2) response-orchestrator _fillFromConversation compare carry가 ctxRegion=activeMergeSource, curRegion=filled.district||filled.sourceLocation 사용 → district=null인 법정동 타깃도 compareDistricts 구성. _compare/_buildCompareSide는 이미 양쪽 merge 처리.",
+    "files": ["app/js/conversation-state.js", "app/js/response-orchestrator.js", "app/js/test-suites.js", "app/js/test-runner.js"],
+    "verification": ["legalDongCompare 3/3 통과", "UI 다중턴: '둔산동 카페'→'반석동과 비교'→둔산동(1,814,3동merge) vs 반석동(869,2동merge) 정상", "regionSwitchChain·regression 회귀 4/4·4/4", "node --check"],
+    "note": "사용자 제보가 자동화 테스트의 새 유형(legalDongCompare)으로 영구 가드됨 — 제보→테스트→수정 워크플로우 시연. 캐시 qa-j→qa-k."
+  },
+  {
+    "id": "claude-20260531-qa-legalcompare-expand",
+    "at": "2026-05-31T14:30:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 법정동 비교 자동화 테스트 커버리지 확장",
+    "method": "사용자 질문('다른 동으로도 비교/꼬리물기 테스트했나')에 대응. 기존 legalDongCompare는 둔산동/반석동 한 쌍만 검증(pickPair 고정). generateLegalDongCompareTests를 다쌍·양방향으로 확장: (1) 별칭/랜드마크 제외하고 '동'으로 끝나는 canonical 법정동만, 동일 행정동 집합 중복(노은/노은동) 제거. (2) 인접 쌍 최대 8쌍을 정방향 꼬리물기('A 업종 매출'→'B과 비교해줘')로, 업종도 카페/치킨/편의점/미용실 순환. (3) 첫 쌍은 직접 compareDistricts + 역방향 꼬리물기('B 카페'→'A와 비교') 추가로 양방향 가드. (4) 법정동vs단일행정동 혼합 유지. 케이스 3→11개. 사전 수동 검증: 노은/월평·도마/태평·갈마/관저·가양/문화·판암/유천·둔산/반석 6쌍 실경로 PASS.",
+    "files": ["app/js/test-suites.js", "app/index.html"],
+    "verification": ["legalDongCompare 11/11 통과(8쌍 꼬리물기+직접+역방향+혼합)", "regression 4/4·regionSwitchChain 4/4 회귀 0", "실경로 6쌍 수동 비교 PASS"],
+    "note": "수동 검증으로 둔산/반석 외 다수 복수묶음 법정동도 비교 정상 확인. 캐시 qa-k→qa-l. 별칭 표기('노은')는 의도적으로 테스트에서 제외(동일 집합이 canonical로 이미 커버)."
+  }
+]
