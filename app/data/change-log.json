@@ -185,5 +185,16 @@
     "files": [".gitignore", ".github/workflows/deploy-pages.yml", "README.md"],
     "verification": ["워크플로 성공 21s", "라이브 200: index·data/index.json·geojson·districts·micro/stores·admin-reports", "키 유출 점검 404: /build/secrets/*, /raw/* (미발행 확인)", "추적 234파일·비밀흔적0·.git 20.7MB"],
     "note": "라이브 https://ksd1125.github.io/daejeon-sangkwon-ai/ . 비밀키 파일은 로컬 디스크엔 잔존(gitignore)·저장소 미포함 — 과거 로컬 커밋 이력에 있었으므로 해당 API 키 재발급(rotate) 권장. app/build 빌드스크립트가 저장소에서 제외됨 → 데이터 재생성 도구는 로컬 전용(향후 tools/ 분리 권장). env.local.js 404는 main.js의 ||{} 폴백으로 무해."
+  },
+  {
+    "id": "claude-20260601-api-keys-externalize",
+    "at": "2026-06-01T00:40:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · API 키 외부 주입 구성",
+    "method": "키를 소스/저장소가 아닌 외부에서 주입하도록 구성. [빌드] app/build/load-env.js(의존성 없는 .env 로더) 신설 — 저장소 루트 .env를 process.env로. collect-store-api.js·collect-franchise-brand-dictionary.js가 process.env.PUBLIC_DATA_STORE_API_KEY / FAIRTRADE_FRANCHISE_API_KEY를 우선 읽도록 loadServiceKey 보강(기존 --service-key/--key-file/secrets 파일은 폴백 유지). [템플릿] 루트 .env.example(공공데이터 2키), app/env.local.example.js(Gemini 런타임) 신설. [저장소] .gitignore를 'app/build/' 통째 제외 → 'app/build/secrets/'·'app/build/raw/'만 제외로 변경하여 빌드 스크립트(6+load-env)·package.json·fixtures를 저장소에 재포함(키는 .env로 분리). Gemini는 방문자 설정 모달 입력 방식 유지(공개 정적 사이트라 비밀키 미탑재).",
+    "files": ["app/build/load-env.js", "app/build/collect-store-api.js", "app/build/collect-franchise-brand-dictionary.js", ".env.example", "app/env.local.example.js", ".gitignore", "README.md"],
+    "verification": ["node --check 3파일 통과", "임시 .env로 로더 동작 확인(STORE/FRAN 주입)", "스테이지 14개: 스크립트·템플릿 포함 / 비밀·raw·.env·env.local.js 제외 확인(check-ignore)"],
+    "note": "주의/사고기록: 로더 테스트 중 Out-File이 기존 루트 .env를 덮어씀 → app/build/secrets/의 실제 키(공공데이터 2종)로 .env 복구함. env.local.js는 원래 비어있었음(Gemini 키는 별도). 빌드 키 탐색 순서: --service-key > process.env > --key-file/.env-file > secrets 파일."
   }
 ]

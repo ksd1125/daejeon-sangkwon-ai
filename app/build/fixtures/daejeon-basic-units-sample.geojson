@@ -1,0 +1,43 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "BAS_ID": "sample-central-west",
+        "ADMI_CD": "30110515"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [127.4255, 36.3285],
+            [127.4275, 36.3285],
+            [127.4275, 36.3305],
+            [127.4255, 36.3305],
+            [127.4255, 36.3285]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "BAS_ID": "sample-central-east",
+        "ADMI_CD": "30110515"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [127.4275, 36.3285],
+            [127.4298, 36.3285],
+            [127.4298, 36.3305],
+            [127.4275, 36.3305],
+            [127.4275, 36.3285]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -7,9 +7,14 @@ node_modules/
 !.env.example
 app/env.local.js
 
-# secrets & build tooling (배포·추적 제외)
-app/build/
+# secrets & 원본 수집물 (배포·추적 제외) — 빌드 스크립트는 추적, 비밀/원본만 제외
+app/build/secrets/
+app/build/raw/
 app/raw/
+
+# 내부 핸드오프/디자인 산출물 (배포 무관, 대용량 — 공개 저장소 제외)
+commercial-ai-handoff-package/
+디자인/
 
 # 런타임 미사용 원본 집계 (per-district stores/ 는 유지)
 app/data/micro/public-store-api-daejeon.json

@@ -25,12 +25,25 @@ python -m http.server 3456
 
 > ⚠️ `serve`의 `-s`/`--single`(SPA) 플래그는 쓰지 마세요 — `admin-reports.html`이 열리지 않습니다.
 
-## Gemini API 키 (선택)
+## API 키 설정
 
-키가 없어도 로컬 데이터로 동작합니다. 더 자연스러운 해설 · 후속 질문을 원하면
-우측 상단 **설정** 버튼에서 [Gemini API 키](https://aistudio.google.com/apikey)를 입력하세요.
-키는 브라우저 localStorage에만 저장되며 저장소에 커밋되지 않습니다
-(`app/env.local.js`, `.env`는 `.gitignore` 처리).
+모든 키는 **저장소에 커밋되지 않으며**, 각 위치에서 별도로 주입합니다.
+(`.env`, `app/env.local.js`, `app/build/secrets/`는 모두 `.gitignore` 처리)
+
+### 1) Gemini (런타임 · 선택)
+키가 없어도 로컬 데이터로 동작합니다. 더 자연스러운 해설·후속 질문을 원할 때만 필요합니다.
+- **배포된 공개 사이트**: 방문자가 우측 상단 **설정** 모달에서 각자
+  [Gemini 키](https://aistudio.google.com/apikey)를 입력 (브라우저 localStorage에만 저장).
+- **로컬 개발 자동 주입**: `app/env.local.example.js` → `app/env.local.js`로 복사 후 키 입력.
+
+### 2) 공공데이터 (빌드 시 · 데이터 재생성용)
+상가 데이터를 다시 수집·빌드할 때만 필요합니다. 루트 `.env`에 키를 넣습니다.
+```bash
+cp .env.example .env     # 후 PUBLIC_DATA_STORE_API_KEY / FAIRTRADE_FRANCHISE_API_KEY 입력
+node app/build/collect-store-api.js                  # 소상공인 상가 API
+node app/build/collect-franchise-brand-dictionary.js # 공정위 가맹사업 API
+```
+빌드 스크립트는 `.env`(또는 환경변수, `--service-key`/`--key-file` 플래그) 순으로 키를 찾습니다.
 
 ## 배포 (GitHub Pages)
 
