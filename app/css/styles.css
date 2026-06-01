@@ -1109,10 +1109,11 @@ body {
 
 /* ── Orbit (analysis progress) ── */
 .analysis-orbit {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 10px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border: 1px solid rgba(24, 96, 73, 0.08);
   border-radius: var(--radius-md);
   background: linear-gradient(135deg, rgba(237, 246, 241, 0.7), rgba(253, 250, 245, 0.8));
@@ -1121,6 +1122,7 @@ body {
 .orbit-status {
   display: flex; align-items: center; gap: 8px;
   color: var(--accent); font-size: 12.5px; font-weight: 600;
+  flex-shrink: 0; white-space: nowrap;
 }
 
 .orbit-dot {
@@ -1135,12 +1137,14 @@ body {
 }
 
 .orbit-steps {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px;
+  flex: 1 1 auto; min-width: 0;
+  display: flex; gap: 5px;
 }
 
 .orbit-step {
+  flex: 1 1 0;
   display: inline-flex; align-items: center; justify-content: center;
-  min-height: 28px; padding: 4px 6px;
+  min-height: 26px; padding: 4px 6px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.6);
@@ -1157,10 +1161,12 @@ body {
 .orbit-step.done::before { content: '✓ '; font-size: 9px; }
 
 .orbit-val {
-  display: block; font-size: 9px; font-weight: 600;
-  opacity: 0.7; margin-top: 1px;
-  overflow: hidden; text-overflow: ellipsis;
+  display: none; /* 한 줄 유지: 검출값(지역명 등)은 칩 라벨로 충분 */
 }
+
+/* 홈(첫 질문 전): 분석 과정·토글을 숨겨 입력 영역을 깔끔하게 */
+body:not(.is-chatting) .analysis-orbit,
+body:not(.is-chatting) .orbit-toggle { display: none; }
 
 /* ── Notice ── */
 .notice {

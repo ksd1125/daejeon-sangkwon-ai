@@ -406,7 +406,8 @@ export class ChatUI {
     this._history = [];
     this._firstMessage = true;
     this._turnSeq = 0;
-    // 웰컴 복원
+    // 웰컴 복원 (새 대화 → 홈 상태)
+    document.body.classList.remove('is-chatting');
     if (this._welcome) {
       this._welcome.hidden = false;
       this._welcome.style.transition = 'opacity 0.3s ease';
@@ -422,6 +423,7 @@ export class ChatUI {
   _hideWelcome() {
     if (!this._welcome || !this._firstMessage) return;
     this._firstMessage = false;
+    document.body.classList.add('is-chatting'); // 홈→대화 전환: orbit/토글 노출
     this._welcome.style.transition = 'opacity 0.3s ease, max-height 0.4s ease';
     this._welcome.style.opacity = '0';
     this._welcome.style.maxHeight = '0';

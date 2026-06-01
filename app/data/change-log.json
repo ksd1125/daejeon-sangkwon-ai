@@ -262,5 +262,16 @@
     "files": ["app/js/chat-ui.js", "app/js/response-orchestrator.js", "app/css/styles.css", "app/index.html"],
     "verification": ["모바일 비교: 듀얼 지도 2개(좌 둔산동/우 반석동), 각자 점포 344/203, 라벨·색상·오버플로0", "모바일 단일: 지도 317x300 풀폭 브레이크아웃", "데스크톱: 단일 480(브레이크아웃X)·듀얼 339씩, 오버플로0", "입력 min-height 52·전송 48", "regression 4/4·regionSwitch 4/4·legalDongCompare 11/11", "node --check"],
     "note": "듀얼 지도는 전 뷰포트 적용(데스크톱도 좌우 2개). 좌=대상(녹색), 우=compare codes(파랑)로 createMiniMap 색상 분기 재사용. 캐시 qa-q→qa-r."
+  },
+  {
+    "id": "claude-20260601-home-tidy-orbit-oneline",
+    "at": "2026-06-01T06:30:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 홈 정리 + 분석 orbit 한 줄",
+    "method": "사용자 요청: 첫 화면이 산재돼 깔끔하게, '질문을 기다리는 중'(orbit)을 한 줄로 공간 확보. (1) 홈 정리: chat-ui가 첫 질문 시 body.is-chatting 토글(_hideWelcome 추가/새대화 reset 제거). CSS body:not(.is-chatting) .analysis-orbit,.orbit-toggle{display:none} → 첫 질문 전 홈에선 분석 과정·토글 숨겨 하단이 입력+안내문만. (2) orbit 한 줄: .analysis-orbit grid→flex(상태+단계 인라인), .orbit-steps grid(4col)→flex, .orbit-step flex:1, .orbit-val display:none(검출값 숨겨 1줄 유지). 높이 113→46px.",
+    "files": ["app/js/chat-ui.js", "app/css/styles.css", "app/index.html"],
+    "verification": ["홈: orbit·토글 display:none, 하단=[입력row, notice]만", "질문 후: is-chatting, orbit 한 줄(상태+지역업종지표비교), 높이 113→46px", "새 대화→홈 복원(is-chatting 제거)", "node --check"],
+    "note": "orbit는 분석 진행/완료 시에만 노출(홈 숨김). 한 줄이라 검출값(.orbit-val)은 숨김 — 진행 단계는 칩 라벨로 표시. 전 뷰포트 적용. 캐시 qa-r→qa-s."
   }
 ]
