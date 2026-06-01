@@ -1107,21 +1107,40 @@ export class ResponseOrchestrator {
 
     if (!allCodes.length || mapSig === this._lastMapSig) return;
 
-    const stores = await this._loadMapStoresForDistricts(allCodes);
-
     if (this._ensureMapController) await this._ensureMapController();
     const mapController = this._getMapController?.();
-    if (mapController) {
+    if (!mapController) { this._lastMapSig = mapSig; return; }
+
+    const cmpList = compareCodes.filter(Boolean);
+    const tgtList = districtCodes.filter(Boolean);
+    const isCompare = cmpList.length > 0 && tgtList.length > 0;
+    const sgg = response.mapCard.sgg || intent.district?.sgg || '';
+
+    if (isCompare) {
+      // 비교: 좌(대상)·우(비교) 두 지도, 각 동의 점포를 따로 로드
+      const containers = this._chatUI.setMapCard(handle, response.mapCard, { dual: true });
+      if (Array.isArray(containers) && containers[0] && containers[1]) {
+        const [storesA, storesB] = await Promise.all([
+          this._loadMapStoresForDistricts(tgtList),
+          this._loadMapStoresForDistricts(cmpList),
+        ]);
+        mapController.createMiniMap(containers[0], {
+          districtCode: tgtList[0], districtCodes: tgtList, sgg,
+          industry: intent.industry, stores: storesA || [],
+        });
+        mapController.createMiniMap(containers[1], {
+          compareCode: cmpList[0], compareCodes: cmpList, sgg,
+          industry: intent.industry, stores: storesB || [],
+        });
+      }
+    } else {
+      const stores = await this._loadMapStoresForDistricts(allCodes);
       const mapContainer = this._chatUI.setMapCard(handle, response.mapCard);
       if (mapContainer) {
         mapController.createMiniMap(mapContainer, {
-          districtCode: districtCodes[0],
-          districtCodes,
-          sgg: response.mapCard.sgg || intent.district?.sgg || '',
-          compareCode: compareCodes[0] || null,
-          compareCodes,
-          industry: intent.industry,
-          stores: stores || [],
+          districtCode: districtCodes[0], districtCodes, sgg,
+          compareCode: compareCodes[0] || null, compareCodes,
+          industry: intent.industry, stores: stores || [],
         });
       }
     }

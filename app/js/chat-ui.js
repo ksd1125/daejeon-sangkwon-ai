@@ -147,7 +147,7 @@ export class ChatUI {
 
   /* ── 인라인 미니맵 카드 (디자인: MapCard) ── */
 
-  setMapCard(handle, mapData) {
+  setMapCard(handle, mapData, opts = {}) {
     if (!mapData?.districtCode && !mapData?.districtCodes?.length) return;
     const catColor = '#E04A3A'; // 선택 업종: 항상 빨간색
 
@@ -163,6 +163,32 @@ export class ChatUI {
 
     head.append(headLeft);
     card.appendChild(head);
+
+    // ── 비교: 좌(대상)/우(비교) 두 지도 ──
+    if (opts.dual) {
+      const dual = el('div', 'minimap-dual');
+      const makeCol = (name, variant) => {
+        const col = el('div', 'minimap-col');
+        const lbl = el('div', 'minimap-col-label');
+        lbl.innerHTML = `<span class="minimap-swatch minimap-swatch--${variant}"></span>${escapeHtml(name || '')}`;
+        const w = el('div', 'minimap-container');
+        col.append(lbl, w);
+        dual.appendChild(col);
+        return w;
+      };
+      const left = makeCol(mapData.districtName, 'target');
+      const right = makeCol(mapData.compareName, 'compare');
+      card.appendChild(dual);
+      if (mapData.industry) {
+        const legend = el('div', 'minimap-legend');
+        legend.innerHTML = `
+          <span class="minimap-legend-item"><span class="minimap-dot" style="background:${catColor};border:1.2px solid #fff"></span>${escapeHtml(mapData.industry)}</span>
+          <span class="minimap-legend-item"><span class="minimap-dot minimap-dot--sm" style="background:#B3AC9E"></span>기타</span>`;
+        card.appendChild(legend);
+      }
+      handle.card.parentNode.insertBefore(card, handle.card);
+      return [left, right];
+    }
 
     // 미니맵 컨테이너
     const mapWrap = el('div', 'minimap-container');

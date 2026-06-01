@@ -685,6 +685,21 @@ body {
   height: 100% !important;
   background: #F5F2EC;
 }
+
+/* ── 비교: 좌(대상)/우(비교) 두 지도 ── */
+.minimap-dual { display: flex; gap: 8px; padding: 4px 10px 8px; }
+.minimap-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
+.minimap-col-label {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 700; color: var(--ink);
+  padding: 2px 2px 6px; letter-spacing: -0.01em;
+}
+.minimap-col .minimap-container {
+  aspect-ratio: 3 / 4; min-height: 200px; max-height: 320px;
+  border-radius: 12px; overflow: hidden; border: 1px solid var(--line);
+}
+.minimap-swatch--target { border: 2px solid #005F4E; background: rgba(14, 124, 102, 0.28); }
+.minimap-swatch--compare { border: 2px dashed #34439B; background: rgba(79, 95, 168, 0.32); }
 .minimap-legend {
   display: flex;
   align-items: center;
@@ -1398,6 +1413,10 @@ button, a, input, textarea, select,
   /* iOS Safari 입력 포커스 시 자동 확대(좌우 어긋남) 방지: 16px 이상 강제 */
   .chat-input, .input-field { font-size: 16px; }
 
+  /* 입력 터치 편의 — 입력칸 키움 (전송버튼 크기는 아래 safe-area 블록에서) */
+  .chat-input { min-height: 52px; padding: 14px 16px; }
+  .chat-input-row { gap: 8px; }
+
   .home-h1 { font-size: 28px; }
   .chat-welcome { padding: 28px 12px 20px; }
   .home-content { margin-top: 24px; gap: 20px; }
@@ -1440,11 +1459,18 @@ button, a, input, textarea, select,
     padding-left: max(14px, env(safe-area-inset-left));
     padding-right: max(14px, env(safe-area-inset-right));
   }
-  .btn-send { width: 44px; height: 44px; }
+  .btn-send { width: 48px; height: 48px; }
 
   /* ── 결과 길이 축소(스크롤 완화) — 지도·차트는 렌더 시점 높이라 안전 ── */
-  .minimap-card, .stats-card { margin-bottom: 10px; }
-  .minimap-container { aspect-ratio: auto; min-height: 150px; height: 175px; max-height: 200px; }
+  .stats-card { margin-bottom: 10px; }
+
+  /* 분석 지도: 모바일에서 크게 — 버블 가로 꽉 차게(브레이크아웃) + 높게 */
+  .minimap-card { margin: 0 -14px 12px; border-radius: 0; }
+  .minimap-card-head, .minimap-legend { padding-left: 14px; padding-right: 14px; }
+  .minimap-container { aspect-ratio: auto; height: 300px; min-height: 300px; max-height: 340px; }
+  /* 비교 두 지도는 좌우 절반씩 */
+  .minimap-dual { padding-left: 12px; padding-right: 12px; }
+  .minimap-dual .minimap-container { height: 232px; min-height: 232px; aspect-ratio: auto; }
   .trend-chart-wrap { height: 150px; padding-bottom: 10px; }
   .compare-chart-wrap { height: 112px; padding-bottom: 10px; }
   .synthesis-card { padding: 12px 13px; }

@@ -251,5 +251,16 @@
     "files": ["app/css/styles.css", "app/index.html"],
     "verification": ["모바일 답변 2040→1647px(칩 313→74, 지도 349→284)", "1280px 데스크톱: 칩 wrap·지도 480·힌트 block 불변", "차트/지도 정상 렌더(고정 높이라 invalidate 불필요)"],
     "note": "1차 안전 축소. 더 줄이려면 추세·비교 카드를 '더보기' 토글로 접는 방안(max-height:0 기법으로 Chart.js 안전) 후속 가능. 입력 터치 불편은 별도 확인 필요. 캐시 qa-p→qa-q."
+  },
+  {
+    "id": "claude-20260601-dual-compare-maps",
+    "at": "2026-06-01T05:30:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 비교 듀얼 지도 + 분석 지도 확대 + 입력 편의",
+    "method": "사용자 요청: 분석 지도는 더 크게, 2지역 비교는 한 지도 대신 좌(A동)/우(B동) 두 지도로. (1) 비교 듀얼 지도: chat-ui.setMapCard에 opts.dual 분기 추가 → .minimap-dual에 좌(대상·녹색)/우(비교·파랑) 컬럼+라벨 생성하고 [left,right] 반환. response-orchestrator._renderMinimap을 isCompare 분기로 재작성 — 비교면 각 동의 점포를 _loadMapStoresForDistricts로 따로 로드해 createMiniMap 2회(좌=대상 codes, 우=compare codes). map-controller는 그대로 재사용. (2) 단일 분석 지도 확대(모바일): minimap-card 좌우 -14px 브레이크아웃으로 버블 가로 꽉 채움 + 높이 240→300px. (직전 qa-q의 칩 가로스크롤·차트 축소는 유지, 지도 축소만 되돌림). (3) 입력 편의(모바일): .chat-input min-height 52px·패딩↑, 전송버튼 44→48px. 운영 경로는 orchestrator뿐이라 main.js 폴백(단일 지도)은 무영향.",
+    "files": ["app/js/chat-ui.js", "app/js/response-orchestrator.js", "app/css/styles.css", "app/index.html"],
+    "verification": ["모바일 비교: 듀얼 지도 2개(좌 둔산동/우 반석동), 각자 점포 344/203, 라벨·색상·오버플로0", "모바일 단일: 지도 317x300 풀폭 브레이크아웃", "데스크톱: 단일 480(브레이크아웃X)·듀얼 339씩, 오버플로0", "입력 min-height 52·전송 48", "regression 4/4·regionSwitch 4/4·legalDongCompare 11/11", "node --check"],
+    "note": "듀얼 지도는 전 뷰포트 적용(데스크톱도 좌우 2개). 좌=대상(녹색), 우=compare codes(파랑)로 createMiniMap 색상 분기 재사용. 캐시 qa-q→qa-r."
   }
 ]
