@@ -170,8 +170,14 @@ export class MapController {
     if (targetBounds.length) {
       let merged = targetBounds[0];
       for (let i = 1; i < targetBounds.length; i++) merged.extend(targetBounds[i]);
-      // 분석 동이 화면을 채우도록 타이트하게 (여백 최소화). maxZoom 캡을 높여 작은 동도 확대
-      mini.fitBounds(merged, { padding: [10, 10], maxZoom: 17 });
+      if (opts.tightFill) {
+        // 비교 지도: 분석 동이 프레임을 꽉 채우도록 cover 방식 (주변 ≈ 0)
+        const z = Math.min(mini.getBoundsZoom(merged, true), 18);
+        mini.setView(merged.getCenter(), z);
+      } else {
+        // 단일 지도: 동 전체가 보이도록 contain(여백 최소)
+        mini.fitBounds(merged, { padding: [10, 10], maxZoom: 17 });
+      }
     }
 
     // 초기 마커 사이즈 설정

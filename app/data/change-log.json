@@ -295,5 +295,16 @@
     "files": ["app/css/styles.css", "app/index.html"],
     "verification": ["390px 비교: 지도 176×290, 오버플로0, Leaflet 2개", "360px: 161×290, 오버플로0", "분석 동이 타이트 줌으로 프레임 채움"],
     "note": "좌우 동시 비교 유지가 우선이라 폭은 화면 절반이 한계. 더 키우려면 '지도 탭→전체폭 확대' 토글(후속) 가능. 캐시 qa-t→qa-u."
+  },
+  {
+    "id": "claude-20260601-compare-map-coverfit",
+    "at": "2026-06-01T08:50:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 비교 지도 분석동 꽉 채우기(cover)",
+    "method": "사용자: 비교 시 분석 영역이 잘 안 보임 → 분석동만 100%, 주변 0에 가깝게. 기존 fitBounds(contain)는 세로로 긴 비교 지도에서 동 전체를 넣느라 위아래 여백(주변)이 생김. map-controller.createMiniMap에 opts.tightFill 추가 → Leaflet getBoundsZoom(merged, true)(cover 줌, min(.,18))으로 setView해 동이 프레임을 채움. response-orchestrator 비교 분기의 두 createMiniMap에 tightFill:true 전달. 단일 지도는 기존 contain(여백 최소) 유지.",
+    "files": ["app/js/map-controller.js", "app/js/response-orchestrator.js", "app/index.html"],
+    "verification": ["390px 비교: 둔산동 zoom14·반석동 zoom13, 동이 프레임 채움(스크린샷)", "오버플로0·Leaflet 2개", "단일 지도 contain 유지(tightFill 미전달)", "node --check 2파일"],
+    "note": "cover라 동 bbox 모서리는 약간 잘릴 수 있으나 분석 영역이 지배적. 비교 지도에만 적용. 캐시 qa-u→qa-v."
   }
 ]

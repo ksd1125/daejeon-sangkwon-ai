@@ -1126,11 +1126,11 @@ export class ResponseOrchestrator {
         ]);
         mapController.createMiniMap(containers[0], {
           districtCode: tgtList[0], districtCodes: tgtList, sgg,
-          industry: intent.industry, stores: storesA || [],
+          industry: intent.industry, stores: storesA || [], tightFill: true,
         });
         mapController.createMiniMap(containers[1], {
           compareCode: cmpList[0], compareCodes: cmpList, sgg,
-          industry: intent.industry, stores: storesB || [],
+          industry: intent.industry, stores: storesB || [], tightFill: true,
         });
       }
     } else {
