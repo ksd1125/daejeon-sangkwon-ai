@@ -100,8 +100,9 @@ export class ResponseBuilder {
     response.filters = this._buildFilters(questionType, displayDistrict, industry, monthDisplay, sgg, intent);
     // 업종 배지 (디자인: categoryBadge)
     response.badge = industry ? this._categoryBadge(industry) : null;
-    // 참고 각주 (디자인: note)
-    response.note = this._buildDataNote(questionType, record, result, intent);
+    // 참고 각주 (디자인: note) — 오타 보정 안내를 앞에 붙임
+    response.note = [this._typoNote(intent), this._buildDataNote(questionType, record, result, intent)]
+      .filter(Boolean).join(' ');
 
     // 인라인 미니맵 카드 (디자인: MapCard)
     const baseCodes = Array.isArray(intent?.district?.codes) && intent.district.codes.length
@@ -1127,6 +1128,21 @@ export class ResponseBuilder {
       return parts.join(' ');
     }
     return '';
+  }
+
+  /** 오타 자동보정 안내 (예: "입력하신 '둔선동'을 '둔산동'으로 해석했습니다.") */
+  _typoNote(intent = {}) {
+    const corr = Array.isArray(intent?.typoCorrections) ? intent.typoCorrections : [];
+    const valid = corr.filter(c => c && c.from && c.to && c.from !== c.to);
+    if (!valid.length) return null;
+    const ro = (w) => {
+      const last = String(w).charCodeAt(String(w).length - 1);
+      if (last < 0xAC00 || last > 0xD7A3) return '로';
+      const jong = (last - 0xAC00) % 28;
+      return (jong === 0 || jong === 8) ? '로' : '으로'; // 받침 없거나 ㄹ → '로'
+    };
+    const parts = valid.map(c => `'${c.from}'${josa(c.from, '을/를')} '${c.to}'${ro(c.to)}`);
+    return `입력하신 ${parts.join(', ')} 해석했습니다.`;
   }
 
   _buildDataNote(questionType, record, result = {}, intent = {}) {

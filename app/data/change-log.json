@@ -229,5 +229,16 @@
     "files": ["app/index.html", "app/css/styles.css"],
     "verification": ["390px: 가로오버플로0·전송버튼44x44·touch-action manipulation·overscroll contain·입력16px", "1280px: 토글none·입력14.5px·패널정상(데스크톱 불변)", "node 불필요(CSS)"],
     "note": "세이프에어리어/노치 효과는 헤드리스에선 inset=0이라 실제 iPhone에서 체감. dvh 미지원 구형 브라우저는 100vh 폴백. 캐시 qa-n→qa-o."
+  },
+  {
+    "id": "claude-20260601-typo-correction",
+    "at": "2026-06-01T03:30:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 오타 자동보정(지역·업종·지표) + 회신 안내",
+    "method": "한글 자모 분해 + 편집거리 기반 오타 보정. 인식 '실패 시에만' 동작하는 폴백으로 false positive 최소화. intent-parser: _hangulToJamo/_editDistance/_jamoDistance/_compactMap/_fuzzyFindBest/_detectTypoCorrections 추가, parse()가 보정 시 정정 텍스트로 재파싱(법정동·merge 로직 재사용)하고 intent.typoCorrections에 기록. (1) 번호동 한글표기('둔산이동'→'둔산2동')는 실재 행정동일 때만 항상 보정. (2) 지역 자모 fuzzy('든산동/든 산동/둔선동'→'둔산동')는 district·sgg·후보가 전무하고 순위/구단위 질의가 아닐 때만(유성구→서구류 오염 방지), 더 긴 후보 우선·동일길이 동률만 모호처리. (3) 업종 fuzzy('카패'→'카페','펴늬점'→'편의점'). 지표('매충'→'매출')는 best-effort. response-builder: _typoNote로 \"입력하신 '둔선동'을 '둔산동'으로 해석했습니다\" 노트를 note 앞에 추가. response-orchestrator: _localIntentToIntentPlan에 typoCorrections 전달 + intent 복사 루프에 추가, 보정된 question으로 plan 생성해 카드 라벨도 정정값 표시.",
+    "files": ["app/js/intent-parser.js", "app/js/response-builder.js", "app/js/response-orchestrator.js", "app/index.html"],
+    "verification": ["오타 케이스 보정 확인(둔선동/든산동/든 산동/둔산이동/둔산일동/카패/펴늬점)", "정상 L1 272건 false positive 0", "regression 4/4·regionSwitchChain 4/4·legalDongCompare 11/11 회귀 0", "UI: 둔선동 입력→둔산동 분석(1,814만원)+노트 표시, 라벨 모두 둔산동", "node --check 3파일"],
+    "note": "안전 우선 설계: sgg가 잡힌 경우 지역 fuzzy는 스킵(유성구 오염 회귀 방지)이라 '둔산둥/둔산똥'처럼 둔산 별칭이 sgg를 채우는 케이스는 미보정. 지표 오타는 일부만(매줄/유둥인구 미보정). Gemini 경로는 자체 이해로 처리(노트 없음). 캐시 qa-o→qa-p."
   }
 ]

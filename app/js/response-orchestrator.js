@@ -165,7 +165,7 @@ export class ResponseOrchestrator {
     let intent = toolResult.intent;
 
     if (intent && intentPlan) {
-      for (const key of ['industryRaw', 'industryMatchType', 'industryMatchRatio']) {
+      for (const key of ['industryRaw', 'industryMatchType', 'industryMatchRatio', 'typoCorrections']) {
         if (intentPlan[key] !== undefined && intent[key] === undefined) intent[key] = intentPlan[key];
       }
     }
@@ -315,7 +315,8 @@ export class ResponseOrchestrator {
       try {
         const localIntent = this._intentParser.parse(question);
         ctx.mark('intent', 'local');
-        return { intentPlan: this._localIntentToIntentPlan(localIntent, question) };
+        // 오타 보정이 일어났으면 보정된 질문으로 plan 생성 (지역 라벨이 보정값으로 표시되게)
+        return { intentPlan: this._localIntentToIntentPlan(localIntent, localIntent.question || question) };
       } catch (err) {
         console.warn('[Orchestrator] local intent parse 실패:', err.message);
       }
@@ -579,6 +580,7 @@ export class ResponseOrchestrator {
       confidence: localIntent.confidence || 0.5,
       directAnswer: null,
       unmatchedIndustry: localIntent.unmatchedIndustry || null,
+      typoCorrections: localIntent.typoCorrections || [],
       rationale: 'local intent parser',
       originalQuestion: question,
     };

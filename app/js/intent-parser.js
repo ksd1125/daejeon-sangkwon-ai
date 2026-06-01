@@ -77,7 +77,7 @@ export class IntentParser {
     this.locationAliases = this._normalizeLocationAliases(matchingDictionaries.locationAliases || {});
   }
 
-  parse(question) {
+  parse(question, _typoDepth = 0) {
     const text = String(question || '').trim();
     const compact = this._compact(text);
     let confidence = 1.0;
@@ -147,6 +147,17 @@ export class IntentParser {
       }
     }
 
+    // 오타 보정 폴백: 인식 실패한 부분(지역/업종/지표)을 가장 가까운 정답으로 보정 후 재파싱 (depth 0에서만)
+    if (_typoDepth === 0) {
+      const corr = this._detectTypoCorrections(text, districtResult, industryResult, questionTypeResult);
+      if (corr.correctedText && corr.correctedText !== text) {
+        const reparsed = this.parse(corr.correctedText, 1);
+        reparsed.typoCorrections = corr.corrections;
+        reparsed.originalQuestion = text;
+        return reparsed;
+      }
+    }
+
     // 미인식 업종 감지: 업종이 필요한 질문인데 매칭 실패 시 잔여 토큰 추출 (#40)
     let unmatchedIndustry = null;
     if (!industryResult.industry && this._industryIsImplied(questionTypeResult.questionType)) {
@@ -176,6 +187,7 @@ export class IntentParser {
       locationAlias: districtResult.locationAlias || null,
       industryCandidates: industryResult.candidates || [],
       compareTarget,
+      typoCorrections: [],
     };
   }
 
@@ -696,6 +708,149 @@ export class IntentParser {
 
   _compact(value) {
     return String(value || '').replace(/\s+/g, '').trim();
+  }
+
+  /* ══════════════ 오타 보정 (자모 편집거리) ══════════════ */
+
+  _hangulToJamo(str) {
+    const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+    const JUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ'];
+    const JONG = ['','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+    let out = '';
+    for (const ch of String(str || '')) {
+      const code = ch.charCodeAt(0);
+      if (code >= 0xAC00 && code <= 0xD7A3) {
+        const s = code - 0xAC00;
+        out += CHO[Math.floor(s / 588)] + JUNG[Math.floor((s % 588) / 28)] + JONG[s % 28];
+      } else out += ch;
+    }
+    return out;
+  }
+
+  _editDistance(a, b) {
+    const m = a.length, n = b.length;
+    if (!m) return n;
+    if (!n) return m;
+    let prev = Array.from({ length: n + 1 }, (_, i) => i);
+    for (let i = 1; i <= m; i++) {
+      const cur = [i];
+      for (let j = 1; j <= n; j++) {
+        cur[j] = a[i - 1] === b[j - 1] ? prev[j - 1] : 1 + Math.min(prev[j - 1], prev[j], cur[j - 1]);
+      }
+      prev = cur;
+    }
+    return prev[n];
+  }
+
+  _jamoDistance(a, b) {
+    return this._editDistance(this._hangulToJamo(a), this._hangulToJamo(b));
+  }
+
+  /** 공백 제거 + 원본 인덱스 맵 */
+  _compactMap(text) {
+    const s = String(text || '');
+    let compact = '';
+    const map = [];
+    for (let i = 0; i < s.length; i++) {
+      if (/\s/.test(s[i])) continue;
+      compact += s[i];
+      map.push(i);
+    }
+    return { compact, map };
+  }
+
+  /** compact 안에서 후보와 가장 가까운(자모거리 1~maxDist) 구간을 찾음. 동률 2개면 모호 → null */
+  _fuzzyFindBest(compact, map, candidates) {
+    const matches = [];
+    const clen = compact.length;
+    for (const cand of candidates) {
+      const L = cand.length;
+      const maxDist = Math.min(2, Math.max(1, Math.floor(this._hangulToJamo(cand).length * 0.18)));
+      let candBest = null;
+      for (const w of [L, L - 1, L + 1]) {
+        if (w < 2 || w > clen) continue;
+        for (let i = 0; i + w <= clen; i++) {
+          const d = this._jamoDistance(compact.slice(i, i + w), cand);
+          if (d >= 1 && d <= maxDist && (!candBest || d < candBest.dist)) {
+            candBest = { to: cand, dist: d, start: map[i], end: map[i + w - 1] + 1 };
+          }
+        }
+      }
+      if (candBest) matches.push(candBest);
+    }
+    if (!matches.length) return null;
+    // 거리 오름 → 더 긴(구체적인) 후보 우선 → 앞선 위치
+    matches.sort((a, b) => a.dist - b.dist || b.to.length - a.to.length || a.start - b.start);
+    const top = matches[0];
+    // 모호성: 같은 거리 + 같은 길이의 다른 후보가 있을 때만 보정 보류
+    if (matches.some(m => m.to !== top.to && m.dist === top.dist && m.to.length === top.to.length)) return null;
+    return top;
+  }
+
+  _regionFuzzyCandidates() {
+    if (!this._regionCands) {
+      this._regionCands = [...new Set([
+        ...this.districts.map(d => d.name),
+        ...Object.keys(this.legalDongAliases).filter(k => /(동|구)$/.test(k)),
+        ...this.districts.map(d => d.sgg).filter(Boolean),
+      ])].filter(n => n && n.length >= 2);
+    }
+    return this._regionCands;
+  }
+
+  /**
+   * 오타 보정: 지역(번호동 포함)·업종·지표가 인식 실패했을 때만 가장 가까운 정답으로 보정.
+   * @returns {{correctedText: string|null, corrections: Array<{type,from,to}>}}
+   */
+  _detectTypoCorrections(text, districtResult, industryResult, questionTypeResult) {
+    const corrections = [];
+    let t = String(text || '');
+
+    // 1) 번호동 한글 표기 보정 ("둔산이동"→"둔산2동") — 실재 행정동이 될 때만이라 항상 안전
+    const numMap = { 일: '1', 이: '2', 삼: '3', 사: '4', 오: '5', 육: '6', 칠: '7', 팔: '8', 구: '9' };
+    t = t.replace(/([가-힣]{2,})(일|이|삼|사|오|육|칠|팔|구)동/g, (m, pre, num) => {
+      const canon = pre + numMap[num] + '동';
+      if (this.districts.some(d => d.name === canon)) {
+        corrections.push({ type: 'region', from: m, to: canon });
+        return canon;
+      }
+      return m;
+    });
+    const regionFixed = corrections.some(c => c.type === 'region');
+
+    // 자모 fuzzy 지역 보정은 '지역 신호가 전혀 없을 때만' (sgg도 없어야 — 구 단위 질의 오염 방지)
+    const regionUnresolved = !districtResult.district && !districtResult.sgg
+      && (districtResult.candidates?.length || 0) === 0
+      && !['rankDistricts', 'sggIndustry'].includes(questionTypeResult.questionType);
+
+    // 2) 자모거리 fuzzy — 실패한 부분만, 한 종류당 1건
+    const ranges = [];
+    const { compact, map } = this._compactMap(t);
+    const addRange = (best, type) => {
+      if (!best) return;
+      if (ranges.some(r => best.start < r.end && best.end > r.start)) return; // 겹침 방지
+      const from = t.slice(best.start, best.end);
+      if (!from || from === best.to) return;
+      ranges.push({ start: best.start, end: best.end, to: best.to });
+      corrections.push({ type, from, to: best.to });
+    };
+
+    if (regionUnresolved && !regionFixed) {
+      addRange(this._fuzzyFindBest(compact, map, this._regionFuzzyCandidates()), 'region');
+    }
+    const industryImplied = !industryResult.industry && this._industryIsImplied(questionTypeResult.questionType);
+    if (industryImplied) {
+      addRange(this._fuzzyFindBest(compact, map, this.industries.filter(n => n.length >= 2)), 'industry');
+    }
+    if (questionTypeResult.usedDefault) {
+      addRange(this._fuzzyFindBest(compact, map, ['매출', '업소', '점포', '유동인구', '추세', '밀도', '순위', '현황', '종합', '비교']), 'metric');
+    }
+
+    // 범위를 오른쪽부터 적용 (인덱스 보존)
+    ranges.sort((a, b) => b.start - a.start);
+    for (const r of ranges) t = t.slice(0, r.start) + r.to + t.slice(r.end);
+
+    return { correctedText: corrections.length ? t : null, corrections };
   }
 
   _escapeRegex(value) {
