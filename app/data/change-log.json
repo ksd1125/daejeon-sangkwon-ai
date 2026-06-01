@@ -207,5 +207,16 @@
     "files": ["app/css/styles.css", "app/index.html"],
     "verification": ["390px에서 #searchInput computed font-size=16px 확인", "응답 렌더 후 docScrollWidth==innerWidth(가로 오버플로 0)"],
     "note": "근본은 iOS의 <16px 입력 자동확대 정책. 별개로 .chat-panel height:100vh는 iOS에서 하단 주소창에 입력바가 가릴 수 있음(상하 이슈, 미제보라 미수정 — 필요시 dvh 도입 검토)."
+  },
+  {
+    "id": "claude-20260601-mobile-ux-rework",
+    "at": "2026-06-01T02:00:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 모바일 UX 개선(가독성·입력영역 재배치·분석과정 토글)",
+    "method": "iPhone 제보 반영 모바일 정리. (1) 가독성: @media(max-width:768px)에서 본문/라벨/칩 키움 — chat-messages 15px, synthesis-text 15.5px, synthesis-fact 13.5px, bullets 14px, bot-meta 13px, chip 15px(min-h 46px), home-desc 15px, orbit-status 14px. (2) 입력바↔분석과정(orbit) 순서 교체: .chat-input-area를 flex-column + order로 모바일에서 입력바를 위(order1), 토글(order2), orbit(order3), notice(order4)로. (3) 결과 시 분석과정 자동 숨김 + 수동 토글: index.html에 #orbitToggle 버튼 추가, ui-controller에 _setupOrbitToggle/_setOrbitCollapsed 추가, updateOrbitFromIntent·_updateOrbitFromText의 complete→접기/loading→펼치기 훅. 데스크톱은 .orbit-toggle display:none + collapsed 무효화로 기존(orbit 입력 위, 폰트 14.5px) 완전 유지.",
+    "files": ["app/index.html", "app/css/styles.css", "app/js/ui-controller.js"],
+    "verification": ["node --check ui-controller.js", "390px: 결과 후 orbit display:none·toggle 노출·라벨 토글·입력바가 토글 위", "토글 클릭 시 orbit grid 복귀·순서 입력<토글<orbit", "1280px: toggle none·orbit 입력 위·입력 14.5px(데스크톱 불변)"],
+    "note": "분석과정 자동접힘은 mode==='complete'에 훅. 홈/입력중(draft·loading)에는 펼침 유지. collapsed 클래스는 모바일 미디어쿼리에서만 orbit 숨김 → 데스크톱 무영향. 캐시 qa-m→qa-n."
   }
 ]

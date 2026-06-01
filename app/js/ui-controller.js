@@ -21,6 +21,8 @@ export class UIController {
       btnClearKey: document.getElementById('btnClearKey'),
       orbitTitle: document.getElementById('orbitTitle'),
       orbitSteps: document.getElementById('orbitSteps'),
+      chatInputArea: document.getElementById('chatInputArea'),
+      orbitToggle: document.getElementById('orbitToggle'),
       headerNew: document.getElementById('headerNew'),
       sidebarNew: document.getElementById('sidebarNew'),
       sidebarBrand: document.getElementById('sidebarBrand'),
@@ -38,6 +40,7 @@ export class UIController {
     this._setupSidebar();
     this._setupModal();
     this._setupTextarea();
+    this._setupOrbitToggle();
     this._updateOrbitFromText('');
   }
 
@@ -159,6 +162,26 @@ export class UIController {
 
   /* ── Orbit ── */
 
+  _setupOrbitToggle() {
+    this.els.orbitToggle?.addEventListener('click', () => {
+      const collapsed = this.els.chatInputArea?.classList.contains('orbit-collapsed');
+      this._setOrbitCollapsed(!collapsed);
+    });
+  }
+
+  /** 분석 과정(orbit) 접기/펼치기 — 모바일에서만 시각적으로 적용(CSS), 데스크톱은 항상 표시 */
+  _setOrbitCollapsed(collapsed) {
+    const area = this.els.chatInputArea;
+    const btn = this.els.orbitToggle;
+    if (!area) return;
+    area.classList.toggle('orbit-collapsed', collapsed);
+    if (btn) {
+      btn.setAttribute('aria-expanded', String(!collapsed));
+      const label = btn.querySelector('.orbit-toggle-label');
+      if (label) label.textContent = collapsed ? '분석 과정 보기' : '분석 과정 숨기기';
+    }
+  }
+
   updateOrbitFromIntent(intent, mode = 'loading') {
     const title = this.els.orbitTitle;
     const steps = this.els.orbitSteps;
@@ -186,6 +209,8 @@ export class UIController {
       const parts = [district || sgg, industry].filter(Boolean);
       title.textContent = parts.length ? `${parts.join(' ')} 분석 중` : '데이터를 맞춰 보는 중';
     }
+    // 결과가 나오면(완료) 분석 과정 자동 접기, 분석 중이면 펼치기 (모바일)
+    this._setOrbitCollapsed(mode === 'complete');
 
     steps.innerHTML = items.map((item, i) => {
       const classes = ['orbit-step'];
@@ -216,6 +241,10 @@ export class UIController {
     else if (!value.trim()) title.textContent = '질문을 기다리는 중';
     else if (doneCount >= 3) title.textContent = '바로 조회할 수 있는 질문입니다';
     else title.textContent = '질문 의도를 읽는 중';
+
+    // 결과가 나오면(완료) 분석 과정 자동 접기 (모바일)
+    if (mode === 'complete') this._setOrbitCollapsed(true);
+    else if (mode === 'loading') this._setOrbitCollapsed(false);
 
     steps.innerHTML = labels.map((label, index) => {
       const classes = ['orbit-step'];

@@ -1315,6 +1315,29 @@ body {
 }
 .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
+/* ── 분석 과정(orbit) 토글 — 데스크톱에선 숨김(orbit 항상 표시), 모바일에서만 노출 ── */
+.orbit-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 9px 12px;
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--duration), border-color var(--duration);
+}
+.orbit-toggle:hover { color: var(--accent); border-color: var(--accent); }
+.orbit-toggle-caret { transition: transform 0.25s var(--ease); font-size: 11px; }
+.chat-input-area.orbit-collapsed .orbit-toggle-caret { transform: rotate(-180deg); }
+
 /* ═══════════════════════
    RESPONSIVE
    ═══════════════════════ */
@@ -1338,7 +1361,19 @@ body {
   .mobile-header { display: flex; }
   .chat-panel { height: 100vh; }
   .chat-messages { padding: 16px 14px 12px; gap: 18px; }
-  .chat-input-area { padding: 8px 14px 14px; }
+
+  /* 입력바를 위로, 분석 과정(orbit)을 아래로 — 순서 교체 + 토글로 접기 */
+  .chat-input-area {
+    padding: 8px 14px 14px;
+    display: flex;
+    flex-direction: column;
+  }
+  .chat-input-row   { order: 1; }
+  .orbit-toggle     { order: 2; display: flex; }
+  .analysis-orbit   { order: 3; margin-top: 8px; }
+  .notice           { order: 4; }
+  /* 결과가 나오면 분석 과정은 숨김(버튼으로 펼침) */
+  .chat-input-area.orbit-collapsed .analysis-orbit { display: none; }
 
   /* iOS Safari 입력 포커스 시 자동 확대(좌우 어긋남) 방지: 16px 이상 강제 */
   .chat-input, .input-field { font-size: 16px; }
@@ -1357,6 +1392,20 @@ body {
   .hamburger { padding: 10px 8px; min-height: 44px; }
   .welcome-chips { gap: 10px; }
   .chat-chips-row { gap: 10px; }
+
+  /* ── 모바일 가독성: 본문·라벨·칩 키우기 ── */
+  .chat-messages { font-size: 15px; }
+  .synthesis-text { font-size: 15.5px; line-height: 1.62; }
+  .synthesis-title { font-size: 13px; }
+  .synthesis-fact, .synthesis-fact b, .synthesis-fact span { font-size: 13.5px; }
+  .synthesis-bullets { font-size: 14px; line-height: 1.6; }
+  .bot-meta, .bot-meta-text { font-size: 13px; }
+  .bot-meta-badge { font-size: 12px; }
+  .chip { font-size: 15px; min-height: 46px; }
+  .home-desc { font-size: 15px; }
+  .notice { font-size: 12px; line-height: 1.5; }
+  .orbit-toggle { font-size: 14.5px; min-height: 44px; }
+  .orbit-status strong { font-size: 14px; }
 }
 
 /* ── Overlay (mobile sidebar) ── */
