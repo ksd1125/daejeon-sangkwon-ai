@@ -1478,9 +1478,10 @@ button, a, input, textarea, select,
   .minimap-card { margin: 0 -14px 12px; border-radius: 0; }
   .minimap-card-head, .minimap-legend { padding-left: 14px; padding-right: 14px; }
   .minimap-container { aspect-ratio: auto; height: 300px; min-height: 300px; max-height: 340px; }
-  /* 비교 두 지도는 좌우 절반씩 */
-  .minimap-dual { padding-left: 12px; padding-right: 12px; }
-  .minimap-dual .minimap-container { height: 232px; min-height: 232px; aspect-ratio: auto; }
+  /* 비교 두 지도: 좌우 절반이라 좁으므로 여백·간격 최소화 + 높이↑ 로 최대한 크게 */
+  .minimap-dual { gap: 5px; padding: 4px 5px 8px; }
+  .minimap-dual .minimap-container { height: 290px; min-height: 290px; aspect-ratio: auto; }
+  .minimap-col-label { padding: 1px 2px 4px; font-size: 11.5px; }
   .trend-chart-wrap { height: 150px; padding-bottom: 10px; }
   .compare-chart-wrap { height: 112px; padding-bottom: 10px; }
   .synthesis-card { padding: 12px 13px; }
