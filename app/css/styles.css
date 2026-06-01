@@ -1340,6 +1340,9 @@ body {
   .chat-messages { padding: 16px 14px 12px; gap: 18px; }
   .chat-input-area { padding: 8px 14px 14px; }
 
+  /* iOS Safari 입력 포커스 시 자동 확대(좌우 어긋남) 방지: 16px 이상 강제 */
+  .chat-input, .input-field { font-size: 16px; }
+
   .home-h1 { font-size: 28px; }
   .chat-welcome { padding: 28px 12px 20px; }
   .home-content { margin-top: 24px; gap: 20px; }

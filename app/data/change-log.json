@@ -196,5 +196,16 @@
     "files": ["app/build/load-env.js", "app/build/collect-store-api.js", "app/build/collect-franchise-brand-dictionary.js", ".env.example", "app/env.local.example.js", ".gitignore", "README.md"],
     "verification": ["node --check 3파일 통과", "임시 .env로 로더 동작 확인(STORE/FRAN 주입)", "스테이지 14개: 스크립트·템플릿 포함 / 비밀·raw·.env·env.local.js 제외 확인(check-ignore)"],
     "note": "주의/사고기록: 로더 테스트 중 Out-File이 기존 루트 .env를 덮어씀 → app/build/secrets/의 실제 키(공공데이터 2종)로 .env 복구함. env.local.js는 원래 비어있었음(Gemini 키는 별도). 빌드 키 탐색 순서: --service-key > process.env > --key-file/.env-file > secrets 파일."
+  },
+  {
+    "id": "claude-20260601-ios-input-zoom-fix",
+    "at": "2026-06-01T01:10:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 모바일(iOS) 반응형 수정",
+    "method": "iPhone 13 사용자가 '좌우가 안 맞는다' 제보. 진단: 390×844로 재현 → 문서 가로 오버플로는 0(레이아웃 정상, 지도 타일은 Leaflet overflow:hidden 클리핑)이나, 입력창 .chat-input(14.5px)·.input-field(14px)가 16px 미만 → iOS Safari가 입력 포커스 시 자동 확대(zoom-in)하고 화면이 가로로 커진 채 복귀하지 않아 좌우가 어긋나 보이는 고전적 버그. 수정: @media(max-width:768px)에 `.chat-input,.input-field{font-size:16px}` 추가(데스크톱 14.5/14px 유지). 캐시 qa-l→qa-m.",
+    "files": ["app/css/styles.css", "app/index.html"],
+    "verification": ["390px에서 #searchInput computed font-size=16px 확인", "응답 렌더 후 docScrollWidth==innerWidth(가로 오버플로 0)"],
+    "note": "근본은 iOS의 <16px 입력 자동확대 정책. 별개로 .chat-panel height:100vh는 iOS에서 하단 주소창에 입력바가 가릴 수 있음(상하 이슈, 미제보라 미수정 — 필요시 dvh 도입 검토)."
   }
 ]
