@@ -306,5 +306,16 @@
     "files": ["app/js/map-controller.js", "app/js/response-orchestrator.js", "app/index.html"],
     "verification": ["390px 비교: 둔산동 zoom14·반석동 zoom13, 동이 프레임 채움(스크린샷)", "오버플로0·Leaflet 2개", "단일 지도 contain 유지(tightFill 미전달)", "node --check 2파일"],
     "note": "cover라 동 bbox 모서리는 약간 잘릴 수 있으나 분석 영역이 지배적. 비교 지도에만 적용. 캐시 qa-u→qa-v."
+  },
+  {
+    "id": "claude-20260601-compare-map-cover-tune",
+    "at": "2026-06-01T09:10:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 비교 지도 cover 미세조정(여유 추가)",
+    "method": "사용자: cover가 너무 바짝 잘려 약간 여유 요청. createMiniMap에 zoomSnap: opts.tightFill?0:1(분수 줌 허용) + cover 줌에서 -0.3 backoff(setView). 동이 프레임을 거의 채우되 모서리에 약간 여백 → 잘림 완화. 단일 지도(zoomSnap 1, contain) 무영향.",
+    "files": ["app/js/map-controller.js", "app/index.html"],
+    "verification": ["390px 비교 줌 13.69/12.27(분수), 동이 프레임 대부분 채우고 모서리 여유(스크린샷)", "오버플로0", "node --check"],
+    "note": "backoff 양은 0.3(약 1.23x). 더 여유 원하면 값↑, 더 꽉 원하면 0. 캐시 qa-v→qa-w."
   }
 ]

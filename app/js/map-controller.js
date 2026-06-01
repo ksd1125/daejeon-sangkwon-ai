@@ -20,6 +20,7 @@ export class MapController {
     const mini = L.map(uid, {
       center: [36.35, 127.385],
       zoom: 12,
+      zoomSnap: opts.tightFill ? 0 : 1, // 비교 지도: 분수 줌 허용(cover 미세조정)
       zoomControl: true,
       dragging: true,
       scrollWheelZoom: false,
@@ -171,8 +172,8 @@ export class MapController {
       let merged = targetBounds[0];
       for (let i = 1; i < targetBounds.length; i++) merged.extend(targetBounds[i]);
       if (opts.tightFill) {
-        // 비교 지도: 분석 동이 프레임을 꽉 채우도록 cover 방식 (주변 ≈ 0)
-        const z = Math.min(mini.getBoundsZoom(merged, true), 18);
+        // 비교 지도: 분석 동이 프레임을 거의 채우되(주변 최소) 모서리는 살짝 여유 — cover에서 약간 backoff
+        const z = Math.min(mini.getBoundsZoom(merged, true) - 0.3, 18);
         mini.setView(merged.getCenter(), z);
       } else {
         // 단일 지도: 동 전체가 보이도록 contain(여백 최소)
