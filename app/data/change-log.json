@@ -174,5 +174,16 @@
     "files": ["app/js/test-suites.js", "app/index.html"],
     "verification": ["legalDongCompare 11/11 통과(8쌍 꼬리물기+직접+역방향+혼합)", "regression 4/4·regionSwitchChain 4/4 회귀 0", "실경로 6쌍 수동 비교 PASS"],
     "note": "수동 검증으로 둔산/반석 외 다수 복수묶음 법정동도 비교 정상 확인. 캐시 qa-k→qa-l. 별칭 표기('노은')는 의도적으로 테스트에서 제외(동일 집합이 canonical로 이미 커버)."
+  },
+  {
+    "id": "claude-20260601-github-pages-deploy",
+    "at": "2026-06-01T00:10:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · GitHub Pages 배포 구성",
+    "method": "정적 사이트를 GitHub Pages로 공개 배포. [보안] 추적·히스토리에 있던 비밀키(app/build/secrets/*) 발견 → .gitignore에 app/build/·app/raw/ 추가, orphan 브랜치로 새 단일 커밋 생성, 옛 master·태그(v1.0-local-only) 삭제 + gc로 비밀키 히스토리 완전 제거(어떤 ref에서도 도달 불가 확인). [경량화] 런타임 미사용 대용량 제외: app/raw(74MB)·app/build·거대 micro 2종(89MB)·내부 핸드오프 KB commercial-ai-handoff-package(43,232파일·471MB)·디자인(22MB)·*.bak. 런타임 필수(districts 82·micro/stores 83·core JSON·geojson)는 유지. [배포] .github/workflows/deploy-pages.yml 신설 — actions/upload-pages-artifact path:app 으로 app/를 사이트 루트 발행(앱이 서브폴더라 브랜치형 대신 Actions 채택, 모든 경로 상대라 프로젝트 페이지 서브경로 정상). README.md 신설. gh repo create(public)+push, Pages build_type=workflow.",
+    "files": [".gitignore", ".github/workflows/deploy-pages.yml", "README.md"],
+    "verification": ["워크플로 성공 21s", "라이브 200: index·data/index.json·geojson·districts·micro/stores·admin-reports", "키 유출 점검 404: /build/secrets/*, /raw/* (미발행 확인)", "추적 234파일·비밀흔적0·.git 20.7MB"],
+    "note": "라이브 https://ksd1125.github.io/daejeon-sangkwon-ai/ . 비밀키 파일은 로컬 디스크엔 잔존(gitignore)·저장소 미포함 — 과거 로컬 커밋 이력에 있었으므로 해당 API 키 재발급(rotate) 권장. app/build 빌드스크립트가 저장소에서 제외됨 → 데이터 재생성 도구는 로컬 전용(향후 tools/ 분리 권장). env.local.js 404는 main.js의 ||{} 폴백으로 무해."
   }
 ]
