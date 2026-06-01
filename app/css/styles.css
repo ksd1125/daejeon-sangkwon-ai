@@ -1441,6 +1441,26 @@ button, a, input, textarea, select,
     padding-right: max(14px, env(safe-area-inset-right));
   }
   .btn-send { width: 44px; height: 44px; }
+
+  /* ── 결과 길이 축소(스크롤 완화) — 지도·차트는 렌더 시점 높이라 안전 ── */
+  .minimap-card, .stats-card { margin-bottom: 10px; }
+  .minimap-container { aspect-ratio: auto; min-height: 150px; height: 175px; max-height: 200px; }
+  .trend-chart-wrap { height: 150px; padding-bottom: 10px; }
+  .compare-chart-wrap { height: 112px; padding-bottom: 10px; }
+  .synthesis-card { padding: 12px 13px; }
+  .chat-card-area > * { margin-bottom: 10px; }
+
+  /* 후속 질문 칩: 가로 스크롤 한 줄로 압축(세로 길이 절약) */
+  .chat-chips-hint { display: none; }
+  .chat-chips-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .chat-chips-row::-webkit-scrollbar { display: none; }
+  .chat-chips-row > * { flex: 0 0 auto; }
 }
 
 /* ── Overlay (mobile sidebar) ── */
