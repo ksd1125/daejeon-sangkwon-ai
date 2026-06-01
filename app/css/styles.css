@@ -1429,7 +1429,11 @@ button, a, input, textarea, select,
 
   .chat-user-bubble { max-width: 85%; }
   .chat-ai-bubble { padding: 12px 14px; }
-  .orbit-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* 답변 카드 너비 최대화 — AI 아바타를 카드 옆이 아닌 위로 (좌우 공간 활용) */
+  .chat-row--ai { flex-direction: column; gap: 6px; align-items: stretch; }
+  .chat-row--ai .chat-avatar--ai { margin-left: 2px; }
+  .chat-row--ai .chat-ai-bubble { width: 100%; }
 
   /* ── 터치 타깃 44px+ ── */
   .chip { min-height: 44px; padding: 0 16px; font-size: 14px; }
@@ -1457,8 +1461,8 @@ button, a, input, textarea, select,
   .chat-messages {
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    padding-left: max(14px, env(safe-area-inset-left));
-    padding-right: max(14px, env(safe-area-inset-right));
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
   }
   .chat-input-area {
     padding-bottom: calc(14px + env(safe-area-inset-bottom));

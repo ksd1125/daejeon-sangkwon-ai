@@ -273,5 +273,16 @@
     "files": ["app/js/chat-ui.js", "app/css/styles.css", "app/index.html"],
     "verification": ["홈: orbit·토글 display:none, 하단=[입력row, notice]만", "질문 후: is-chatting, orbit 한 줄(상태+지역업종지표비교), 높이 113→46px", "새 대화→홈 복원(is-chatting 제거)", "node --check"],
     "note": "orbit는 분석 진행/완료 시에만 노출(홈 숨김). 한 줄이라 검출값(.orbit-val)은 숨김 — 진행 단계는 칩 라벨로 표시. 전 뷰포트 적용. 캐시 qa-r→qa-s."
+  },
+  {
+    "id": "claude-20260601-card-width-map-tight",
+    "at": "2026-06-01T07:20:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 카드 너비 최대화 + 지도 타이트 줌",
+    "method": "사용자 요청: 지도는 분석 동이 화면을 채우게(분석80/주변10·여백 최소), 답변 카드 너비 최대화, AI 아이콘을 카드 옆이 아닌 위로. (1) 지도 타이트 줌: map-controller fitBounds padding 24→10, maxZoom 캡 15→17 — 작은 동도 확대돼 분석 경계가 프레임을 ~80%+ 채움(주변 최소화). (2) 카드 너비 최대화(모바일): .chat-row--ai flex-direction:column·align-items:stretch로 AI 아바타를 카드 위로 → 버블이 풀폭(308→370px, 뷰포트 95%). .chat-messages 좌우 패딩 14→10px로 좌우 공간 활용. 데스크톱은 아바타 옆 유지(MQ 한정).",
+    "files": ["app/js/map-controller.js", "app/css/styles.css", "app/index.html"],
+    "verification": ["모바일: 아바타 카드 위(flex column), 버블 370px=뷰포트95%, 오버플로0", "지도: 둔산1동 경계가 프레임 대부분 채움(점포 dots 선명)", "데스크톱 1280: 아바타 옆 유지(row), 버블 758px", "node --check map-controller"],
+    "note": "지도 타이트 줌은 전 뷰포트 적용. 아바타-위 배치는 모바일(≤768)만. 카드 내부 카드(요약·통계·지도)는 버블 풀폭을 따라 자동 확대. 캐시 qa-s→qa-t."
   }
 ]
