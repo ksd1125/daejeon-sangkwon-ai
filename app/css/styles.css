@@ -1339,6 +1339,26 @@ body {
 .chat-input-area.orbit-collapsed .orbit-toggle-caret { transform: rotate(-180deg); }
 
 /* ═══════════════════════
+   모바일 최적화 (전역 — 데스크톱 안전)
+   ═══════════════════════ */
+
+/* 탭 지연(300ms) 제거 — 지도(.leaflet-container)는 제외해 제스처 보존 */
+button, a, input, textarea, select,
+.chip, .orbit-step, .suggest-btn, .history-item, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* 모션 감속 선호 존중 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════
    RESPONSIVE
    ═══════════════════════ */
 
@@ -1359,7 +1379,7 @@ body {
   .sidebar-close { display: block; }
 
   .mobile-header { display: flex; }
-  .chat-panel { height: 100vh; }
+  .chat-panel { height: 100vh; height: 100dvh; }
   .chat-messages { padding: 16px 14px 12px; gap: 18px; }
 
   /* 입력바를 위로, 분석 과정(orbit)을 아래로 — 순서 교체 + 토글로 접기 */
@@ -1406,6 +1426,21 @@ body {
   .notice { font-size: 12px; line-height: 1.5; }
   .orbit-toggle { font-size: 14.5px; min-height: 44px; }
   .orbit-status strong { font-size: 14px; }
+
+  /* ── 세이프에어리어(노치/홈바) · 모멘텀 스크롤 · 터치타깃 ── */
+  .mobile-header { padding-top: calc(12px + env(safe-area-inset-top)); }
+  .chat-messages {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+  .chat-input-area {
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
+    padding-left: max(14px, env(safe-area-inset-left));
+    padding-right: max(14px, env(safe-area-inset-right));
+  }
+  .btn-send { width: 44px; height: 44px; }
 }
 
 /* ── Overlay (mobile sidebar) ── */

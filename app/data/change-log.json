@@ -218,5 +218,16 @@
     "files": ["app/index.html", "app/css/styles.css", "app/js/ui-controller.js"],
     "verification": ["node --check ui-controller.js", "390px: 결과 후 orbit display:none·toggle 노출·라벨 토글·입력바가 토글 위", "토글 클릭 시 orbit grid 복귀·순서 입력<토글<orbit", "1280px: toggle none·orbit 입력 위·입력 14.5px(데스크톱 불변)"],
     "note": "분석과정 자동접힘은 mode==='complete'에 훅. 홈/입력중(draft·loading)에는 펼침 유지. collapsed 클래스는 모바일 미디어쿼리에서만 orbit 숨김 → 데스크톱 무영향. 캐시 qa-m→qa-n."
+  },
+  {
+    "id": "claude-20260601-mobile-optimization-pass",
+    "at": "2026-06-01T02:40:00.000Z",
+    "actor": "Claude",
+    "tool": "Claude",
+    "scope": "상권 AI · 모바일 최적화 패스(ui-ux-pro-max 가이드)",
+    "method": "ui-ux-pro-max 스킬 UX 가이드(터치타깃·탭지연·세이프에어리어·스크롤·모션) 기반 일관 최적화, 기존 브랜드 토큰 유지. (1) viewport-fit=cover + env(safe-area-inset-*) → iPhone 노치/홈인디케이터 영역 보정(.mobile-header padding-top, .chat-input-area padding-bottom/left/right, .chat-messages left/right). (2) .chat-panel height:100dvh(100vh 폴백) → Safari 하단 툴바에 입력바 가림 방지. (3) touch-action:manipulation 전역(버튼·입력·칩·링크, 지도 .leaflet-container 제외) → 300ms 탭 지연 제거. (4) .chat-messages overscroll-behavior:contain + -webkit-overflow-scrolling:touch → 당겨서새로고침/스크롤체이닝 방지+모멘텀. (5) 전송버튼 44px 명시(기존 전역 min 44 보강). (6) prefers-reduced-motion:reduce 존중. 데스크톱 영향 없음(세이프에어리어 0, dvh/overscroll은 모바일 MQ, touch-action 무해).",
+    "files": ["app/index.html", "app/css/styles.css"],
+    "verification": ["390px: 가로오버플로0·전송버튼44x44·touch-action manipulation·overscroll contain·입력16px", "1280px: 토글none·입력14.5px·패널정상(데스크톱 불변)", "node 불필요(CSS)"],
+    "note": "세이프에어리어/노치 효과는 헤드리스에선 inset=0이라 실제 iPhone에서 체감. dvh 미지원 구형 브라우저는 100vh 폴백. 캐시 qa-n→qa-o."
   }
 ]
